@@ -18,7 +18,7 @@ class Simulation {
     //Article Properties
     private var _newArticles: [Article] = [];
     var newArticles: [Article] { return _newArticles; }
-    private var _writtenArticles: [Article] = [];
+    private var _writtenArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 12);
     var writtenArticles: [Article] { return _writtenArticles; }
     private var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
     var nextEditionArticles: [Article] { return _nextEditionArticles; }
@@ -90,15 +90,15 @@ class Simulation {
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].tick(elapsed: _gameDaysElapsed);
             
-            if _employedAuthors[i].getMorale() < 1 {
-                quit(_employedAuthors[i]);
-            }
-            
-            if _employedAuthors[i].hasFinishedArticle() {
+            if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
                 
-                let topic = TopicLibrary.getRandomTopics(from: _employedAuthors[i].getTopics(), quantity: 1)[0];
-                _newArticles.append(Article(topic: topic, author: &_employedAuthors[i]))
+//                let topic = TopicLibrary.getRandomTopics(from: _employedAuthors[i].getTopics(), quantity: 1)[0];
+                _newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            }
+            
+            if _employedAuthors[i].getMorale() < 1 {
+                quit(_employedAuthors[i]);
             }
             
             i -= 1;
@@ -160,8 +160,9 @@ class Simulation {
     }
     
     func syncNewArticles() {
-        for i in 0 ..< _newArticles.count {
-            _writtenArticles.append(_newArticles[i]);
+        while !_newArticles.isEmpty {
+            _writtenArticles.append(_newArticles.first!);
+            _newArticles.removeFirst();
         }
     }
     

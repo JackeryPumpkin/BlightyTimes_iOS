@@ -182,7 +182,7 @@ class AuthorLibrary {
     
     fileprivate static func getRandom(employedAuthors: inout [Author]) -> Author {
         //print("get random author name");
-        var rAuthor = AuthorLibrary._AUTHORS[RandomIndex(from: AuthorLibrary._AUTHORS.count)];
+        var rAuthor = AuthorLibrary._AUTHORS[Random(index: AuthorLibrary._AUTHORS.count)];
         
         var valid = false;
         while (!valid) {
@@ -190,7 +190,7 @@ class AuthorLibrary {
             
             for author in employedAuthors {
                 if (author.getName() == rAuthor.getName()) {
-                    rAuthor = AuthorLibrary._AUTHORS[RandomIndex(from: AuthorLibrary._AUTHORS.count)];
+                    rAuthor = AuthorLibrary._AUTHORS[Random(index: AuthorLibrary._AUTHORS.count)];
                     valid = false;
                 }
             }
@@ -201,7 +201,7 @@ class AuthorLibrary {
     
     private static func getRandomRate() -> Double {
         //print("get random author article rate");
-        return Random(between: Author.ARTICLE_RATE_MIN, and: Author.ARTICLE_RATE_MAX);
+        return Random(double: Author.ARTICLE_RATE_MIN ... Author.ARTICLE_RATE_MAX);
     }
     
 }

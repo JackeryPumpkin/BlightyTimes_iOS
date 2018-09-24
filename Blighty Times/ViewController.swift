@@ -9,13 +9,12 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var testTileTitle: UILabel!
-    @IBOutlet weak var testTileAuthor: UILabel!
-    @IBOutlet weak var testTile: UIView!
+    @IBOutlet weak var articleSlotsTop: UIStackView!
+    @IBOutlet weak var articleSlotsMiddle: UIStackView!
+    @IBOutlet weak var articleSlotsBottom: UIStackView!
+    @IBOutlet weak var articleTileHight: NSLayoutConstraint!
     
-    
-    @IBOutlet var pArticleTileSlots: [UIView]!
-    var pArticleSlotStatus: [Bool] = Array(repeating: false, count: 12);
+    var articleTiles: NSPointerArray = .weakObjects();
     
     @IBOutlet weak var employedAuthorsTable: UITableView!;
     @IBOutlet weak var dayOfTheWeek: UILabel!
@@ -31,12 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad();
         
         sim.spawnFirstAuthor();
-        
-//        for tile in writtenArticleTiles {
-//            tile.articleTitle.text = "Fucking Title";
-//            tile.authorName.text = "Gatdamn Author";
-//            tile.backgroundColor = .red;
-//        }
+        createTiles();
         
         gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
     }
@@ -54,26 +48,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //All articles are put to end of a queue, including re-queued
         //If an article is currently being touched, it is considered by the model to be in writtenArticles
         
-//        a: for article in sim.newArticles {
-//            b: for i in 0 ..< writtenArticleTiles.count {
-//                if writtenArticleTiles[i].article === ArticleLibrary.blank {
-//                    writtenArticleTiles[i].article = article;
-//                    writtenArticleTiles[i].articleTitle.text = article.getTitle();
-//                    writtenArticleTiles[i].authorName.text = article.getAuthor().getName();
-//                    writtenArticleTiles[i].tile.backgroundColor = article.getTopic().getColor();
-//
-//                    break b;
-//                }
-//            }
-//        }
+        //Cleans up dead articles
+        for i in 0 ..< articleTiles.count {
+            if let tile = articleTiles.object(at: i) as? ArticleTile {
+                if tile.article.getLifetime() < 1.0 {
+                    tile.setBlank();
+                }
+            }
+        }
+        
+        //Adds in new articles
+        a: for article in sim.newArticles {
+            b: for i in 0 ..< articleTiles.count {
+                if let tile = articleTiles.object(at: i) as? ArticleTile {
+                    if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
+                        tile.set(article: article);
+                        
+                        break b;
+                    }
+                }
+            }
+        }
         
         sim.syncNewArticles();
-        
-        if !sim.writtenArticles.isEmpty {
-            testTileTitle.text = sim.writtenArticles.last!.getTitle();
-            testTileAuthor.text = sim.writtenArticles.last!.getAuthor().getName();
-            testTile.backgroundColor = sim.writtenArticles.last!.getTopic().getColor();
-        }
     }
     
     @IBAction func pauseButton(_ sender: Any) {
@@ -110,6 +107,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.authorBonus.text = "Morale: \(sim.employedAuthors[indexPath.row].getMorale())";
         
         return cell;
+    }
+    
+    func createTiles() {
+        for i in 1 ... 12 {
+            guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { return }
+            
+            tile.setBlank();
+            tile.addConstraint(NSLayoutConstraint(item: tile, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: articleTileHight.constant));
+            
+            articleTiles.addObject(tile);
+            
+            if i <= 4 {
+                articleSlotsTop.addArrangedSubview(tile);
+            } else if i <= 8 {
+                articleSlotsMiddle.addArrangedSubview(tile);
+            } else {
+                articleSlotsBottom.addArrangedSubview(tile);
+            }
+        }
     }
 }
 

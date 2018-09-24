@@ -12,7 +12,7 @@ class Article {
     private var _title: String;
     private var _topic: Topic;
     private var _author: Author;
-    private var _lifetime: Double = 10.0; //Starts with default value and is modified by world events
+    private var _lifetime: Double = 100.0; //Starts with default value and is modified by world events
     private var _inNextEdition: Bool = false;
     
     init(topic: Topic, author: inout Author, lifeMultiplier: Double = 1.0) {

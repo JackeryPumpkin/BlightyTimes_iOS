@@ -10,7 +10,6 @@ import UIKit
 //@IBDesignable
 
 class ArticleTile: UIView {
-    @IBOutlet var tile: UIView!
     @IBOutlet weak var articleTitle: UILabel!
     @IBOutlet weak var authorName: UILabel!
     
@@ -19,21 +18,36 @@ class ArticleTile: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame);
         print("frame")
-        initialize();
+//        initialize();
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder);
         print("coder")
-        initialize();
+//        initialize();
     }
     
-    func initialize() {
-        tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? UIView;
-        addSubview(tile);
-        tile.frame = self.bounds;
-        tile.autoresizingMask = [.flexibleHeight, .flexibleWidth];
+    func set(article: Article) {
+        self.article = article;
+        articleTitle.text = article.getTitle();
+        authorName.text = article.getAuthor().getName();
+        self.backgroundColor = article.getTopic().getColor();
     }
+    
+    func setBlank() {
+        self.article = ArticleLibrary.blank;
+        articleTitle.text = "";
+        authorName.text = "";
+        self.backgroundColor = .clear;
+    }
+    
+//    func initialize() {
+//        tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile;
+//        tile = loadNib();
+//        addSubview(tile);
+//        tile.frame = self.bounds;
+//        tile.autoresizingMask = [.flexibleHeight, .flexibleWidth];
+//    }
     
 //    func loadNib() -> ArticleTile {
 //        let bundle = Bundle(for: type(of: self));
