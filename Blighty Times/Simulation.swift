@@ -44,11 +44,7 @@ class Simulation {
     @objc func tick() {
         _gameTimeElapsed += 1;
         
-        if Int.random(in: 0...50) == 5 {
-            spawnApplicant();
-            hire(_applicantAuthors[0]);
-        }
-        
+        chanceToSpawnApplicant();
         writtenArticleTick();
         authorTick();
         
@@ -83,6 +79,8 @@ class Simulation {
             
             i -= 1;
         }
+        
+        print("_writtenArticles.count = \(_writtenArticles.count)");
     }
     
     func authorTick() {
@@ -90,10 +88,9 @@ class Simulation {
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].tick(elapsed: _gameDaysElapsed);
             
-            if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count < 12 {
+            if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + _newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
                 
-//                let topic = TopicLibrary.getRandomTopics(from: _employedAuthors[i].getTopics(), quantity: 1)[0];
                 _newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
             }
             
@@ -140,6 +137,13 @@ class Simulation {
     func spawnFirstAuthor() {
         spawnApplicant();
         hire(_applicantAuthors[0]);
+    }
+    
+    func chanceToSpawnApplicant() {
+        if Random(int: 0 ... 10) == 5 {
+            spawnApplicant();
+            hire(_applicantAuthors[0]);
+        }
     }
     
     func assignToNextEdition(article: inout Article) {
@@ -202,11 +206,16 @@ class Simulation {
     }
     
     func isPaused() -> Bool {
+        print("Pause status: \(_gameIsPaused)");
         return _gameIsPaused;
     }
     
     func pauseplayButtonPressed() {
-        if _playerPausesLeft > 0 {
+        if _playerPausesLeft == 0 {
+            if _gameIsPaused {
+                _gameIsPaused = false;
+            }
+        } else if _playerPausesLeft > 0 {
             if _gameIsPaused {
                 _gameIsPaused = false;
             } else {

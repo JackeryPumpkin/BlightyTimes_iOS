@@ -36,8 +36,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func tick() {
-        //User Interactions
-        
         //Game Simulation
         sim.tick();
         
@@ -45,13 +43,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         employedAuthorsTable.reloadData();
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         
-        //All articles are put to end of a queue, including re-queued
-        //If an article is currently being touched, it is considered by the model to be in writtenArticles
-        
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
-            if let tile = articleTiles.object(at: i) as? ArticleTile {
-                if tile.article.getLifetime() < 1.0 {
+            if let tile = articleTiles.object(at: i) {
+                if tile.article.getLifetime() <= 0 {
                     tile.setBlank();
                 }
             }
@@ -60,7 +55,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //Adds in new articles
         a: for article in sim.newArticles {
             b: for i in 0 ..< articleTiles.count {
-                if let tile = articleTiles.object(at: i) as? ArticleTile {
+                if let tile = articleTiles.object(at: i) {
                     if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
                         tile.set(article: article);
                         
@@ -71,28 +66,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         sim.syncNewArticles();
+        
+        //If an article is currently being touched, it is considered by the model to be in writtenArticles
     }
     
     @IBAction func pauseButton(_ sender: Any) {
         sim.pauseplayButtonPressed();
         
         if sim.isPaused() {
-            pauseButton.titleLabel?.text = "►";
+            pauseButton.setTitle("►", for: .normal);
             pausesLeft.text = "\(sim.getPausesLeft())";
             gameTimer.invalidate();
         } else {
-            pauseButton.titleLabel?.text = "||";
-            gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+            if sim.getPausesLeft() == 0 {
+                pauseButton.setTitle("᰽", for: .normal);
+                gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+                pauseButton.isEnabled = false;
+            } else {
+                pauseButton.setTitle("||", for: .normal);
+                gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print("numberOfRowsInSection");
         return sim.employedAuthors.count;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cellForRowAt: \(indexPath.row)");
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
             fatalError("Employed Author cell downcasting didn't work");
         }
@@ -102,7 +103,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.authorTitle.text = sim.employedAuthors[indexPath.row].getTitle();
         cell.authorBonus.text = sim.employedAuthors[indexPath.row].getBonus();
         
-//        cell.authorProgress.alpha = CGFloat(gameService.employedAuthors[indexPath.row].getArticalProgress()) / 100;
         cell.authorProgress.text = "\(sim.employedAuthors[indexPath.row].getArticalProgress())%";
         cell.authorBonus.text = "Morale: \(sim.employedAuthors[indexPath.row].getMorale())";
         

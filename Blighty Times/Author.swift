@@ -24,7 +24,7 @@ class Author {
     private var _commission: Int = 1000; //per publication
     
     public let PROGRESS_MAX: Double = 100;
-    public static let ARTICLE_RATE_MAX: Double = 1.99;
+    public static let ARTICLE_RATE_MAX: Double = 3.0;
     public static let ARTICLE_RATE_MIN: Double = 0.5;
     
     fileprivate init(portrait: UIImage, name: String, topics: [Topic], articleRate: Double) {
@@ -137,7 +137,7 @@ class Author {
     }
     
     func newArticleTopic() -> Topic {
-        return TopicLibrary.getRandomTopics(from: _topics, quantity: 1)[0];
+        return _topics[Random(index: _topics.count)];
     }
 }
 
