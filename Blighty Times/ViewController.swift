@@ -9,6 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    //Article Outlets & Properties
+    @IBOutlet weak var pendingSlotsFullWarning: UILabel!
     @IBOutlet weak var articleSlotsTop: UIStackView!
     @IBOutlet weak var articleSlotsMiddle: UIStackView!
     @IBOutlet weak var articleSlotsBottom: UIStackView!
@@ -21,6 +23,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var pausesLeft: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
     
+    //Company Outlets
+    @IBOutlet weak var companyFunds: UILabel!
+    @IBOutlet weak var yesterdaysProfit: UILabel!
+    @IBOutlet weak var totalSubscribers: UILabel!
+    @IBOutlet weak var newSubscribers: UILabel!
+    
+    //Game Properties
     private var sim = Simulation();
     private var gameTimer: Timer!;
     
@@ -42,6 +51,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //Animate UI changes
         employedAuthorsTable.reloadData();
         dayOfTheWeek.text = sim.getDayOfTheWeek();
+        companyFunds.text = "$\(sim.company.getFunds())";
+        yesterdaysProfit.text = "$\(sim.company.getYesterdaysProfit())";
+        totalSubscribers.text = "\(1000)";
+        newSubscribers.text = "0";
         
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
@@ -66,6 +79,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         sim.syncNewArticles();
+        
+        if sim.writtenArticles.count == 12 { pendingSlotsFullWarning.isHidden = false; }
+        else { pendingSlotsFullWarning.isHidden = true; }
         
         //If an article is currently being touched, it is considered by the model to be in writtenArticles
     }
@@ -100,11 +116,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
         cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
-        cell.authorTitle.text = sim.employedAuthors[indexPath.row].getTitle();
-        cell.authorBonus.text = sim.employedAuthors[indexPath.row].getBonus();
+        cell.level.text = "\(sim.employedAuthors[indexPath.row].getLevel())";
+        cell.morale.text = "\(sim.employedAuthors[indexPath.row].getMoraleSymbol())";
+        cell.publications.text = "\(sim.employedAuthors[indexPath.row].getPublishedThisWeek())";
+        cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
+        cell.salary.text = "$\(sim.employedAuthors[indexPath.row].getSalary())";
+        cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
         
-        cell.authorProgress.text = "\(sim.employedAuthors[indexPath.row].getArticalProgress())%";
-        cell.authorBonus.text = "Morale: \(sim.employedAuthors[indexPath.row].getMorale())";
+        cell.topicList.text = "";
+        for topic in sim.employedAuthors[indexPath.row].getTopics() {
+            cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol())\(topic.getName())\n");
+        }
         
         return cell;
     }

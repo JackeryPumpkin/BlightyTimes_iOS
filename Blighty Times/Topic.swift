@@ -14,20 +14,21 @@ class Topic {
     private let _color: UIColor;
     
     init(name: String, approval: Bool, color: UIColor) {
-//        print("init Topic");
         _name = name;
         _approval = approval;
         _color = color;
     }
     
     func getName() -> String {
-//        print("get topic name");
         return _name;
     }
     
     func getApproval() -> Bool {
-//        print("get topic approval");
         return _approval;
+    }
+    
+    func getApprovalSymbol() -> String {
+        return _approval ? "+" : "-";
     }
     
     func getColor() -> UIColor {

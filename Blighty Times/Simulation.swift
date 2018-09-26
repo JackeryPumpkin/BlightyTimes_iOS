@@ -9,6 +9,9 @@
 import Foundation
 
 class Simulation {
+    //Company
+    let company: Company = Company();
+    
     //Author properties
     private var _employedAuthors: [Author] = [];
     var employedAuthors: [Author] { return _employedAuthors; }
@@ -32,25 +35,25 @@ class Simulation {
     private var _gameIsPaused: Bool = false;
     
     //Player properties
-    private var _playerXP: Int = 0;
+    private let _MAX_PAUSES: Int = 5;
     private var _playerPausesLeft: Int = 5; //Fewer pauses for higher player level
-    private var _playerLevel: Int = 1;
     
     //Game Constants
-    static let TICK_RATE: TimeInterval = 0.3;
-    static let TICKS_PER_DAY: Int = 24;
+    static let TICK_RATE: TimeInterval = 0.1;
+    static let TICKS_PER_DAY: Int = 100;
     
     
     @objc func tick() {
         _gameTimeElapsed += 1;
         
-        chanceToSpawnApplicant();
         writtenArticleTick();
         authorTick();
         
         if isEndOfDay() {
             publishNextEdition();
+            company.tick(subscribers: 1000, employedAuthors: _employedAuthors);
             nextDay();
+            chanceToSpawnApplicant();
         }
     }
     
@@ -58,6 +61,7 @@ class Simulation {
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
                 _nextEditionArticles[i].publish();
+                company.payCommission(to: _nextEditionArticles[i].getAuthor());
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
             }
@@ -140,7 +144,7 @@ class Simulation {
     }
     
     func chanceToSpawnApplicant() {
-        if Random(int: 0 ... 10) == 5 {
+        if Random(int: 0 ... 50) == 5 {
             spawnApplicant();
             hire(_applicantAuthors[0]);
         }

@@ -10,48 +10,46 @@ import Foundation
 
 class Company {
     private var _funds: Int = 500000;
-    private var _expensesDaily: Int = 156;
+    private var _yesterdaysProfit: Int = 0;
+    private var _commissionsPaid: Int = 0;
     
-    private var _subscribers: Int = 0;
-    private var _newSubscribers: Int = 0;
-    
-    private var _experience: Int = 0;
-    private var _experienceGained: Int = 0;
-    private var _level: Int = 0;
+    //Constants
+    private let _OPERATIONS_COSTS: Int = 500;
+    private let _SUBSCRIPTION_FEE: Int = 15;
     
     
     //Company tick happens once a day
-    func tick() {
-        _newSubscribers = 0;
-    }
-    
-    func giveExperience(from newSubscribers: Int) {
-        _experienceGained = 0;
+    func tick(subscribers: Int, employedAuthors: [Author]) {
+        _yesterdaysProfit = subscribers * _SUBSCRIPTION_FEE;
         
-        if _newSubscribers < 20 {
-            _experience += 10;
-            _experienceGained += 10;
-        } else if _newSubscribers < 100 {
-            _experience += 50;
-            _experienceGained += 50;
-        } else if _newSubscribers < 200 {
-            _experience += 150;
-            _experienceGained += 150;
+        for author in employedAuthors {
+            _yesterdaysProfit -= author.getSalary();
         }
         
-        _experience += _experienceGained;
+        _yesterdaysProfit -= _commissionsPaid;
+        _yesterdaysProfit -= _OPERATIONS_COSTS;
+        _funds += _yesterdaysProfit;
+        
+        _commissionsPaid = 0;
     }
     
-    func getExperience() -> Int {
-        return _experience;
+    func getFunds() -> Int {
+        return _funds;
     }
     
-    func getExperienceGained() -> Int {
-        return _experienceGained;
+    func getYesterdaysProfit() -> Int {
+        return _yesterdaysProfit;
     }
     
-    func hiredEmployee() {
-        _experience += 20;
-        _experienceGained += 20;
+    func getOperationsCosts() -> Int {
+        return _OPERATIONS_COSTS;
+    }
+    
+    func getSubscriptionFee() -> Int {
+        return _SUBSCRIPTION_FEE;
+    }
+    
+    func payCommission(to author: Author) {
+        _commissionsPaid += author.getCommission();
     }
 }

@@ -11,26 +11,26 @@ import UIKit;
 class Author {
     private var _portrait: UIImage;
     private var _name: String;
-    private var _title: String = "Staff Writer";
+    private var _level: Int;
     private var _topics: [Topic];
     private var _articleRate: Double;
     private var _articleProgress: Double = 0;
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
-    private var _daysEmployed: Int = 0; //Put "Senior" in front of the Author's title when they've been employed for >30 days. Their salary raises.
-    private var _morale: Int = 200; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
+    private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
+    private var _morale: Int = 800; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int = 275; //daily
     private var _commission: Int = 1000; //per publication
     
     public let PROGRESS_MAX: Double = 100;
-    public static let ARTICLE_RATE_MAX: Double = 3.0;
-    public static let ARTICLE_RATE_MIN: Double = 0.5;
+    public static let ARTICLE_RATE_MAX: Double = 0.8;
+    public static let ARTICLE_RATE_MIN: Double = 0.05;
     
     fileprivate init(portrait: UIImage, name: String, topics: [Topic], articleRate: Double) {
         _portrait = portrait;
         _name = name;
-        _title = "Staff Writer";
+        _level = 1;
         _topics = topics;
         _articleRate = articleRate;
     }
@@ -39,7 +39,7 @@ class Author {
         let newAuthor = AuthorLibrary.getRandom(employedAuthors: &employedAuthors);
         _portrait = newAuthor.getPortrait();
         _name = newAuthor.getName();
-        _title = newAuthor.getTitle();
+        _level = newAuthor.getLevel();
         _topics = newAuthor.getTopics();
         _articleRate = newAuthor.getRate();
     }
@@ -67,12 +67,26 @@ class Author {
         return _name;
     }
     
-    func getTitle() -> String {
-        return _title;
+    func getLevel() -> Int {
+        return _level;
     }
     
     func getRate() -> Double {
         return _articleRate;
+    }
+    
+    func getRateSymbol() -> String {
+        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
+        
+        if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
+            return "+";
+        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
+            return "++";
+        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
+            return "+++";
+        } else {
+            return "++++";
+        }
     }
     
     func getBonus() -> String {
@@ -105,6 +119,26 @@ class Author {
         return _morale;
     }
     
+    func getMoraleSymbol() -> String {
+        if _morale < 80 {
+            return "🤬";
+        } else if _morale < 150 {
+            return "😤";
+        } else if _morale < 300 {
+            return "😠";
+        } else if _morale < 450 {
+            return "😖";
+        } else if _morale < 600 {
+            return "☹️";
+        } else if _morale < 700 {
+            return "😐";
+        } else if _morale < 800 {
+            return "😀";
+        } else {
+            return "🤩";
+        }
+    }
+    
     func adjustMorale() {
         if _daysEmployed > 7 {
             _morale -= 1;
@@ -125,6 +159,10 @@ class Author {
     
     func getCommission() -> Int {
         return _commission;
+    }
+    
+    func getPublishedThisWeek() -> Int {
+        return _articlesPublishedThisWeek;
     }
     
     func publishArticle() {

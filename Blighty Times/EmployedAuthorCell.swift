@@ -11,16 +11,27 @@ import UIKit
 class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var authorPortrait: UIImageView!
     @IBOutlet weak var authorName: UILabel!
-    @IBOutlet weak var authorTitle: UILabel!
-    @IBOutlet weak var authorBonus: UILabel!
-    @IBOutlet weak var authorProgress: UILabel!
+    @IBOutlet weak var level: UILabel!
+    @IBOutlet weak var topicList: UILabel!
+    @IBOutlet weak var publications: UILabel!
+    @IBOutlet weak var salary: UILabel!
+    @IBOutlet weak var speed: UILabel!
+    @IBOutlet weak var morale: UILabel!
+    @IBOutlet weak var progressConstraint: NSLayoutConstraint!
+    @IBOutlet weak var progressMaxConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
         authorPortrait.layer.cornerRadius = authorPortrait.frame.width / 2;
         authorPortrait.clipsToBounds = true;
+    }
+    
+    func getProgressLength(_ progress: Double) -> CGFloat {
+        if progress == 0 {
+            return CGFloat(0);
+        } else {
+            return progressMaxConstraint.constant * CGFloat(progress / 100);
+        }
     }
 }
 

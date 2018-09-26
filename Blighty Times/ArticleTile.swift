@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//@IBDesignable
 
 class ArticleTile: UIView {
     @IBOutlet weak var articleTitle: UILabel!
@@ -17,14 +16,12 @@ class ArticleTile: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame);
-        print("frame")
-//        initialize();
+        print("frame");
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder);
-        print("coder")
-//        initialize();
+        print("coder");
     }
     
     func set(article: Article) {
@@ -40,18 +37,4 @@ class ArticleTile: UIView {
         authorName.text = "";
         self.backgroundColor = .clear;
     }
-    
-//    func initialize() {
-//        tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile;
-//        tile = loadNib();
-//        addSubview(tile);
-//        tile.frame = self.bounds;
-//        tile.autoresizingMask = [.flexibleHeight, .flexibleWidth];
-//    }
-    
-//    func loadNib() -> ArticleTile {
-//        let bundle = Bundle(for: type(of: self));
-//        let nib = UINib(nibName: "ArticleTile", bundle: bundle);
-//        return nib.instantiate(withOwner: self, options: nil)[0] as! ArticleTile;
-//    }
 }
