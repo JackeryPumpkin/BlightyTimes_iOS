@@ -13,6 +13,7 @@ class ArticleTile: UIView {
     @IBOutlet weak var authorName: UILabel!
     
     var article: Article = ArticleLibrary.blank;
+    var isTouched: Bool = false;
     
     override init(frame: CGRect) {
         super.init(frame: frame);
@@ -36,5 +37,17 @@ class ArticleTile: UIView {
         articleTitle.text = "";
         authorName.text = "";
         self.backgroundColor = .clear;
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouched = true;
+        
+        
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouched = false;
+    }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouched = false;
     }
 }

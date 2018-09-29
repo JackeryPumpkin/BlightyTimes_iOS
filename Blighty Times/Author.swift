@@ -48,10 +48,10 @@ class Author {
         if _lastKnownGameDaysElapsed != days {
             _lastKnownGameDaysElapsed = days;
             _daysEmployed += 1;
+            adjustMorale();
         }
         
         increaseArticleProgress();
-        adjustMorale();
     }
     
     func newWeekReset() {
@@ -122,17 +122,17 @@ class Author {
     func getMoraleSymbol() -> String {
         if _morale < 80 {
             return "🤬";
-        } else if _morale < 150 {
+        } else if _morale < 100 {
             return "😤";
         } else if _morale < 300 {
             return "😠";
-        } else if _morale < 450 {
+        } else if _morale < 400 {
             return "😖";
-        } else if _morale < 600 {
+        } else if _morale < 500 {
             return "☹️";
-        } else if _morale < 700 {
+        } else if _morale < 600 {
             return "😐";
-        } else if _morale < 800 {
+        } else if _morale < 801 {
             return "😀";
         } else {
             return "🤩";
@@ -141,13 +141,13 @@ class Author {
     
     func adjustMorale() {
         if _daysEmployed > 7 {
-            _morale -= 1;
+            _morale -= 10;
             
             if _articlesPublishedThisWeek < 1 {
-                _morale -= 5;
+                _morale -= 10;
             }
         } else if _daysEmployed > 30 {
-            _morale -= 10;
+            _morale -= 50;
         }
         
         _morale += _articlesPublishedThisWeek * 10;
@@ -167,6 +167,10 @@ class Author {
     
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
+    }
+    
+    func getSubmittedThisWeek() -> Int {
+        return _articlesWrittenThisWeek;
     }
     
     func submitArticle() {

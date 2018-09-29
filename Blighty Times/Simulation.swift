@@ -144,7 +144,7 @@ class Simulation {
     }
     
     func chanceToSpawnApplicant() {
-        if Random(int: 0 ... 50) == 5 {
+        if Random(int: 0 ... 10) == 1 {
             spawnApplicant();
             hire(_applicantAuthors[0]);
         }

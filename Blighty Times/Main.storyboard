@@ -517,7 +517,7 @@
                                                                             <constraints>
                                                                                 <constraint firstItem="ZSP-nD-VKx" firstAttribute="leading" secondItem="qoP-8n-Mwo" secondAttribute="leading" id="21p-1i-J7K"/>
                                                                                 <constraint firstItem="ZSP-nD-VKx" firstAttribute="trailing" secondItem="qoP-8n-Mwo" secondAttribute="leading" constant="150" id="PIC-3T-mez"/>
-                                                                                <constraint firstAttribute="width" constant="221" id="WNP-zo-gFM"/>
+                                                                                <constraint firstAttribute="width" priority="1" constant="221" id="WNP-zo-gFM"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="ZSP-nD-VKx" secondAttribute="bottom" id="oq3-N2-cns"/>
                                                                                 <constraint firstItem="ZSP-nD-VKx" firstAttribute="top" secondItem="qoP-8n-Mwo" secondAttribute="top" id="rXF-fb-d2p"/>
                                                                                 <constraint firstAttribute="height" constant="5" id="sMR-in-ONm"/>
@@ -553,7 +553,7 @@
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LkX-EV-1Tt">
                                                                                     <rect key="frame" x="81.5" y="0.0" width="7" height="12"/>
                                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="textColor" red="0.20411634449999999" green="0.47271108630000003" blue="0.96475440260000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SALARY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvR-5S-yu0">
@@ -571,13 +571,13 @@
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GQz-sk-NWk">
                                                                                     <rect key="frame" x="46" y="17" width="7" height="12"/>
                                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="textColor" red="0.20411634449999999" green="0.47271108630000003" blue="0.96475440260000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0dy-Ii-gyY">
                                                                                     <rect key="frame" x="38.5" y="34" width="7" height="12"/>
                                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="textColor" red="0.20411634449999999" green="0.47271108630000003" blue="0.96475440260000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
@@ -610,13 +610,13 @@
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOPICS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q85-CG-LRi">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="38.5" height="12"/>
                                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                                                    <nil key="textColor"/>
+                                                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+Science -Conservatism" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pV9-ls-Ew1">
                                                                                     <rect key="frame" x="0.0" y="14" width="100" height="24"/>
                                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="textColor" red="0.20411634449999999" green="0.47271108630000003" blue="0.96475440260000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
@@ -935,7 +935,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠︎" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKA-Ut-n98">
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠︎" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKA-Ut-n98">
                                                 <rect key="frame" x="227.5" y="180" width="24.5" height="32.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="27"/>
                                                 <color key="textColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1135,6 +1135,49 @@
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.50644432110000004" green="0.50644432110000004" blue="0.50644432110000004" alpha="0.50909674660000004" colorSpace="custom" customColorSpace="sRGB"/>
                                             </stackView>
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C6w-NJ-7hh">
+                                                <rect key="frame" x="582" y="463" width="159" height="60"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="E0w-F8-Q8j">
+                                                        <rect key="frame" x="0.0" y="13.5" width="89" height="33.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Article Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b71-Xa-o6C">
+                                                                <rect key="frame" x="0.0" y="0.0" width="89" height="18"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="15"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fancy Author" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Te5-KR-a7T">
+                                                                <rect key="frame" x="0.0" y="19" width="89" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="12"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f38-Uf-P9f">
+                                                        <rect key="frame" x="99" y="0.0" width="60" height="60"/>
+                                                        <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="60" id="Mt0-Pu-UPS"/>
+                                                            <constraint firstAttribute="height" constant="60" id="mVd-2o-fG7"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <gestureRecognizers/>
+                                                <constraints>
+                                                    <constraint firstItem="f38-Uf-P9f" firstAttribute="centerY" secondItem="C6w-NJ-7hh" secondAttribute="centerY" id="9Oc-MH-PRk"/>
+                                                    <constraint firstAttribute="trailing" secondItem="f38-Uf-P9f" secondAttribute="trailing" id="9lx-8r-eeH"/>
+                                                    <constraint firstAttribute="height" constant="60" id="Gw7-1y-BOf"/>
+                                                    <constraint firstItem="E0w-F8-Q8j" firstAttribute="leading" secondItem="C6w-NJ-7hh" secondAttribute="leading" id="R4k-Ql-QzE"/>
+                                                    <constraint firstItem="E0w-F8-Q8j" firstAttribute="centerY" secondItem="f38-Uf-P9f" secondAttribute="centerY" id="fiH-pt-1or"/>
+                                                    <constraint firstItem="f38-Uf-P9f" firstAttribute="leading" secondItem="E0w-F8-Q8j" secondAttribute="trailing" constant="10" id="i12-b2-U8j"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="6JF-dD-iof" appends="YES" id="W1G-ER-cbr"/>
+                                                </connections>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -1151,6 +1194,8 @@
                                             <constraint firstItem="iXD-5S-Mhd" firstAttribute="width" secondItem="jdU-TX-059" secondAttribute="width" id="OOe-tV-3Jg"/>
                                             <constraint firstItem="4Ec-1G-7F7" firstAttribute="leading" secondItem="f9n-jQ-ftm" secondAttribute="leading" constant="20" id="RBw-iF-r26"/>
                                             <constraint firstItem="kdY-YC-qo2" firstAttribute="width" secondItem="jdU-TX-059" secondAttribute="width" id="SIr-fl-E6o"/>
+                                            <constraint firstAttribute="bottom" secondItem="C6w-NJ-7hh" secondAttribute="bottom" placeholder="YES" id="Sxi-0r-olI"/>
+                                            <constraint firstAttribute="trailing" secondItem="C6w-NJ-7hh" secondAttribute="trailing" placeholder="YES" id="UdD-F9-axf"/>
                                             <constraint firstAttribute="trailing" secondItem="muE-4U-o7E" secondAttribute="trailing" constant="20" id="aYk-9R-PyF"/>
                                             <constraint firstAttribute="trailing" secondItem="4Ec-1G-7F7" secondAttribute="trailing" constant="20" id="anJ-E5-MbZ"/>
                                             <constraint firstItem="rQ4-WQ-HpN" firstAttribute="leading" secondItem="f9n-jQ-ftm" secondAttribute="leading" constant="20" id="c50-dh-E6f"/>
@@ -1272,6 +1317,10 @@
                         <outlet property="companyFunds" destination="rGk-pt-g48" id="LQs-Ey-jbJ"/>
                         <outlet property="dayOfTheWeek" destination="Xok-To-Woo" id="sOy-ix-v5J"/>
                         <outlet property="employedAuthorsTable" destination="aid-f0-ge8" id="A0Z-Vq-bor"/>
+                        <outlet property="movingTileAuthor" destination="Te5-KR-a7T" id="PDd-bB-BbL"/>
+                        <outlet property="movingTileColor" destination="f38-Uf-P9f" id="zxP-bD-ClO"/>
+                        <outlet property="movingTileReferenceView" destination="C6w-NJ-7hh" id="dgP-iT-Bkw"/>
+                        <outlet property="movingTileTitle" destination="b71-Xa-o6C" id="P6t-aB-rT5"/>
                         <outlet property="newSubscribers" destination="0hj-K6-4fp" id="yei-go-soV"/>
                         <outlet property="pauseButton" destination="etW-BA-Nbm" id="SmU-16-3LA"/>
                         <outlet property="pausesLeft" destination="ePJ-hf-5tZ" id="yI0-k8-Ynf"/>
@@ -1370,6 +1419,11 @@
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="Eqr-7A-l68"/>
                 </view>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="6JF-dD-iof">
+                    <connections>
+                        <action selector="handlePanWithRecognizer:" destination="BYZ-38-t0r" id="7B7-ra-sQn"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-79.316546762589937" y="130.93525179856115"/>
         </scene>
