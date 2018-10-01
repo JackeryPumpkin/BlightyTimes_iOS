@@ -24,8 +24,8 @@ class Author {
     private var _commission: Int = 1000; //per publication
     
     public let PROGRESS_MAX: Double = 100;
-    public static let ARTICLE_RATE_MAX: Double = 0.8;
-    public static let ARTICLE_RATE_MIN: Double = 0.05;
+    public static let ARTICLE_RATE_MAX: Double = 8.0;
+    public static let ARTICLE_RATE_MIN: Double = 8.0;
     
     fileprivate init(portrait: UIImage, name: String, topics: [Topic], articleRate: Double) {
         _portrait = portrait;

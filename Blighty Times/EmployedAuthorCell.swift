@@ -9,6 +9,7 @@
 import UIKit
 
 class EmployedAuthorCell: UITableViewCell {
+    //Main View
     @IBOutlet weak var authorPortrait: UIImageView!
     @IBOutlet weak var authorName: UILabel!
     @IBOutlet weak var level: UILabel!
@@ -19,6 +20,9 @@ class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var morale: UILabel!
     @IBOutlet weak var progressConstraint: NSLayoutConstraint!
     @IBOutlet weak var progressMaxConstraint: NSLayoutConstraint!
+    
+    //Options View
+    @IBOutlet weak var optionsView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -21,7 +21,7 @@ class Simulation {
     //Article Properties
     private var _newArticles: [Article] = [];
     var newArticles: [Article] { return _newArticles; }
-    private var _writtenArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 12);
+    private var _writtenArticles: [Article] = [];
     var writtenArticles: [Article] { return _writtenArticles; }
     private var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
     var nextEditionArticles: [Article] { return _nextEditionArticles; }
@@ -57,6 +57,11 @@ class Simulation {
         }
     }
     
+    func start() {
+        spawnFirstAuthor();
+        spawnFirstAuthor();
+    }
+    
     func publishNextEdition() {
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
@@ -83,8 +88,6 @@ class Simulation {
             
             i -= 1;
         }
-        
-        print("_writtenArticles.count = \(_writtenArticles.count)");
     }
     
     func authorTick() {

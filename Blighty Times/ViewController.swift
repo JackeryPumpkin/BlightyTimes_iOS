@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //Article Outlets & Properties
     @IBOutlet weak var pendingSlotsFullWarning: UILabel!
+    @IBOutlet weak var articleSlotsStack: UIStackView!
     @IBOutlet weak var articleSlotsTop: UIStackView!
     @IBOutlet weak var articleSlotsMiddle: UIStackView!
     @IBOutlet weak var articleSlotsBottom: UIStackView!
@@ -34,11 +35,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var gameTimer: Timer!;
     
     //Moving Tile Outlets and Properties
-    private var movingTileIndex: Int?
     @IBOutlet weak var movingTileReferenceView: UIView!
     @IBOutlet weak var movingTileTitle: UILabel!
     @IBOutlet weak var movingTileAuthor: UILabel!
     @IBOutlet weak var movingTileColor: UIView!
+    private var movingTileIndex: Int?
+    private var lastknownTileLocation: CGPoint = CGPoint();
     
     
     override func viewDidLoad() {
@@ -46,8 +48,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         setupAesthetics();
         
-        sim.spawnFirstAuthor();
-        sim.spawnFirstAuthor();
+        sim.start();
+        
         createTiles();
         
         gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
@@ -92,32 +94,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if sim.writtenArticles.count == 12 { pendingSlotsFullWarning.isHidden = false; }
         else { pendingSlotsFullWarning.isHidden = true; }
         
-        //If an article is currently being touched, it is considered by the model to be in writtenArticles
-//        if movingTileIndex != nil {
-//            if articleTiles.object(at: movingTileIndex!)?.isTouched == false {
-//                movingTileIndex = nil
-//            }
-//        }
-        
-        print("Is moving: \(movingTileIndex ?? 999)");
+        //print("Is moving: \(movingTileIndex ?? 999)");
         
         if movingTileIndex == nil {
             for i in 0 ..< articleTiles.count {
                 if articleTiles.object(at: i)!.isTouched {
                     movingTileIndex = i;
-                    
-                    movingTileReferenceView.isHidden = false;
+
                     movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
                     movingTileAuthor.text = articleTiles.object(at: i)!.article.getAuthor().getName();
                     movingTileColor.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
-                    
-//                    movingTileReferenceView.center.x =
-                    
-//                    guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError(); }
-//                    tile.set(article: articleTiles.object(at: i)!.article);
-//                    tile.frame = CGRect(x: articleTiles.object(at: i)!.frame.origin.x, y: articleTiles.object(at: i)!.frame.origin.y, width: articleTiles.object(at: i)!.frame.width, height: articleTiles.object(at: i)!.frame.height + 20)
-//
-//                    view.addSubview(tile);
                 }
             }
         }
@@ -168,12 +154,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell;
     }
     
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+//            fatalError("Employed Author cell downcasting didn't work");
+//        }
+//        
+//        cell.optionsView.isHidden = false;
+//    }
+//    
+//    @IBAction func dismissAuthorOptions(_ sender: Any) {
+//        let cell = (sender as AnyObject).superview! as! EmployedAuthorCell;
+//        
+//        cell.optionsView.isHidden = true;
+//    }
+//    
+//    @IBAction func fireAuthor(_ sender: Any) {
+//        let cell = (sender as AnyObject).superview!.superview!.superview!.superview!.superview!.superview! as! EmployedAuthorCell;
+//        let indexPath = employedAuthorsTable.indexPath(for: cell);
+//        
+//        sim.fire(sim.employedAuthors[indexPath!.row]);
+//    }
+    
     func createTiles() {
         for i in 1 ... 12 {
             guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError() }
             
             tile.setBlank();
             tile.addConstraint(NSLayoutConstraint(item: tile, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: articleTileHight.constant));
+            tile.addGestureRecognizer(pan());
             
             articleTiles.addObject(tile);
             
@@ -188,31 +196,56 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func setupAesthetics() {
-//        movingTileColor.clipsToBounds = true;
         movingTileColor.layer.cornerRadius = movingTileColor.frame.width / 2;
         //Shadow stuff for the labels
     }
     
-    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
-        if recognizer.state == .began {
-            articleTiles.object(at: movingTileIndex!)?.layer.opacity = 0;
-        }
-        
-        if articleTiles.object(at: movingTileIndex!)?.article.getLifetime() 
-        
-        let translation = recognizer.translation(in: self.view);
-        
-        if let view = recognizer.view {
-            view.center = CGPoint(x:view.center.x + translation.x,
-                                  y:view.center.y + translation.y);
-        }
-        
-        recognizer.setTranslation(CGPoint.zero, in: self.view);
-        
-        if recognizer.state == .ended || recognizer.state == .cancelled {
-            articleTiles.object(at: movingTileIndex!)?.layer.opacity = 1;
-            movingTileIndex = nil;
-            movingTileReferenceView.isHidden = true;
+    func pan() -> UIPanGestureRecognizer {
+        var panRecognizer = UIPanGestureRecognizer()
+
+        panRecognizer = UIPanGestureRecognizer (target: self, action: #selector(handlePan(recognizer: )));
+        panRecognizer.minimumNumberOfTouches = 1;
+        panRecognizer.maximumNumberOfTouches = 1;
+        return panRecognizer;
+    }
+    
+    @objc func handlePan(recognizer: UIPanGestureRecognizer) {
+        if let index = movingTileIndex {
+            if let tile = articleTiles.object(at: index) {
+                if recognizer.state == .began {
+                    tile.layer.opacity = 0;
+                    
+                    if index < 4 {
+                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.minY + articleSlotsTop.frame.height / 2);
+                    } else if index < 8 {
+                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.midY);
+                    } else if index < 12 {
+                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.maxY - articleSlotsBottom.frame.height / 2);
+                    }
+                    movingTileReferenceView.center = lastknownTileLocation;
+                    movingTileReferenceView.isHidden = false;
+                }
+                
+                if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
+                    recognizer.state = .ended;
+                }
+                
+                let translation = recognizer.translation(in: self.view);
+                
+                movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x,
+                                                         y: movingTileReferenceView.center.y + translation.y);
+                
+                recognizer.setTranslation(CGPoint.zero, in: self.view);
+                
+                if recognizer.state == .ended || recognizer.state == .cancelled {
+                    tile.layer.opacity = 1;
+                    movingTileIndex = nil;
+                    
+                    //Animate movingTileReferenceView back to lastknownTileLocation
+                    
+                    movingTileReferenceView.isHidden = true;
+                }
+            }
         }
     }
 }
