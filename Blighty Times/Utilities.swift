@@ -6,7 +6,7 @@
 //  Copyright © 2018 Zachary Duncan. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 
 //func Random(between min: Double, and max: Double) -> Double {
@@ -75,5 +75,49 @@ extension NSPointerArray {
         guard index < count else { return }
         
         removePointer(at: index)
+    }
+}
+
+extension UIView {
+    
+    func addShadow(alpha: CGFloat, radius: CGFloat, height: CGFloat) {
+        self.layer.shadowOpacity = 1
+        self.layer.shadowRadius = radius
+        self.layer.shadowOffset = CGSize(width: 0.0, height: height)
+        self.layer.shadowColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: alpha).cgColor
+    }
+    
+    func addBorders(width: CGFloat, color: CGColor) {
+        self.layer.borderWidth = width
+        self.layer.borderColor = color
+    }
+    
+    func roundCorners(withIntensity level: Roundness) {
+        switch level {
+        case .slight:
+            self.layer.cornerRadius = 5.0
+        case .heavy:
+            self.layer.cornerRadius = 15.0
+        case .full:
+            self.layer.cornerRadius = self.frame.width > self.frame.height ? self.frame.height / 2 : self.frame.width / 2
+        }
+    }
+    
+    func show() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.alpha = 1
+        })
+    }
+    
+    func hide() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.alpha = 0
+        })
+    }
+    
+    enum Roundness {
+        case slight
+        case heavy
+        case full
     }
 }

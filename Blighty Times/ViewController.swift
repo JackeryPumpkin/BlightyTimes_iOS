@@ -38,7 +38,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var movingTileReferenceView: UIView!
     @IBOutlet weak var movingTileTitle: UILabel!
     @IBOutlet weak var movingTileAuthor: UILabel!
-    @IBOutlet weak var movingTileColor: UIView!
     private var movingTileIndex: Int?
     private var lastknownTileLocation: CGPoint = CGPoint();
     
@@ -94,8 +93,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if sim.writtenArticles.count == 12 { pendingSlotsFullWarning.isHidden = false; }
         else { pendingSlotsFullWarning.isHidden = true; }
         
-        //print("Is moving: \(movingTileIndex ?? 999)");
-        
         if movingTileIndex == nil {
             for i in 0 ..< articleTiles.count {
                 if articleTiles.object(at: i)!.isTouched {
@@ -103,7 +100,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
                     movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
                     movingTileAuthor.text = articleTiles.object(at: i)!.article.getAuthor().getName();
-                    movingTileColor.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
+                    movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
                 }
             }
         }
@@ -154,30 +151,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell;
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-//            fatalError("Employed Author cell downcasting didn't work");
-//        }
-//        
-//        cell.optionsView.isHidden = false;
-//    }
-//    
-//    @IBAction func dismissAuthorOptions(_ sender: Any) {
-//        let cell = (sender as AnyObject).superview! as! EmployedAuthorCell;
-//        
-//        cell.optionsView.isHidden = true;
-//    }
-//    
-//    @IBAction func fireAuthor(_ sender: Any) {
-//        let cell = (sender as AnyObject).superview!.superview!.superview!.superview!.superview!.superview! as! EmployedAuthorCell;
-//        let indexPath = employedAuthorsTable.indexPath(for: cell);
-//        
-//        sim.fire(sim.employedAuthors[indexPath!.row]);
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("You've made it this far")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+            fatalError("Employed Author cell downcasting didn't work");
+        }
+        
+        if cell.optionsView.isHidden {
+            cell.optionsView.isHidden = false;
+        } else {
+            cell.optionsView.isHidden = true;
+        }
+    }
     
     func createTiles() {
         for i in 1 ... 12 {
-            guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError() }
+            guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError(); }
             
             tile.setBlank();
             tile.addConstraint(NSLayoutConstraint(item: tile, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: articleTileHight.constant));
@@ -196,8 +185,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func setupAesthetics() {
-        movingTileColor.layer.cornerRadius = movingTileColor.frame.width / 2;
-        //Shadow stuff for the labels
+        movingTileReferenceView.addShadow(alpha: 0.2, radius: 7, height: 8);
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -206,6 +194,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         panRecognizer = UIPanGestureRecognizer (target: self, action: #selector(handlePan(recognizer: )));
         panRecognizer.minimumNumberOfTouches = 1;
         panRecognizer.maximumNumberOfTouches = 1;
+        panRecognizer.cancelsTouchesInView = false;
         return panRecognizer;
     }
     
@@ -216,11 +205,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     tile.layer.opacity = 0;
                     
                     if index < 4 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.minY + articleSlotsTop.frame.height / 2);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.minY + articleSlotsTop.frame.height / 2);
                     } else if index < 8 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.midY);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.midY);
                     } else if index < 12 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x, y: articleSlotsStack.frame.maxY - articleSlotsBottom.frame.height / 2);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.maxY - articleSlotsBottom.frame.height / 2);
                     }
                     movingTileReferenceView.center = lastknownTileLocation;
                     movingTileReferenceView.isHidden = false;
@@ -238,12 +227,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 recognizer.setTranslation(CGPoint.zero, in: self.view);
                 
                 if recognizer.state == .ended || recognizer.state == .cancelled {
-                    tile.layer.opacity = 1;
-                    movingTileIndex = nil;
-                    
                     //Animate movingTileReferenceView back to lastknownTileLocation
-                    
-                    movingTileReferenceView.isHidden = true;
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.movingTileReferenceView.center = self.lastknownTileLocation;
+                    }) { (finished) in
+                        tile.layer.opacity = 1;
+                        self.movingTileIndex = nil;
+                        self.movingTileReferenceView.isHidden = true;
+                    }
                 }
             }
         }

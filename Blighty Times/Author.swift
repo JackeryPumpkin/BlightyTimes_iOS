@@ -11,7 +11,8 @@ import UIKit;
 class Author {
     private var _portrait: UIImage;
     private var _name: String;
-    private var _level: Int;
+//    private var _level: Int;
+    private var _experience: Double;
     private var _topics: [Topic];
     private var _articleRate: Double;
     private var _articleProgress: Double = 0;
@@ -24,17 +25,20 @@ class Author {
     private var _commission: Int = 1000; //per publication
     
     public let PROGRESS_MAX: Double = 100;
-    public static let ARTICLE_RATE_MAX: Double = 8.0;
-    public static let ARTICLE_RATE_MIN: Double = 8.0;
+    public static let ARTICLE_RATE_MAX: Double = 1.0;
+    public static let ARTICLE_RATE_MIN: Double = 0.3;
     
+    //Handles the inits for the pre-made Authors with random stats
+    //Used by AuthorLibrary
     fileprivate init(portrait: UIImage, name: String, topics: [Topic], articleRate: Double) {
         _portrait = portrait;
         _name = name;
-        _level = 1;
+        _experience = 0;
         _topics = topics;
         _articleRate = articleRate;
     }
     
+    //Is the public interface for making new Authors in context of the currently employed
     init(exluding employedAuthors: inout [Author]) {
         let newAuthor = AuthorLibrary.getRandom(employedAuthors: &employedAuthors);
         _portrait = newAuthor.getPortrait();
@@ -68,7 +72,7 @@ class Author {
     }
     
     func getLevel() -> Int {
-        return _level;
+        return Int((sqrt(100.0 * (2.0 * _experience + 25.0)) + 50.0) / 100.0);
     }
     
     func getRate() -> Double {
@@ -122,12 +126,10 @@ class Author {
     func getMoraleSymbol() -> String {
         if _morale < 80 {
             return "🤬";
-        } else if _morale < 100 {
-            return "😤";
+        } else if _morale < 200 {
+            return "😡";
         } else if _morale < 300 {
-            return "😠";
-        } else if _morale < 400 {
-            return "😖";
+            return "😤";
         } else if _morale < 500 {
             return "☹️";
         } else if _morale < 600 {
@@ -171,6 +173,10 @@ class Author {
     
     func getSubmittedThisWeek() -> Int {
         return _articlesWrittenThisWeek;
+    }
+    
+    private func getBaseExp() -> Int {
+        
     }
     
     func submitArticle() {
@@ -241,10 +247,17 @@ class AuthorLibrary {
         return rAuthor;
     }
     
-    private static func getRandomRate() -> Double {
+    static func getRandomRate() -> Double {
         //print("get random author article rate");
         return Random(double: Author.ARTICLE_RATE_MIN ... Author.ARTICLE_RATE_MAX);
     }
     
+    static func getRandomStartingExp() -> Double {
+        return Random(double: 0 ... 4500);
+    }
+    
+    static func getRandomStartingLevel() -> Int {
+        return Random(int: 1 ... 10);
+    }
 }
 

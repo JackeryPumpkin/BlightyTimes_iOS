@@ -40,14 +40,15 @@ class ArticleTile: UIView {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true;
-        
-        
+        print("Touching")
+        isTouched = article.getTitle() == ArticleLibrary.blank.getTitle() ? false : true;
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("Ending touch")
         isTouched = false;
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("Cancelling touch")
         isTouched = false;
     }
 }
