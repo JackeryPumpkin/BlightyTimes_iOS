@@ -29,8 +29,8 @@ class Author {
     
     //Constants
     public let PROGRESS_MAX: Double = 100;
-    public static let ARTICLE_RATE_MAX: Double = 1.0;
-    public static let ARTICLE_RATE_MIN: Double = 0.3;
+    public static let ARTICLE_RATE_MAX: Double = 10.0;
+    public static let ARTICLE_RATE_MIN: Double = 10.0;
     
     //Handles the inits for the pre-made Authors with random stats
     //Used by AuthorLibrary

@@ -193,12 +193,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     tile.layer.opacity = 0;
                     
                     if index < 4 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.minY + articleSlotsTop.frame.height / 2);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 10) - (articleSlotsTop.frame.height * 2.5));
                     } else if index < 8 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.midY);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 5) - (articleSlotsMiddle.frame.height * 1.5));
                     } else if index < 12 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: articleSlotsStack.frame.maxY - articleSlotsBottom.frame.height / 2);
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY) - (articleSlotsBottom.frame.height * 0.5));
                     }
+                    
                     movingTileReferenceView.center = lastknownTileLocation;
                     movingTileReferenceView.isHidden = false;
                 }
