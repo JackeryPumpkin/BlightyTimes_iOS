@@ -20,9 +20,8 @@ class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var morale: UILabel!
     @IBOutlet weak var progressConstraint: NSLayoutConstraint!
     @IBOutlet weak var progressMaxConstraint: NSLayoutConstraint!
+    @IBOutlet weak var experience: UILabel!
     
-    //Options View
-    @IBOutlet weak var optionsView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
