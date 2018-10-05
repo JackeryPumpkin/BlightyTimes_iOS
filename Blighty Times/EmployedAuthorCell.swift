@@ -33,7 +33,7 @@ class EmployedAuthorCell: UITableViewCell {
         if progress == 0 {
             return CGFloat(0);
         } else {
-            return progressMaxConstraint.constant * CGFloat(progress / 100);
+            return progressMaxConstraint.constant * CGFloat(progress / Double(Simulation.TICKS_PER_DAY));
         }
     }
 }

@@ -19,8 +19,8 @@ class Simulation {
     var applicantAuthors: [Author] { return _applicantAuthors; }
     
     //Article Properties
-    private var _newArticles: [Article] = [];
-    var newArticles: [Article] { return _newArticles; }
+    var newArticles: [Article] = [];
+//    var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
     var writtenArticles: [Article] { return _writtenArticles; }
     private var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
@@ -39,8 +39,8 @@ class Simulation {
     private var _playerPausesLeft: Int = 5; //Fewer pauses for higher player level
     
     //Game Constants
-    static let TICK_RATE: TimeInterval = 0.1;
-    static let TICKS_PER_DAY: Int = 100;
+    static let TICK_RATE: TimeInterval = 0.03;
+    static let TICKS_PER_DAY: Int = 1800;
     
     
     @objc func tick() {
@@ -95,10 +95,10 @@ class Simulation {
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].tick(elapsed: _gameDaysElapsed);
             
-            if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + _newArticles.count < 12 {
+            if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
                 
-                _newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+                newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
             }
             
             if _employedAuthors[i].getMorale() < 1 {
@@ -167,13 +167,22 @@ class Simulation {
     func addToNextEdition(article: inout Article, index: Int) {
         if _nextEditionArticles[index].getTopic().getName() == "blank" {
             _nextEditionArticles[index] = article;
+            removeFromPending(article: article);
+        }
+    }
+    
+    func removeFromPending(article: Article) {
+        for i in 0 ..< _writtenArticles.count {
+            if _writtenArticles[i] === article {
+                _writtenArticles.remove(at: i);
+            }
         }
     }
     
     func syncNewArticles() {
-        while !_newArticles.isEmpty {
-            _writtenArticles.append(_newArticles.first!);
-            _newArticles.removeFirst();
+        while !newArticles.isEmpty {
+            _writtenArticles.append(newArticles.first!);
+            newArticles.removeFirst();
         }
     }
     

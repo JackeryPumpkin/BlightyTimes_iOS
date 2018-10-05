@@ -25,11 +25,12 @@ class ArticleTile: UIView {
         print("coder");
     }
     
-    func set(article: Article) {
+    func set(article: inout Article) {
         self.article = article;
         articleTitle.text = article.getTitle();
         authorName.text = article.getAuthor().getName();
         self.backgroundColor = article.getTopic().getColor();
+        self.isUserInteractionEnabled = true;
     }
     
     func setBlank() {
@@ -37,18 +38,16 @@ class ArticleTile: UIView {
         articleTitle.text = "";
         authorName.text = "";
         self.backgroundColor = .clear;
+        self.isUserInteractionEnabled = false;
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touching")
-        isTouched = article.getTitle() == ArticleLibrary.blank.getTitle() ? false : true;
+        isTouched = true;
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Ending touch")
         isTouched = false;
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Cancelling touch")
         isTouched = false;
     }
 }
