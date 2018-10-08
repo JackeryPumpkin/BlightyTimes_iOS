@@ -26,6 +26,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var employedAuthorsTable: UITableView!;
     @IBOutlet weak var dayOfTheWeek: UILabel!
+    @IBOutlet weak var timeOfDay: UILabel!
+    @IBOutlet weak var timelineWidth: NSLayoutConstraint!
+    @IBOutlet weak var timePlayHeadConstraint: NSLayoutConstraint!
     @IBOutlet weak var pausesLeft: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
     
@@ -64,6 +67,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //Animate UI changes
         employedAuthorsTable.reloadData();
         dayOfTheWeek.text = sim.getDayOfTheWeek();
+        timeOfDay.text = sim.getTimeOfDay();
+        timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
         companyFunds.text = "$\(sim.company.getFunds())";
         yesterdaysProfit.text = "$\(sim.company.getYesterdaysProfit())";
         totalSubscribers.text = "\(1000)";

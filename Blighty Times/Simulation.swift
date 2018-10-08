@@ -6,7 +6,7 @@
 //  Copyright © 2018 Zachary Duncan. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class Simulation {
     //Company
@@ -29,9 +29,12 @@ class Simulation {
     var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
     //Time properties
-    private var _gameTimeElapsed: Int = 0;
+    private var _gameTimeElapsed: Int = 60;
     private var _gameDaysElapsed: Int { return _gameTimeElapsed / Simulation.TICKS_PER_DAY; }
     private var _gameDayOfTheWeek: Int = 1;
+//    private let _GAME_MINUTE: Double = Double(Simulation.TICKS_PER_DAY / 24 / 60);
+    private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24 / 60;
+    private var _gameDayMinutesElapsed: Int = 60;
     private var _gameIsPaused: Bool = false;
     
     //Player properties
@@ -44,7 +47,7 @@ class Simulation {
     
     
     @objc func tick() {
-        _gameTimeElapsed += 1;
+        moveTimeForward();
         
         writtenArticleTick();
         authorTick();
@@ -188,6 +191,26 @@ class Simulation {
     
     
     //Time Methods
+    private func moveTimeForward() {
+        _gameTimeElapsed += 1;
+        
+        if _gameTimeElapsed % _TICKS_PER_HOUR == 0 {
+            _gameDayMinutesElapsed = _gameDayMinutesElapsed > 1500 ? 60 : _gameDayMinutesElapsed + 1;
+        }
+    }
+    
+    func getPlayheadLength(maxLength: CGFloat) -> CGFloat {
+        if _gameTimeElapsed == 0 {
+            return CGFloat(0);
+        } else {
+            return maxLength * ((CGFloat(_gameTimeElapsed) - CGFloat(Simulation.TICKS_PER_DAY * _gameDaysElapsed)) / CGFloat(Simulation.TICKS_PER_DAY));
+        }
+    }
+    
+    func getDaysElapsed() -> Int {
+        return _gameDaysElapsed;
+    }
+    
     private func isEndOfDay() -> Bool {
         return _gameTimeElapsed % Simulation.TICKS_PER_DAY == 0;
     }
@@ -219,6 +242,32 @@ class Simulation {
         default:
             return "Error";
         }
+    }
+    
+    func getTimeOfDay() -> String {
+        var time: String = "12:00 AM";
+        
+        for hour in 1 ... 24 {
+            if _gameDayMinutesElapsed / 60 == hour {
+                let minute: Int = _gameDayMinutesElapsed % 60 < 10 ? _gameDayMinutesElapsed % 60 : _gameDayMinutesElapsed % 60;
+                
+                if _gameDayMinutesElapsed <= 780 {
+                    if hour == 1 {
+                        time = "\(12):\(minute)" + " AM";
+                    } else {
+                        time = "\(hour - 1):\(minute)" + " AM";
+                    }
+                } else {
+                    if hour == 13 {
+                        time = "\(12):\(minute)" + " PM";
+                    } else {
+                        time = "\(hour - 13):\(minute)" + " PM";
+                    }
+                }
+            }
+        }
+        
+        return time;
     }
     
     func isPaused() -> Bool {

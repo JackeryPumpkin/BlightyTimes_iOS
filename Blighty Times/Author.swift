@@ -299,6 +299,7 @@ class AuthorLibrary {
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Ava Estmire"),
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Ike Crimmelflank"),
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Kaylin Sprockets"),
+        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Marcus Guildabreck"),
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Bill Festerville")
     ];
     
