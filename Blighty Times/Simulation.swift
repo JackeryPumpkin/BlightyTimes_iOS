@@ -33,8 +33,9 @@ class Simulation {
     private var _gameDaysElapsed: Int { return _gameTimeElapsed / Simulation.TICKS_PER_DAY; }
     private var _gameDayOfTheWeek: Int = 1;
 //    private let _GAME_MINUTE: Double = Double(Simulation.TICKS_PER_DAY / 24 / 60);
-    private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24 / 60;
-    private var _gameDayMinutesElapsed: Int = 60;
+    private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24;
+//    private var _gameDayMinutesElapsed: Int = 60;
+    private var _gameDayHoursElapsed: Int = 1;
     private var _gameIsPaused: Bool = false;
     
     //Player properties
@@ -195,8 +196,13 @@ class Simulation {
         _gameTimeElapsed += 1;
         
         if _gameTimeElapsed % _TICKS_PER_HOUR == 0 {
-            _gameDayMinutesElapsed = _gameDayMinutesElapsed > 1500 ? 60 : _gameDayMinutesElapsed + 1;
+            _gameDayHoursElapsed = _gameDayHoursElapsed > 23 ? 1 : _gameDayHoursElapsed + 1;
         }
+        
+        //// This setup is for tracking time by minutes
+        //if _gameTimeElapsed % _TICKS_PER_HOUR == 0 {
+        //    _gameDayMinutesElapsed = _gameDayMinutesElapsed > 1500 ? 60 : _gameDayMinutesElapsed + 1;
+        //}
     }
     
     func getPlayheadLength(maxLength: CGFloat) -> CGFloat {
@@ -247,25 +253,40 @@ class Simulation {
     func getTimeOfDay() -> String {
         var time: String = "12:00 AM";
         
-        for hour in 1 ... 24 {
-            if _gameDayMinutesElapsed / 60 == hour {
-                let minute: Int = _gameDayMinutesElapsed % 60 < 10 ? _gameDayMinutesElapsed % 60 : _gameDayMinutesElapsed % 60;
-                
-                if _gameDayMinutesElapsed <= 780 {
-                    if hour == 1 {
-                        time = "\(12):\(minute)" + " AM";
-                    } else {
-                        time = "\(hour - 1):\(minute)" + " AM";
-                    }
-                } else {
-                    if hour == 13 {
-                        time = "\(12):\(minute)" + " PM";
-                    } else {
-                        time = "\(hour - 13):\(minute)" + " PM";
-                    }
-                }
+        if _gameDayHoursElapsed <= 12 {
+            if _gameDayHoursElapsed == 1 {
+                time = "\(12) AM";
+            } else {
+                time = "\(_gameDayHoursElapsed - 1) AM";
+            }
+        } else {
+            if _gameDayHoursElapsed == 13 {
+                time = "\(12) PM";
+            } else {
+                time = "\(_gameDayHoursElapsed - 13) PM";
             }
         }
+        
+        //// This setup is for tracking time by minutes
+        //        for hour in 1 ... 24 {
+        //            if _gameDayMinutesElapsed / 60 == hour {
+        //                let minute: Int = _gameDayMinutesElapsed % 60 < 10 ? _gameDayMinutesElapsed % 60 : _gameDayMinutesElapsed % 60;
+        //
+        //                if _gameDayMinutesElapsed <= 780 {
+        //                    if hour == 1 {
+        //                        time = "\(12):\(minute) AM";
+        //                    } else {
+        //                        time = "\(hour - 1):\(minute) AM";
+        //                    }
+        //                } else {
+        //                    if hour == 13 {
+        //                        time = "\(12):\(minute) PM";
+        //                    } else {
+        //                        time = "\(hour - 13):\(minute) PM";
+        //                    }
+        //                }
+        //            }
+        //        }
         
         return time;
     }
