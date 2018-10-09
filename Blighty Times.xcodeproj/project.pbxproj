@@ -21,6 +21,7 @@
 		C315310F215848790054684F /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3153105215848790054684F /* Topic.swift */; };
 		C3153111215916040054684F /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3153110215916040054684F /* Company.swift */; };
 		C31531132159485C0054684F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31531122159485C0054684F /* Utilities.swift */; };
+		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		C3153105215848790054684F /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		C3153110215916040054684F /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		C31531122159485C0054684F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 				C31530FC215848790054684F /* ArticleTile.swift */,
 				C31530FD215848790054684F /* ArticleTile.xib */,
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
+				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
 				C31530FF215848790054684F /* Main.storyboard */,
 				C31531122159485C0054684F /* Utilities.swift */,
 				C31530F1215846D50054684F /* Assets.xcassets */,
@@ -171,6 +174,7 @@
 				C3153108215848790054684F /* Article.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
 				C315310E215848790054684F /* ViewController.swift in Sources */,
+				C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */,
 				C31531132159485C0054684F /* Utilities.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 			);

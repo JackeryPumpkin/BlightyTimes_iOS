@@ -9,7 +9,6 @@
 import UIKit
 
 class EmployedAuthorCell: UITableViewCell {
-    //Main View
     @IBOutlet weak var authorPortrait: UIImageView!
     @IBOutlet weak var authorName: UILabel!
     @IBOutlet weak var level: UILabel!
@@ -25,8 +24,7 @@ class EmployedAuthorCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        authorPortrait.layer.cornerRadius = authorPortrait.frame.width / 2;
-        authorPortrait.clipsToBounds = true;
+        authorPortrait.roundCorners(withIntensity: .full);
     }
     
     func getProgressLength(_ progress: Double) -> CGFloat {

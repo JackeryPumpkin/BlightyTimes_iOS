@@ -118,9 +118,10 @@ class Simulation {
     func hire(_ author: Author) {
         _employedAuthors.append(author);
         
-        for i in 0 ..< _applicantAuthors.count {
+        hireLoop: for i in 0 ..< _applicantAuthors.count {
             if _applicantAuthors[i].getName() == author.getName() {
                 _applicantAuthors.remove(at: i);
+                break hireLoop;
             }
         }
     }
@@ -142,7 +143,8 @@ class Simulation {
     }
     
     func spawnApplicant() {
-        _applicantAuthors.append(Author(exluding: &_employedAuthors));
+        var auths = _employedAuthors + _applicantAuthors
+        _applicantAuthors.append(Author(exluding: &auths));
     }
     
     func spawnFirstAuthor() {
@@ -150,11 +152,13 @@ class Simulation {
         hire(_applicantAuthors[0]);
     }
     
-    func chanceToSpawnApplicant() {
-        if Random(int: 0 ... 10) == 1 {
+    func chanceToSpawnApplicant() -> Bool {
+        var spawned = false;
+        if Random(int: 0 ... 0) == 0 {
             spawnApplicant();
-            hire(_applicantAuthors[0]);
+            spawned = true;
         }
+        return spawned;
     }
     
     func assignToNextEdition(article: inout Article) {

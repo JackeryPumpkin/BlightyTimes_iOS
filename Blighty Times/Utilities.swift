@@ -93,6 +93,8 @@ extension UIView {
     }
     
     func roundCorners(withIntensity level: Roundness) {
+        self.clipsToBounds = true;
+        
         switch level {
         case .slight:
             self.layer.cornerRadius = 5.0

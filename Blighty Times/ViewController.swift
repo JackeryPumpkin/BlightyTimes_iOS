@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
     //Article Outlets & Properties
     @IBOutlet weak var NE_articleSlotsTop: UIStackView!
     @IBOutlet weak var NE_articleSlotsBottom: UIStackView!
@@ -25,6 +25,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var NE_articleTiles: NSPointerArray = .weakObjects();
     
     @IBOutlet weak var employedAuthorsTable: UITableView!;
+    @IBOutlet weak var applicantAuthorsTable: UITableView!
+    @IBOutlet weak var applicantsButton: UIButton!
+    @IBOutlet weak var applicantsCountBadge: UILabel!
+    @IBOutlet weak var journalistsTitle: UILabel!
+    var applicantBadgeCooldown: Int = 0;
+    
     @IBOutlet weak var dayOfTheWeek: UILabel!
     @IBOutlet weak var timeOfDay: UILabel!
     @IBOutlet weak var timelineWidth: NSLayoutConstraint!
@@ -58,6 +64,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         createTiles();
         
         gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+        
+        sim.spawnApplicant();
     }
     
     @objc func tick() {
@@ -104,11 +112,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         for i in 0 ..< articleTiles.count {
             if articleTiles.object(at: i)!.isTouched {
                 movingTileIndex = i;
-
+                
                 movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
                 movingTileAuthor.text = articleTiles.object(at: i)!.article.getAuthor().getName();
                 movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
             }
+        }
+        
+        //Handles the Applicants counter visibility
+        if applicantBadgeCooldown == 0 {
+            if sim.applicantAuthors.count > 0 && applicantsButton.titleLabel?.text == "APPLICANTS" {
+                applicantsCountBadge.text = "\(sim.applicantAuthors.count)";
+                applicantsCountBadge.isHidden = false;
+            } else {
+                applicantBadgeCooldown = 10;
+            }
+        } else {
+            applicantBadgeCooldown -= 1;
+            applicantAuthorsTable.reloadData();
         }
     }
     
@@ -131,32 +152,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sim.employedAuthors.count;
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-            fatalError("Employed Author cell downcasting didn't work");
-        }
-        
-        cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
-        cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
-        cell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
-        cell.morale.text = "\(sim.employedAuthors[indexPath.row].getMoraleSymbol())";
-        cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
-        cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-        cell.salary.text = "$\(sim.employedAuthors[indexPath.row].getSalary() * 365)";
-        cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
-        cell.experience.text = "\(Int(sim.employedAuthors[indexPath.row].getExperience()))";
-        
-        cell.topicList.text = "";
-        for topic in sim.employedAuthors[indexPath.row].getTopics() {
-            cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
-        }
-        
-        return cell;
-    }
     
     func createTiles() {
         for i in 1 ... 6 {
@@ -199,6 +195,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func setupAesthetics() {
         movingTileReferenceView.addShadow(alpha: 0.2, radius: 7, height: 8);
+        applicantsCountBadge.roundCorners(withIntensity: .full);
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -307,5 +304,106 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             }
         }
+    }
+    
+    @IBAction func applicantsButton(_ sender: Any) {
+        let APPLICANTS = " Job Applicants";
+        let EMPLOYED = " Journalists";
+        
+        applicantsCountBadge.isHidden = true;
+        applicantBadgeCooldown = 10
+        
+        if journalistsTitle.text == EMPLOYED {
+            journalistsTitle.text = APPLICANTS;
+            applicantsButton.setTitle("↩︎ BACK", for: .normal);
+            applicantsButton.contentHorizontalAlignment = .right;
+            applicantsButton.setTitleColor(#colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1), for: .normal);
+            applicantsButton.backgroundColor = .clear;
+            applicantAuthorsTable.isHidden = false;
+            
+            applicantAuthorsTable.reloadData();
+        } else {
+            journalistsTitle.text = EMPLOYED;
+            applicantsButton.setTitle("APPLICANTS", for: .normal);
+            applicantsButton.contentHorizontalAlignment = .center;
+            applicantsButton.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal);
+            applicantsButton.backgroundColor = #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1);
+            applicantAuthorsTable.isHidden = true;
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////        Table Methods        ///////////////////////
+///////////////////////////////////////////////////////////////////////
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == employedAuthorsTable {
+            return sim.employedAuthors.count;
+            
+        } else if tableView == applicantAuthorsTable {
+            return sim.applicantAuthors.count;
+        }
+        
+        return 0;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == employedAuthorsTable {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+                fatalError("Employed Author cell downcasting didn't work");
+            }
+            
+            cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
+            cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
+            cell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
+            cell.morale.text = "\(sim.employedAuthors[indexPath.row].getMoraleSymbol())";
+            cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
+            cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
+            cell.salary.text = "$" + sim.employedAuthors[indexPath.row].getFormattedSalary();
+            cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
+            cell.experience.text = "\(Int(sim.employedAuthors[indexPath.row].getExperience()))";
+            
+            cell.topicList.text = "";
+            for topic in sim.employedAuthors[indexPath.row].getTopics() {
+                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+            }
+            
+            return cell;
+            
+        } else if tableView == applicantAuthorsTable {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "applicantAuthorCell", for: indexPath) as? ApplicantAuthorCell else {
+                fatalError("Applicant Author cell downcasting didn't work");
+            }
+            
+            cell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
+            cell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
+            cell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+            cell.speed.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+            cell.salary.text = sim.applicantAuthors[indexPath.row].getFormattedSalary();
+            
+            cell.topicList.text = "";
+            for topic in sim.applicantAuthors[indexPath.row].getTopics() {
+                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+            }
+            
+            cell.onButtonTapped = {
+                self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
+                tableView.reloadData();
+            }
+            
+            return cell;
+        }
+        
+        return UITableViewCell();
     }
 }

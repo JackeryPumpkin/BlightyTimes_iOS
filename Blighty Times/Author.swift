@@ -197,6 +197,13 @@ class Author {
         return _salary;
     }
     
+    func getFormattedSalary() -> String {
+        let numberFormatter = NumberFormatter();
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal;
+        
+        return numberFormatter.string(from: NSNumber(value:_salary * 365))!;
+    }
+    
     func setNewSalary() {
         _salary = _articleRate == Author.ARTICLE_RATE_MAX ? _salary + (_quality * 10) : Int(_articleRate * 300) + (_quality * 10);
     }
@@ -256,38 +263,38 @@ class AuthorLibrary {
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Snazzy Jack Bricklayer"),
         Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Frank Bottomwealth"),
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Harold Knickers"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Theresa Frost"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Lincoln Mathers"),
+        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Theresa Froshet"),
+        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Lincoln Matherlips"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Freddie Plicks"),
         Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Wendy Mysten"),
         Author(portrait: #imageLiteral(resourceName: "Author2"), name: "Elaine Mendihooks"),
         Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Chuck Vandel"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Greg R.E. House"),
+        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Greg Heartis"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Jesse Flickmaster"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Nichole Tremble"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Leonard Spray"),
+        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Leonard Teaspray"),
         Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Catherine Humble"),
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Samuel Barth"),
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Jackie Westerpile"),
         Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Pete Underknuckle"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Arthur Tinmonk"),
         Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Richard Feak"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Timothy Whiskers"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Matthew Snore"),
+        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Timothy Whiskerly"),
+        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Matthew Snote"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Brittany Blossoms"),
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Nigel Tuntilly"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "James Heath"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Meresa Plaingull"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Norman Sugar"),
+        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Norman Shugal"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Lizzy Frankly"),
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Les Wursthumor"),
         Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Helga Harbinger"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Chaz Gesture"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Fletcher Klankapot"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Nathan Zippties"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Osmund Honey"),
+        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Nathan Zimpeck"),
+        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Osmund Honeyfront"),
         Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Terry Smackeral"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Oliver Klipfil"),
+        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Oliver Klipfin"),
         Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Abbigail Mowrett"),
         Author(portrait: #imageLiteral(resourceName: "Author2"), name: "Jen Thistlebeak"),
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Hank Prestal"),
@@ -299,6 +306,7 @@ class AuthorLibrary {
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Ava Estmire"),
         Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Ike Crimmelflank"),
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Kaylin Sprockets"),
+        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Snutty Leftcut"),
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Marcus Guildabreck"),
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Bill Festerville")
     ];
