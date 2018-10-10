@@ -23,7 +23,7 @@ class Simulation {
 //    var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
     var writtenArticles: [Article] { return _writtenArticles; }
-    private var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
+     var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
     var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
     var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
@@ -161,7 +161,7 @@ class Simulation {
         return spawned;
     }
     
-    func assignToNextEdition(article: inout Article) {
+    private func assignToNextEdition(article: inout Article) {
         NELoop: for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] === ArticleLibrary.blank {
                 _nextEditionArticles[i] = article;
@@ -172,17 +172,25 @@ class Simulation {
     
     
     //Article Methods
-    func addToNextEdition(article: inout Article, index: Int) {
-        if _nextEditionArticles[index].getTopic().getName() == "blank" {
+    func addToNextEdition(article: inout Article, index: Int) -> Bool {
+        var didAdd = false;
+        
+        if _nextEditionArticles[index] === ArticleLibrary.blank {
             _nextEditionArticles[index] = article;
             removeFromPending(article: article);
+            
+            didAdd = true;
         }
+        
+        return didAdd;
     }
     
     func removeFromPending(article: Article) {
-        for i in 0 ..< _writtenArticles.count {
+        remloop: for i in 0 ..< _writtenArticles.count {
             if _writtenArticles[i] === article {
                 _writtenArticles.remove(at: i);
+                
+                break remloop;
             }
         }
     }

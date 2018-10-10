@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var NE_articleSlotsBottom: UIStackView!
     @IBOutlet weak var NE_bonusTopic: UILabel!
     @IBOutlet weak var pendingSlotsFullWarning: UILabel!
+    @IBOutlet weak var articlePane: UIView!
     @IBOutlet weak var articleSlotsStack: UIStackView!
     @IBOutlet weak var articleSlotsTop: UIStackView!
     @IBOutlet weak var articleSlotsMiddle: UIStackView!
@@ -23,6 +24,8 @@ class ViewController: UIViewController {
     
     var articleTiles: NSPointerArray = .weakObjects();
     var NE_articleTiles: NSPointerArray = .weakObjects();
+    @IBOutlet var NE_viewPositions: [UIView]!
+    
     
     @IBOutlet weak var employedAuthorsTable: UITableView!;
     @IBOutlet weak var applicantAuthorsTable: UITableView!
@@ -109,6 +112,7 @@ class ViewController: UIViewController {
         if sim.writtenArticles.count == 12 { pendingSlotsFullWarning.isHidden = false; }
         else { pendingSlotsFullWarning.isHidden = true; }
         
+        //Handles the behavior of the moving tile from pending
         for i in 0 ..< articleTiles.count {
             if articleTiles.object(at: i)!.isTouched {
                 movingTileIndex = i;
@@ -118,6 +122,9 @@ class ViewController: UIViewController {
                 movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
             }
         }
+        
+        //Handles the behavior of the moving tile from NE
+        
         
         //Handles the Applicants counter visibility
         if applicantBadgeCooldown == 0 {
@@ -155,14 +162,14 @@ class ViewController: UIViewController {
     
     
     func createTiles() {
+        // NE Tiles
         for i in 1 ... 6 {
             guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError(); }
             
-//            tile.set(article: Article(topic: TopicLibrary.list[3], author: &AuthorLibrary().blank)); //Here to test the generated layout
             tile.setBlank();
             tile.addConstraint(NSLayoutConstraint(item: tile, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: articleTileHight.constant));
             tile.addConstraint(NSLayoutConstraint(item: tile, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: articleTileWidth.constant));
-            tile.layer.opacity = 0.5;
+            tile.layer.opacity = 0;
             tile.addGestureRecognizer(pan());
             
             NE_articleTiles.addObject(tile);
@@ -174,6 +181,7 @@ class ViewController: UIViewController {
             }
         }
         
+        // Pending Tiles
         for i in 1 ... 12 {
             guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError(); }
             
@@ -211,6 +219,7 @@ class ViewController: UIViewController {
     @objc func handlePan(recognizer: UIPanGestureRecognizer) {
         if let index = movingTileIndex {
             if let tile = articleTiles.object(at: index) {
+                
                 if recognizer.state == .began {
                     tile.layer.opacity = 0;
                     
@@ -224,84 +233,58 @@ class ViewController: UIViewController {
                     
                     movingTileReferenceView.center = lastknownTileLocation!;
                     movingTileReferenceView.isHidden = false;
-                }
+                }// End .began
+                
+                
                 
                 if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
                     recognizer.state = .ended;
                     (recognizer.view as! ArticleTile).isTouched = false;
                     movingTileIndex = nil;
                 }
-                
                 let translation = recognizer.translation(in: self.view);
-                
-                movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x,
-                                                         y: movingTileReferenceView.center.y + translation.y);
-                
+                movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x, y: movingTileReferenceView.center.y + translation.y);
                 recognizer.setTranslation(CGPoint.zero, in: self.view);
                 
+                
+                
                 if recognizer.state == .ended || recognizer.state == .cancelled {
-                    let dropLocation = recognizer.location(in: articleSlotsStack);
+                    let dropLocation = recognizer.location(in: articlePane);
                     var NE_newLocation: CGPoint? = nil;
                     var NE_newIndex: Int? = nil;
                     
-                    //Tests the drop location for being inside the bounds of any NE tile
-                    hitTest: for i in 0 ..< 6 {
-                        if i < 6 {
-                            if dropLocation.x > ((articleTileWidth.constant * CGFloat(i)) + (5 * CGFloat(i)) + articleTileWidth.constant + 5) &&
-                                dropLocation.y > (articleTileHight.constant * CGFloat(i)) + (5 * CGFloat(i)) &&
-                                dropLocation.x < ((articleTileWidth.constant * CGFloat(i + 1)) + (5 * CGFloat(i)) + articleTileWidth.constant + 5) &&
-                                dropLocation.y < (articleTileHight.constant * CGFloat(i + 1)) + (5 * CGFloat(i)) {
+                    hitLoop: for ne_view in NE_viewPositions {
+                        if dropLocation.x > ne_view.frame.minX &&
+                            dropLocation.y > ne_view.frame.minY &&
+                            dropLocation.x < ne_view.frame.maxX &&
+                            dropLocation.y < ne_view.frame.maxY {
+                            
+                            if sim.addToNextEdition(article: &tile.article, index: ne_view.tag) {
+                                NE_newLocation = ne_view.center;
+                                NE_newIndex = ne_view.tag;
+                                lastknownTileLocation = nil;
                                 
-                                //Checks that there isnt already a tile there
-                                if NE_articleTiles.object(at: i)?.article.getTitle() != ArticleLibrary.blank.getTitle() {
-                                    NE_newLocation = CGPoint(x: ((articleTileWidth.constant * CGFloat(i + 1)) / 2 + (5 * CGFloat(i)) + articleTileWidth.constant + 5),
-                                                          y: (articleTileHight.constant * CGFloat(i + 1)) / 2 + (5 * CGFloat(i)))//NE_articleTiles.object(at: i)!.center;
-                                    NE_newIndex = i;
-                                    
-                                    //There is no lastknownTileLocation when we drop in NE
-                                    lastknownTileLocation = nil;
-                                }
-                                
-                                break hitTest;
+                                NE_articleTiles.object(at: ne_view.tag)?.set(article: &sim._nextEditionArticles[ne_view.tag]);
                             }
-                        }
-                    }
-                    
-                    //If tile was taken from NE and not placed NE, we find it a new home in pending
-                    //If pending is full, we put it back in its spot in NE
-                    if NE_newIndex == nil && lastknownTileLocation == nil {
-                        var foundEmptyNode = false;
-                        for i in 0 ..< articleTiles.count {
-                            if articleTiles.object(at: i)!.article.getTitle() == ArticleLibrary.blank.getTitle() {
-                                foundEmptyNode = true;
-                                
-//                                lastknownTileLocation =
-                            }
-                        }
-                        
-                        if !foundEmptyNode {
-                            //
+                            
+                            break hitLoop;
                         }
                     }
                     
                     //Animate movingTileReferenceView back to its destination
                     UIView.animate(withDuration: 0.2, animations: {
-                        
-                        
                         self.movingTileReferenceView.center = NE_newLocation != nil ? NE_newLocation! : self.lastknownTileLocation!;
                     }) { (finished) in
-                        if NE_newLocation != nil {
-                            self.NE_articleTiles.object(at: NE_newIndex!)!.set(article: &tile.article);
-                            //Change article from pending to next edition in model
-                            self.sim.addToNextEdition(article: &tile.article, index: NE_newIndex!)
+                        if NE_newIndex != nil {
+                            self.NE_articleTiles.object(at: NE_newIndex!)?.layer.opacity = 1;
                             tile.setBlank();
                         }
-                        
+
                         tile.layer.opacity = 1;
                         self.movingTileIndex = nil;
                         self.movingTileReferenceView.isHidden = true;
                     }
-                }
+                }// End .ended || .cancelled
             }
         }
     }
@@ -388,7 +371,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
             cell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
             cell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
-            cell.speed.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+            cell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
             cell.salary.text = sim.applicantAuthors[indexPath.row].getFormattedSalary();
             
             cell.topicList.text = "";
