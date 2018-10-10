@@ -54,7 +54,7 @@ class Simulation {
         authorTick();
         
         if isEndOfDay() {
-            publishNextEdition();
+//            publishNextEdition();
             company.tick(subscribers: 1000, employedAuthors: _employedAuthors);
             nextDay();
             chanceToSpawnApplicant();
@@ -64,6 +64,11 @@ class Simulation {
     func start() {
         spawnFirstAuthor();
         spawnFirstAuthor();
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
+        }
     }
     
     func publishNextEdition() {
@@ -102,7 +107,7 @@ class Simulation {
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
                 
-                newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+                newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
             }
             
             if _employedAuthors[i].getMorale() < 1 {
@@ -175,6 +180,11 @@ class Simulation {
     func addToNextEdition(article: inout Article, index: Int) -> Bool {
         var didAdd = false;
         
+        print("\n\n_nextEditionArticles before addToNextEdition():");
+        for article in _nextEditionArticles {
+            print(article.getTopic().getApprovalSymbol() + article.getTopic().getName() + " by " + article.getAuthor().getName());
+        }
+        
         if _nextEditionArticles[index] === ArticleLibrary.blank {
             _nextEditionArticles[index] = article;
             removeFromPending(article: article);
@@ -182,7 +192,41 @@ class Simulation {
             didAdd = true;
         }
         
+        print("_nextEditionArticles after addToNextEdition():");
+        for article in _nextEditionArticles {
+            print(article.getTopic().getApprovalSymbol() + article.getTopic().getName() + " by " + article.getAuthor().getName());
+        }
+        
         return didAdd;
+    }
+    
+    func changeIndexNextEdition(from pos1: Int, to pos2: Int) -> Bool {
+        var didSwitch = false;
+        
+        if _nextEditionArticles[pos2] === ArticleLibrary.blank {
+            _nextEditionArticles[pos2] = _nextEditionArticles[pos1];
+            _nextEditionArticles[pos1] = ArticleLibrary.blank;
+            
+            didSwitch = true;
+        }
+        
+        return didSwitch;
+    }
+    
+    func backToPending(ne_index: Int) -> Bool {
+        var didPend = false;
+        
+        print("_writtenArticles.count before = \(_writtenArticles.count)")
+        if _writtenArticles.count < 12 {
+            _writtenArticles.append(_nextEditionArticles[ne_index]);
+            _nextEditionArticles[ne_index] = ArticleLibrary.blank;
+            
+            print("_writtenArticles.count before = \(_writtenArticles.count)")
+            
+            didPend = true;
+        }
+        
+        return didPend;
     }
     
     func removeFromPending(article: Article) {

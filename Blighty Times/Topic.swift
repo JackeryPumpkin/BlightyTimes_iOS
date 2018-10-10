@@ -28,7 +28,7 @@ class Topic {
     }
     
     func getApprovalSymbol() -> String {
-        return _approval ? "↑" : "↓";
+        return _approval ? "❤︎" : "✗";
     }
     
     func getColor() -> UIColor {

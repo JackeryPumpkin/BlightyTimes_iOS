@@ -80,11 +80,11 @@ extension NSPointerArray {
 
 extension UIView {
     
-    func addShadow(alpha: CGFloat, radius: CGFloat, height: CGFloat) {
+    func addShadow(radius: CGFloat, height: CGFloat, color: UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)) {
         self.layer.shadowOpacity = 1
         self.layer.shadowRadius = radius
         self.layer.shadowOffset = CGSize(width: 0.0, height: height)
-        self.layer.shadowColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: alpha).cgColor
+        self.layer.shadowColor = color.cgColor;
     }
     
     func addBorders(width: CGFloat, color: CGColor) {

@@ -26,7 +26,7 @@ class Author {
 //    private var _needsPromotion: Bool = false;
     
     //Morale Bonus Properties
-    private var _paycheckBonus = 0;
+    private var _paycheckCooldown = 0;
     
     //Constants
     private let PROGRESS_MAX: Double = Double(Simulation.TICKS_PER_DAY);
@@ -70,6 +70,8 @@ class Author {
     }
     
     func tick(elapsed days: Int) {
+        reduceCooldowns();
+        
         if _lastKnownGameDaysElapsed != days {
             _lastKnownGameDaysElapsed = days;
             _daysEmployed += 1;
@@ -119,13 +121,13 @@ class Author {
         let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
         
         if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
-            return "+";
+            return "►";
         } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
-            return "++";
+            return "►►";
         } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
-            return "+++";
+            return "►►►";
         } else {
-            return "++++";
+            return "►►►►";
         }
     }
     
@@ -156,7 +158,7 @@ class Author {
     }
     
     func getMoraleSymbol() -> String {
-        if _paycheckBonus == 0 {
+        if _paycheckCooldown == 0 {
             if _morale < 80 {
                 return "🤬";
             } else if _morale < 200 {
@@ -178,7 +180,7 @@ class Author {
     }
     
     private func adjustMorale() {
-        if _paycheckBonus == 0 {
+        if _paycheckCooldown == 0 {
             if _daysEmployed > 7 {
                 _morale -= 50;
                 
@@ -188,9 +190,11 @@ class Author {
             } else if _daysEmployed > 30 {
                 _morale -= 200;
             }
-        } else {
-            _paycheckBonus -= 1;
         }
+    }
+    
+    func reduceCooldowns() {
+        _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;//= _paycheckCooldown > 0 ? _paycheckCooldown - 1 : 0;
     }
     
     func getSalary() -> Int {
@@ -219,7 +223,7 @@ class Author {
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
         increaseExperience();
-        _paycheckBonus = 1;
+        _paycheckCooldown = 120;
     }
     
     func getSubmittedThisWeek() -> Int {
@@ -230,7 +234,7 @@ class Author {
         _articlesWrittenThisWeek += 1;
         _articleProgress = 0;
         increaseExperience();
-        _paycheckBonus = 1;//Only while publishing is not implemented
+        _paycheckCooldown = 120;//Only while publishing is not implemented
     }
     
     func getExperience() -> Double {
