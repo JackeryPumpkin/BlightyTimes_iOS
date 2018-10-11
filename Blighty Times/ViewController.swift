@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var applicantAuthorsTable: UITableView!
     @IBOutlet weak var applicantsButton: UIButton!
     @IBOutlet weak var applicantsCountBadge: UILabel!
-    @IBOutlet weak var journalistsTitle: UILabel!
+    @IBOutlet weak var journalistsButton: UIButton!
     var applicantBadgeCooldown: Int = 0;
     
     @IBOutlet weak var dayOfTheWeek: UILabel!
@@ -138,7 +138,7 @@ class ViewController: UIViewController {
         
         //Handles the Applicants counter visibility
         if applicantBadgeCooldown == 0 {
-            if sim.applicantAuthors.count > 0 && applicantsButton.titleLabel?.text == "APPLICANTS" {
+            if sim.applicantAuthors.count > 0 && applicantsButton.isEnabled == true {
                 applicantsCountBadge.text = "\(sim.applicantAuthors.count)";
                 applicantsCountBadge.isHidden = false;
             } else {
@@ -214,6 +214,8 @@ class ViewController: UIViewController {
     func setupAesthetics() {
         movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199));
         applicantsCountBadge.roundCorners(withIntensity: .full);
+        applicantsButton.layer.opacity = 0.3;
+        journalistsButton.isEnabled = false;
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -394,30 +396,26 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func applicantsButton(_ sender: Any) {
-        let APPLICANTS = " Job Applicants";
-        let EMPLOYED = " Journalists";
+    @IBAction func journalistsButton(_ sender: Any) {
+        journalistsButton.isEnabled = false;
+        journalistsButton.layer.opacity = 1;
+        applicantsButton.isEnabled = true;
+        applicantsButton.layer.opacity = 0.3;
         
+        applicantAuthorsTable.isHidden = true;
+    }
+    
+    @IBAction func applicantsButton(_ sender: Any) {
         applicantsCountBadge.isHidden = true;
         applicantBadgeCooldown = 10
         
-        if journalistsTitle.text == EMPLOYED {
-            journalistsTitle.text = APPLICANTS;
-            applicantsButton.setTitle("↩︎ BACK", for: .normal);
-            applicantsButton.contentHorizontalAlignment = .right;
-            applicantsButton.setTitleColor(#colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1), for: .normal);
-            applicantsButton.backgroundColor = .clear;
-            applicantAuthorsTable.isHidden = false;
-            
-            applicantAuthorsTable.reloadData();
-        } else {
-            journalistsTitle.text = EMPLOYED;
-            applicantsButton.setTitle("APPLICANTS", for: .normal);
-            applicantsButton.contentHorizontalAlignment = .center;
-            applicantsButton.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal);
-            applicantsButton.backgroundColor = #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1);
-            applicantAuthorsTable.isHidden = true;
-        }
+        applicantsButton.isEnabled = false;
+        applicantsButton.layer.opacity = 1;
+        journalistsButton.isEnabled = true;
+        journalistsButton.layer.opacity = 0.3;
+        
+        applicantAuthorsTable.isHidden = false;
+        applicantAuthorsTable.reloadData();
     }
     
     @IBAction func publishButton(_ sender: Any) {

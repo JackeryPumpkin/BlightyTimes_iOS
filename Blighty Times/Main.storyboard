@@ -478,7 +478,7 @@
                                         <rect key="frame" x="0.0" y="1" width="370" height="523"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" bouncesZoom="NO" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="120" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aid-f0-ge8">
-                                                <rect key="frame" x="0.0" y="56.5" width="370" height="466.5"/>
+                                                <rect key="frame" x="0.0" y="60" width="370" height="463"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="separatorColor" red="0.91075330300053692" green="0.90635352858990625" blue="0.91515307741116747" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <prototypes>
@@ -707,7 +707,7 @@
                                                 </connections>
                                             </tableView>
                                             <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="75" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="piQ-9S-w4w" userLabel="Applicant Authors Table">
-                                                <rect key="frame" x="0.0" y="56.5" width="370" height="466.5"/>
+                                                <rect key="frame" x="0.0" y="60" width="370" height="463"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
@@ -844,29 +844,8 @@
                                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Egm-Ic-yQn"/>
                                                 </connections>
                                             </tableView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Journalists" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMW-OW-WSG">
-                                                <rect key="frame" x="20" y="20" width="330" height="31.5"/>
-                                                <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="27"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9f-il-HLo">
-                                                <rect key="frame" x="200" y="21" width="150" height="30"/>
-                                                <color key="backgroundColor" red="0.87843137250000003" green="0.18039215689999999" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="150" id="3Vj-ur-F9i"/>
-                                                    <constraint firstAttribute="height" constant="30" id="FLE-CV-67D"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="27"/>
-                                                <state key="normal" title="Applicants">
-                                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="applicantsButton:" destination="BYZ-38-t0r" eventType="touchDown" id="GaK-F5-sKK"/>
-                                                </connections>
-                                            </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3bc-TS-kyg">
-                                                <rect key="frame" x="340" y="11" width="20" height="20"/>
+                                                <rect key="frame" x="340" y="12" width="20" height="20"/>
                                                 <color key="backgroundColor" red="0.20411634449999999" green="0.47271108630000003" blue="0.96475440260000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="3m8-bT-Wci"/>
@@ -876,24 +855,50 @@
                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="RCm-g9-eC7">
+                                                <rect key="frame" x="20" y="0.0" width="330" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIP-dE-Zmr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="165" height="60"/>
+                                                        <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="27"/>
+                                                        <state key="normal" title=" Journalists">
+                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="journalistsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GFe-PK-oiU"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9f-il-HLo">
+                                                        <rect key="frame" x="165" y="0.0" width="165" height="60"/>
+                                                        <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="27"/>
+                                                        <state key="normal" title=" Applicants">
+                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="applicantsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tie-tg-xtV"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="1eo-eW-xls"/>
+                                                </constraints>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="piQ-9S-w4w" firstAttribute="top" secondItem="aid-f0-ge8" secondAttribute="top" id="4jl-Iv-AZE"/>
                                             <constraint firstItem="piQ-9S-w4w" firstAttribute="bottom" secondItem="aid-f0-ge8" secondAttribute="bottom" id="Bab-SU-jIv"/>
-                                            <constraint firstItem="3bc-TS-kyg" firstAttribute="top" secondItem="T9f-il-HLo" secondAttribute="top" constant="-10" id="H4f-KL-vNX"/>
-                                            <constraint firstItem="gMW-OW-WSG" firstAttribute="leading" secondItem="xFI-IW-17j" secondAttribute="leading" constant="20" id="HL4-W5-F49"/>
-                                            <constraint firstItem="aid-f0-ge8" firstAttribute="top" secondItem="gMW-OW-WSG" secondAttribute="bottom" constant="5" id="NGe-NN-8Fo"/>
-                                            <constraint firstAttribute="trailing" secondItem="gMW-OW-WSG" secondAttribute="trailing" constant="20" id="Pho-yN-RVs"/>
+                                            <constraint firstAttribute="trailing" secondItem="3bc-TS-kyg" secondAttribute="trailing" constant="10" id="GMb-xH-Un9"/>
                                             <constraint firstAttribute="width" constant="370" id="QCi-Qa-B4X"/>
+                                            <constraint firstItem="RCm-g9-eC7" firstAttribute="top" secondItem="xFI-IW-17j" secondAttribute="top" id="Rum-qM-kEL"/>
                                             <constraint firstItem="piQ-9S-w4w" firstAttribute="leading" secondItem="aid-f0-ge8" secondAttribute="leading" id="XcP-db-yr6"/>
-                                            <constraint firstItem="T9f-il-HLo" firstAttribute="centerY" secondItem="gMW-OW-WSG" secondAttribute="centerY" id="ZhY-8b-u47"/>
+                                            <constraint firstItem="RCm-g9-eC7" firstAttribute="leading" secondItem="xFI-IW-17j" secondAttribute="leading" constant="20" id="Ylf-L4-QgV"/>
+                                            <constraint firstAttribute="trailing" secondItem="RCm-g9-eC7" secondAttribute="trailing" constant="20" id="cfM-sR-phT"/>
+                                            <constraint firstItem="aid-f0-ge8" firstAttribute="top" secondItem="RCm-g9-eC7" secondAttribute="bottom" id="dOq-lB-DjT"/>
                                             <constraint firstItem="piQ-9S-w4w" firstAttribute="trailing" secondItem="aid-f0-ge8" secondAttribute="trailing" id="gup-sx-kcg"/>
-                                            <constraint firstItem="gMW-OW-WSG" firstAttribute="top" secondItem="xFI-IW-17j" secondAttribute="top" constant="20" id="hCm-V2-efm"/>
                                             <constraint firstAttribute="bottom" secondItem="aid-f0-ge8" secondAttribute="bottom" id="iTY-xJ-Wfm"/>
                                             <constraint firstItem="aid-f0-ge8" firstAttribute="leading" secondItem="xFI-IW-17j" secondAttribute="leading" id="kXU-Im-u1O"/>
-                                            <constraint firstItem="3bc-TS-kyg" firstAttribute="trailing" secondItem="T9f-il-HLo" secondAttribute="trailing" constant="10" id="nvS-Mt-W0a"/>
-                                            <constraint firstAttribute="trailing" secondItem="T9f-il-HLo" secondAttribute="trailing" constant="20" id="r1H-gM-mnD"/>
+                                            <constraint firstItem="3bc-TS-kyg" firstAttribute="top" secondItem="xFI-IW-17j" secondAttribute="top" constant="12" id="lVy-Ts-ggq"/>
                                             <constraint firstAttribute="trailing" secondItem="aid-f0-ge8" secondAttribute="trailing" id="sPq-Ca-7yg"/>
                                         </constraints>
                                     </view>
@@ -1567,7 +1572,7 @@
                         <outlet property="companyFunds" destination="rGk-pt-g48" id="LQs-Ey-jbJ"/>
                         <outlet property="dayOfTheWeek" destination="Xok-To-Woo" id="sOy-ix-v5J"/>
                         <outlet property="employedAuthorsTable" destination="aid-f0-ge8" id="A0Z-Vq-bor"/>
-                        <outlet property="journalistsTitle" destination="gMW-OW-WSG" id="VvG-oY-P74"/>
+                        <outlet property="journalistsButton" destination="yIP-dE-Zmr" id="kcw-rc-Xpi"/>
                         <outlet property="movingTileAuthor" destination="Te5-KR-a7T" id="PDd-bB-BbL"/>
                         <outlet property="movingTileReferenceView" destination="C6w-NJ-7hh" id="dgP-iT-Bkw"/>
                         <outlet property="movingTileTitle" destination="b71-Xa-o6C" id="P6t-aB-rT5"/>
