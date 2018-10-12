@@ -9,24 +9,24 @@
 import UIKit
 
 class Simulation {
-    //Company
-    let company: Company = Company();
+    let COMPANY: Company = Company();
+    let POPULATION: Population = Population();
     
     //Author properties
     private var _employedAuthors: [Author] = [];
-    var employedAuthors: [Author] { return _employedAuthors; }
+            var employedAuthors: [Author] { return _employedAuthors; }
     private var _applicantAuthors: [Author] = [];
-    var applicantAuthors: [Author] { return _applicantAuthors; }
+            var applicantAuthors: [Author] { return _applicantAuthors; }
     
     //Article Properties
-    var newArticles: [Article] = [];
+            var newArticles: [Article] = [];
 //    var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
-    var writtenArticles: [Article] { return _writtenArticles; }
+            var writtenArticles: [Article] { return _writtenArticles; }
      var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
-    var nextEditionArticles: [Article] { return _nextEditionArticles; }
+            var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
-    var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
+            var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
     //Time properties
     private var _gameTimeElapsed: Int = 60;
@@ -54,10 +54,8 @@ class Simulation {
         authorTick();
         
         if isEndOfDay() {
-//            publishNextEdition();
-            company.tick(subscribers: 1000, employedAuthors: _employedAuthors);
+            publishNextEdition(is: false);
             nextDay();
-            chanceToSpawnApplicant();
         }
     }
     
@@ -71,15 +69,18 @@ class Simulation {
         }
     }
     
-    func publishNextEdition() {
+    func publishNextEdition(is early: Bool) {
+        POPULATION.tick(published: _nextEditionArticles, is: early);
+        
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
                 _nextEditionArticles[i].publish();
-                company.payCommission(to: _nextEditionArticles[i].getAuthor());
+                COMPANY.payCommission(to: _nextEditionArticles[i].getAuthor());
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
             }
         }
+        if early { forceNextDay(); }
     }
     
     func writtenArticleTick() {
@@ -180,21 +181,11 @@ class Simulation {
     func addToNextEdition(article: inout Article, index: Int) -> Bool {
         var didAdd = false;
         
-        print("\n\n_nextEditionArticles before addToNextEdition():");
-        for article in _nextEditionArticles {
-            print(article.getTopic().getApprovalSymbol() + article.getTopic().getName() + " by " + article.getAuthor().getName());
-        }
-        
         if _nextEditionArticles[index] === ArticleLibrary.blank {
             _nextEditionArticles[index] = article;
             removeFromPending(article: article);
             
             didAdd = true;
-        }
-        
-        print("_nextEditionArticles after addToNextEdition():");
-        for article in _nextEditionArticles {
-            print(article.getTopic().getApprovalSymbol() + article.getTopic().getName() + " by " + article.getAuthor().getName());
         }
         
         return didAdd;
@@ -261,6 +252,16 @@ class Simulation {
         //}
     }
     
+    func forceNextDay() {
+        let timeDelta = Simulation.TICKS_PER_DAY - (_gameTimeElapsed % Simulation.TICKS_PER_DAY);
+        
+        for _ in 1 ... timeDelta {
+            moveTimeForward();
+        }
+        
+        nextDay();
+    }
+    
     func getPlayheadLength(maxLength: CGFloat) -> CGFloat {
         if _gameTimeElapsed == 0 {
             return CGFloat(0);
@@ -273,7 +274,7 @@ class Simulation {
         return _gameDaysElapsed;
     }
     
-    private func isEndOfDay() -> Bool {
+    func isEndOfDay() -> Bool {
         return _gameTimeElapsed % Simulation.TICKS_PER_DAY == 0;
     }
     
@@ -283,6 +284,9 @@ class Simulation {
         } else {
             _gameDayOfTheWeek += 1;
         }
+        
+        COMPANY.tick(subscribers: POPULATION.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
+        chanceToSpawnApplicant();
     }
     
     func getDayOfTheWeek() -> String {
@@ -369,5 +373,21 @@ class Simulation {
     
     func getPausesLeft() -> Int {
         return _playerPausesLeft;
+    }
+    
+    
+    //Population Methods
+    func getRegionGraphLengths(with barLength: CGFloat) -> [CGFloat] {
+        var lengths: [CGFloat] = []
+        
+        for region in POPULATION.regions {
+            if region.getTotalSubscriberCount() == 0 {
+                lengths.append(CGFloat(0));
+            } else {
+                lengths.append(barLength * ((CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))));
+            }
+        }
+        
+        return lengths;
     }
 }

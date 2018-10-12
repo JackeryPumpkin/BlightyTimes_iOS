@@ -12,6 +12,7 @@ class Article {
     private var _title: String;
     private var _topic: Topic;
     private var _author: Author;
+    private var _quality: Int;
     private var _lifetime: Double = Double(Simulation.TICKS_PER_DAY) * 2; //Starts with default value and is modified by world events
     private var _inNextEdition: Bool = false;
     
@@ -19,6 +20,7 @@ class Article {
         _title = topic.getApprovalSymbol() + " " + topic.getName();
         _topic = topic;
         _author = author;
+        _quality = author.getQuality();
         _lifetime *= lifeMultiplier;
     }
     
@@ -53,6 +55,10 @@ class Article {
     
     func getTopic() -> Topic {
         return _topic;
+    }
+    
+    func getQuality() -> Int {
+        return _quality;
     }
     
     func getLifetime() -> Double {

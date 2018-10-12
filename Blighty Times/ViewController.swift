@@ -66,9 +66,7 @@ class ViewController: UIViewController {
         setupAesthetics();
         sim.start();
         createTiles();
-        
-        gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
-        
+        startGameTime();
         sim.spawnApplicant();
     }
     
@@ -76,16 +74,15 @@ class ViewController: UIViewController {
         //Game Simulation
         sim.tick();
         
-        
         //Animate UI changes
         employedAuthorsTable.reloadData();
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
-        companyFunds.text = "$\(sim.company.getFunds())";
-        yesterdaysProfit.text = "$\(sim.company.getYesterdaysProfit())";
-        totalSubscribers.text = "\(1000)";
-        newSubscribers.text = "0";
+        companyFunds.text = "$\(sim.COMPANY.getFunds())";
+        yesterdaysProfit.text = "$\(sim.COMPANY.getYesterdaysProfit())";
+        totalSubscribers.text = "\(sim.POPULATION.getTotalSubscriberCount())";
+        newSubscribers.text = "\(sim.POPULATION.getNewSubscriberCount())";
         
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
@@ -93,6 +90,12 @@ class ViewController: UIViewController {
                 if tile.article.getLifetime() <= 0 {
                     tile.setBlank();
                 }
+            }
+        }
+        
+        if sim.isEndOfDay() {
+            for i in 0 ..< self.NE_articleTiles.count {
+                self.NE_articleTiles.object(at: i)!.setBlank();
             }
         }
         
@@ -156,20 +159,26 @@ class ViewController: UIViewController {
         if sim.isPaused() {
             pauseButton.setTitle("▶︎", for: .normal);
             pausesLeft.text = "\(sim.getPausesLeft())";
-            gameTimer.invalidate();
+            stopGameTime();
         } else {
             if sim.getPausesLeft() == 0 {
                 pauseButton.setTitle("᰽", for: .normal);
-                gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+                startGameTime();
                 pauseButton.isEnabled = false;
             } else {
                 pauseButton.setTitle("||", for: .normal);
-                gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+                startGameTime();
             }
         }
     }
     
+    func startGameTime() {
+        gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
+    }
     
+    func stopGameTime() {
+        gameTimer.invalidate();
+    }
     
     func createTiles() {
         // NE Tiles
@@ -216,6 +225,10 @@ class ViewController: UIViewController {
         applicantsCountBadge.roundCorners(withIntensity: .full);
         applicantsButton.layer.opacity = 0.3;
         journalistsButton.isEnabled = false;
+        
+        for node in NE_viewPositions {
+            node.addBorders(width: 3.0, color: UIColor.black.cgColor);
+        }
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -258,7 +271,7 @@ class ViewController: UIViewController {
                 
                 if recognizer.state == .ended || recognizer.state == .cancelled {
                     let dropLocation = recognizer.location(in: articlePane);
-                    var NE_newLocation: CGPoint? = nil;
+//                    var NE_newLocation: CGPoint? = nil;
                     var NE_newIndex: Int? = nil;
                     
                     hitLoop: for ne_view in NE_viewPositions {
@@ -268,9 +281,9 @@ class ViewController: UIViewController {
                             dropLocation.y < ne_view.frame.maxY {
                             
                             if sim.addToNextEdition(article: &tile.article, index: ne_view.tag) {
-                                NE_newLocation = ne_view.center;
+                                lastknownTileLocation = ne_view.center;
                                 NE_newIndex = ne_view.tag;
-                                lastknownTileLocation = nil;
+//                                lastknownTileLocation = nil;
                                 
                                 NE_articleTiles.object(at: ne_view.tag)!.set(article: &sim._nextEditionArticles[ne_view.tag]);
                                 NE_articleTiles.object(at: ne_view.tag)!.layer.opacity = 0;
@@ -282,7 +295,7 @@ class ViewController: UIViewController {
                     
                     //Animate movingTileReferenceView back to its destination
                     UIView.animate(withDuration: 0.2, animations: {
-                        self.movingTileReferenceView.center = NE_newLocation != nil ? NE_newLocation! : self.lastknownTileLocation!;
+                        self.movingTileReferenceView.center = self.lastknownTileLocation!;
                     }) { (finished) in
                         if NE_newIndex != nil {
                             self.NE_articleTiles.object(at: NE_newIndex!)?.layer.opacity = 1;
@@ -316,15 +329,15 @@ class ViewController: UIViewController {
                 
                 
                 
+                //One of three things can happen when tile from NE is dropped
+                //1. It's in the same spot or another non-blank NE slot
+                //2. It's in another blank NE slot
+                //3. It's anywhere else and either animates to first available Pending slot or back to its own slot
                 if recognizer.state == .ended || recognizer.state == .cancelled {
                     let dropLocation = recognizer.location(in: articlePane);
                     var NE_newIndex: Int? = nil;
                     var Pending_newIndex: Int? = nil;
                     
-                    //One of three things can happen when tile from NE is dropped
-                    //1. It's in the same spot or another non-blank NE slot
-                    //2. It's in another blank NE slot
-                    //3. It's anywhere else and either animates to first available Pending slot or back to its own slot
                     hitLoop: for ne_view in NE_viewPositions {
                         if dropLocation.x > ne_view.frame.minX &&
                             dropLocation.y > ne_view.frame.minY &&
@@ -346,7 +359,7 @@ class ViewController: UIViewController {
                         }
                     }
                     
-                    // if NE_newIndex is still nil here that means we need to find the Pending_newIndex
+                    // if NE_newIndex is still nil here that means we need to find the Pending_newIndex & location
                     if NE_newIndex == nil {
                         pendLoop: for i in 0 ..< articleTiles.count {
                             if articleTiles.object(at: i)!.article === ArticleLibrary.blank {
@@ -369,11 +382,12 @@ class ViewController: UIViewController {
                         }
                     }
                     
+                    //If both NE and Pending indices are nil the tile needs to head back to its orig location
                     if Pending_newIndex == nil && NE_newIndex == nil {
                         NE_newIndex = index;
                     }
                     
-                    //Animate movingTileReferenceView back to its destination
+                    //Animate movingTileReferenceView to its destination
                     UIView.animate(withDuration: 0.2, animations: {
                         self.movingTileReferenceView.center = self.lastknownTileLocation!;
                     }) { (finished) in
@@ -419,20 +433,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func publishButton(_ sender: Any) {
-        gameTimer.invalidate();
+        stopGameTime();
         
-        UIView.animate(withDuration: 5, animations: {
-            for i in 0 ..< self.NE_articleTiles.count {
-                self.NE_articleTiles.object(at: i)!.addShadow(radius: 6, height: 0);
-            }
+        UIView.animate(withDuration: 1, animations: {
+            self.timePlayHeadConstraint.constant = self.timelineWidth.constant;
+            self.view.layoutIfNeeded();
         }) { (finished) in
-            self.sim.publishNextEdition();
-            
+            self.sim.publishNextEdition(is: true);
+
             for i in 0 ..< self.NE_articleTiles.count {
                 self.NE_articleTiles.object(at: i)!.setBlank();
             }
             
-            self.gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(self.tick), userInfo: nil, repeats: true);
+            self.startGameTime();
         }
     }
 }
@@ -508,5 +521,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         return UITableViewCell();
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == employedAuthorsTable {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+                fatalError("Employed Author cell downcasting didn't work");
+            }
+            
+            cell.overlayView.isHidden = false;
+        }
     }
 }
