@@ -194,7 +194,7 @@ class Author {
     }
     
     func reduceCooldowns() {
-        _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;//= _paycheckCooldown > 0 ? _paycheckCooldown - 1 : 0;
+        _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;
     }
     
     func getSalary() -> Int {
@@ -222,7 +222,7 @@ class Author {
     
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
-        increaseExperience();
+        increaseExperience(75);
         _paycheckCooldown = 120;
     }
     
@@ -233,17 +233,16 @@ class Author {
     func submitArticle() {
         _articlesWrittenThisWeek += 1;
         _articleProgress = 0;
-        increaseExperience();
-        _paycheckCooldown = 120;//Only while publishing is not implemented
+        increaseExperience(10);
     }
     
     func getExperience() -> Double {
         return _experience;
     }
     
-    func increaseExperience() {
-        _morale += 10;
-        _experience += 50;
+    func increaseExperience(_ exp: Double) {
+        _morale += Int(exp * 0.25);
+        _experience += exp;
     }
     
     func promoteIfNecessary() {

@@ -62,6 +62,7 @@ class Simulation {
     func start() {
         spawnFirstAuthor();
         spawnFirstAuthor();
+        spawnApplicant();
         
         for i in 0 ..< _employedAuthors.count {
             newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
@@ -256,10 +257,12 @@ class Simulation {
         let timeDelta = Simulation.TICKS_PER_DAY - (_gameTimeElapsed % Simulation.TICKS_PER_DAY);
         
         for _ in 1 ... timeDelta {
-            moveTimeForward();
+//            moveTimeForward();
+            
+            tick();
         }
         
-        nextDay();
+//        nextDay();
     }
     
     func getPlayheadLength(maxLength: CGFloat) -> CGFloat {

@@ -41,11 +41,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var pausesLeft: UILabel!
     @IBOutlet weak var pauseButton: UIButton!
     
-    //Company Outlets
+    //Data Tracking Outlets
     @IBOutlet weak var companyFunds: UILabel!
     @IBOutlet weak var yesterdaysProfit: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
+    @IBOutlet var regionBars: [UIView]!
+    @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
+    @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
+    @IBOutlet var regionBarProgressSymbols: [UILabel]!
     
     //Game Properties
     private var sim = Simulation();
@@ -63,11 +67,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        setupAesthetics();
         sim.start();
+        
+        setupAesthetics();
         createTiles();
         startGameTime();
-        sim.spawnApplicant();
     }
     
     @objc func tick() {
@@ -79,10 +83,6 @@ class ViewController: UIViewController {
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
-        companyFunds.text = "$\(sim.COMPANY.getFunds())";
-        yesterdaysProfit.text = "$\(sim.COMPANY.getYesterdaysProfit())";
-        totalSubscribers.text = "\(sim.POPULATION.getTotalSubscriberCount())";
-        newSubscribers.text = "\(sim.POPULATION.getNewSubscriberCount())";
         
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
@@ -94,9 +94,13 @@ class ViewController: UIViewController {
         }
         
         if sim.isEndOfDay() {
+            stopGameTime();
+            
             for i in 0 ..< self.NE_articleTiles.count {
                 self.NE_articleTiles.object(at: i)!.setBlank();
             }
+            
+            animateDataBars();
         }
         
         //Adds in new articles
@@ -410,6 +414,40 @@ class ViewController: UIViewController {
         }
     }
     
+    func animateDataBars() {
+        stopGameTime();
+        
+        companyFunds.text = "$\(sim.COMPANY.getFunds())";
+        yesterdaysProfit.text = "$\(sim.COMPANY.getYesterdaysProfit())";
+        totalSubscribers.text = "\(sim.POPULATION.getTotalSubscriberCount())";
+        newSubscribers.text = "\(sim.POPULATION.getNewSubscriberCount())";
+        
+        for i in 0 ..< self.regionBars.count {
+            if self.sim.POPULATION.regions[i].getNewSubscriberCount() > 0 {
+                self.regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1);
+                self.regionBarProgressSymbols[i].text = ">";
+            } else if self.sim.POPULATION.regions[i].getNewSubscriberCount() < 0 {
+                self.regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1);
+                self.regionBarProgressSymbols[i].text = "<";
+            } else {
+                self.regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1);
+                self.regionBarProgressSymbols[i].text = "";
+            }
+            
+            if self.sim.POPULATION.regions[i].getTotalSubscriberCount() == 0 {
+                self.regionBarConstraints[i].constant = 0;
+            } else {
+                self.regionBarConstraints[i].constant = self.regionBarsMaxConstraint.constant * (CGFloat(self.sim.POPULATION.regions[i].getTotalSubscriberCount()) / CGFloat(self.sim.POPULATION.regions[i].getSize()));
+            }
+        }
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.layoutIfNeeded();
+        }) { (finished) in
+            self.startGameTime();
+        }
+    }
+    
     @IBAction func journalistsButton(_ sender: Any) {
         journalistsButton.isEnabled = false;
         journalistsButton.layer.opacity = 1;
@@ -445,7 +483,7 @@ class ViewController: UIViewController {
                 self.NE_articleTiles.object(at: i)!.setBlank();
             }
             
-            self.startGameTime();
+            self.animateDataBars();
         }
     }
 }
