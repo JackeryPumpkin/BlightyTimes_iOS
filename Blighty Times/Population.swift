@@ -16,6 +16,10 @@ class Population {
     
     init() {
         for _ in 1 ... 4 { _regions.append(Region()); }
+//        TEST:
+//        for _ in 1 ... 4 { _regions.append(Region(size: 1000000, topics: [TopicLibrary.list[0]], startWithSubs: true)) }
+        
+        print("Region's topics: ")
     }
     
     init(regions: Region ...) {
@@ -23,14 +27,13 @@ class Population {
     }
     
     func tick(published articles: [Article], is early: Bool) {
+        print("=========== Population Tick ===============")
+        
         for region in _regions {
-            print("Region's topics: ")
-            region.dailyTick(published: articles, is: early);
+            region.tick(published: articles, isEarly: early);
         }
         
         _yesterdaysNewSubs = getNewSubscriberCount();
-        
-        print("\n\n");
     }
     
     func getTotalSubscriberCount() -> Int {
@@ -54,22 +57,27 @@ class Population {
     }
 }
 
-
+import GameplayKit
 class Region {
     private let _SIZE: Int;
     private let _TOPICS: [Topic];
+    private let _MAX_LOYALTY: Double = 1.5;
+    private let _MIN_LOYALTY: Double = 0.5;
+    private let _LOYALTY_INCREMENT: Double = 0.01
     
-    private var _loyalty: Double = 0;
+    private var _loyalty: Double = 1.0;
     private var _subscribers: Int;
     private var _newSubscribers: Int = 0;
     private var _daysSinceLastApproval: Int = 0;
-    private var _earlyBonus: Double = 1;
-    private var _incomplete: Bool = false;
+    private var _missedDeadline: Bool = false;
     
     init() {
         _SIZE = RegionHelper.randomSize();
         _TOPICS = RegionHelper.randomTopics();
         _subscribers = _SIZE / 4;
+        
+        
+        print("\n\n");
     }
     
     init(size: Int, topics: [Topic], startWithSubs: Bool) {
@@ -78,97 +86,114 @@ class Region {
         _subscribers = startWithSubs ? RegionHelper.randomStartingSubs(withRegion: _SIZE) : 0;
     }
     
-    func dailyTick(published articles: [Article], is early: Bool) {
+    func tick(published articles: [Article], isEarly: Bool) {
+        print("=========== Region Tick ===============");
         for topic in _TOPICS { print(topic.getApprovalSymbol() + topic.getName()); }
         
         var topicsLiked: Int = 0;
-        let isWorldEventTopic = false; //temporary until WorldEvents.relatedTopic() is added
-        let size: Double = Double(_SIZE);
-        let loyalty = (sqrt(100.0 * (2.0 * _loyalty + 25.0)) + 50.0) / 100.0;
-        let eventMult: Double = isWorldEventTopic ? 2.0 : 1.0;
-        let unsubcribed: Double = size - Double(_subscribers) > 0 ? size - Double(_subscribers) : 0;
-        var quality: Double = 0;
-        _earlyBonus = early ? sqrt(unsubcribed) / 2 : 1;
-        
-        _newSubscribers = 0;
+        var overallQuality: Int = 0;
+        var blankArticles: Int = 0;
         
         for article in articles {
-            
-            quality += Double(article.getQuality());
-            
-            
             if approves(of: article) {
                 topicsLiked += 1;
-                
-//                _newSubscribers += Random(between: Int(sqrt(unsubcribed) / loyalty * quality), and: Int(eventMult * sqrt(unsubcribed)));
-                
-                
-            } else {
-                _newSubscribers -= 1;
+                overallQuality += article.getQuality();
             }
             
-            
+            if article === ArticleLibrary.blank {
+                blankArticles += 1;
+            }
         }
         
-        _newSubscribers += Int((sqrt((Double(topicsLiked + 1) * 16) * (loyalty * unsubcribed + 25.0)) + _earlyBonus) / (100.0 * eventMult) * quality);
-        print("sqrt((\(topicsLiked) * \(quality)) * (\(loyalty) * \(unsubcribed) + 25.0)) + \(_earlyBonus)) / (100.0 * \(eventMult))");
+        _missedDeadline = blankArticles == 6 ? true : false;
+        setNewSubs(statuses: topicsLiked, isEarly, overallQuality);
         
-//        if _incomplete {
-//            if _newSubscribers > 0 { _newSubscribers /= 6; }
-//        } else {
-//            _newSubscribers /= 6 - topicsLiked;
-//        }
-//
-//        if topicsLiked == 0 {
-//            _newSubscribers -= Int((sqrt(100.0 * (loyalty * Double(_subscribers) + 25.0)) + _earlyBonus) / 100.0);
-//        } else if topicsLiked <= 3 {
-//
-//        } else {
-//
-//        }
+        print("New subs: \(_newSubscribers)\nLoyalty: \(_loyalty)\n\n");
+    }
+    
+    func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ overallQuality: Int) {
+        let daysSinceApproval = Float(_daysSinceLastApproval);
+        let quality = Float(overallQuality > 0 ? overallQuality : 1);
+        let subs = Float(_subscribers);
+        let size = Float(_SIZE);
+        let loyalty = Float(_loyalty);
         
-        print("NEW SUBSCRIBERS: \(_newSubscribers)")
-        if _loyalty < 15 {
-            
-        } else if _loyalty < 50 {
-            if _newSubscribers < 0 { _newSubscribers /= 2; }
-        } else if _loyalty < 125 {
-            if _newSubscribers < 0 { _newSubscribers /= 4; }
-        } else if _loyalty < 250 {
-            if _newSubscribers < 0 { _newSubscribers = (_newSubscribers * -1) / 2 }
-        } else if _loyalty < 400 {
-            if _newSubscribers < 0 { _newSubscribers *= -1; }
+        let random = GKRandomSource();
+        var newSubGen = GKGaussianDistribution();
+        
+        if !_missedDeadline {
+            newSubGen = GKGaussianDistribution(randomSource: random,
+                        mean: Float(topicsLiked > 1 ? topicsLiked : 1) * (1000 * quality) * (isEarly ? loyalty + 0.1 : loyalty) * (daysSinceApproval > 0 ? -daysSinceApproval: 1),
+                        deviation: sqrtf(subs + 1) / 2 * Float(topicsLiked));
         } else {
-            if _newSubscribers < 0 { _newSubscribers = Int(sqrt(Double(_subscribers))); }
+            newSubGen = GKGaussianDistribution(randomSource: random,
+                        mean: Float(_daysSinceLastApproval) * -1000,
+                        deviation: sqrtf(subs + 1) / 2 * daysSinceApproval);
         }
         
-        //Determine new loyalty
+        var newSubs: Float = Float(newSubGen.nextInt());
+        
+        if newSubs >= 0 {
+            newSubs *= loyalty;
+        } else {
+            newSubs /= loyalty;
+        }
+        
+        if subs + newSubs < 0 {
+            newSubs = -subs;
+        } else if subs + newSubs > size {
+            newSubs = size - subs;
+        }
+        
+        
+        
+        setNewLoyalty(from: topicsLiked);
+        _missedDeadline = false;
+        _newSubscribers = Int(newSubs);
+        _subscribers += _newSubscribers;
+    }
+    
+    func setNewLoyalty(from topicsLiked: Int) {
         if topicsLiked > 0 {
-            _loyalty += (Double(topicsLiked) / Double(_TOPICS.count)) * 60;
+            increaseLoyalty(divide: topicsLiked, by: 6);
             _daysSinceLastApproval = 0;
         } else {
-            _loyalty = _loyalty - 5 > 0 ? _loyalty - 5 : 0;
+            reduceLoyalty(by: 1);
+            _daysSinceLastApproval += 1;
         }
-        
-        if _newSubscribers + _subscribers <= _SIZE {
-            if _subscribers + _newSubscribers <= 0 {
-                _newSubscribers = _subscribers;
-                _subscribers = 0;
-            } else {
-                _subscribers += _newSubscribers;
-            }
-        } else {
-            _newSubscribers = _SIZE - _subscribers;
-            _subscribers = _SIZE;
-        }
-        
-        print("Region has \(_subscribers) subscribers out of \(_SIZE) people total");
         
         if _daysSinceLastApproval > 7 {
-            _loyalty = _loyalty - 5 > 0 ? _loyalty - 5 : 0;
+            reduceLoyalty(by: 2);
         }
         
-        _daysSinceLastApproval += 1;
+        if _missedDeadline {
+            reduceLoyalty(by: 1);
+        }
+    }
+    
+    func increaseLoyalty(by increments: Int) {
+        _loyalty = _loyalty + (_LOYALTY_INCREMENT * Double(increments)) < _MAX_LOYALTY
+                    ? _loyalty + (_LOYALTY_INCREMENT * Double(increments))
+                    : _MAX_LOYALTY;
+    }
+    
+    func increaseLoyalty(divide numerator: Int, by denominator: Int) {
+        if numerator > 0 && denominator > 0 {
+            let newIncrement = (_LOYALTY_INCREMENT * (Double(numerator) / Double(denominator)));
+            
+            _loyalty = _loyalty + newIncrement < _MAX_LOYALTY
+                        ? _loyalty + (_LOYALTY_INCREMENT * newIncrement)
+                        : _MAX_LOYALTY;
+        } else {
+            increaseLoyalty(by: 1);
+            print("Invalid fraction given to increaseLoyalty(divide numerator: Int, by denominator: Int)");
+        }
+    }
+    
+    func reduceLoyalty(by increments: Int) {
+        _loyalty = _loyalty - (_LOYALTY_INCREMENT * Double(increments)) > _MIN_LOYALTY
+                    ? _loyalty - (_LOYALTY_INCREMENT * Double(increments))
+                    : _MIN_LOYALTY;
     }
     
     func getSize() -> Int {

@@ -26,7 +26,6 @@ class Article {
     
     func tick() {
         _lifetime -= 1;
-//        print(_author.getName() + "'s article on " + _topic.getApprovalSymbol() + _topic.getName() + " has a remaining lifetime of \(_lifetime)");
     }
     
     func publish() {

@@ -46,6 +46,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var yesterdaysProfit: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
+    @IBOutlet var regionTopicsLabels: [UILabel]!
     @IBOutlet var regionBars: [UIView]!
     @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
@@ -68,10 +69,9 @@ class ViewController: UIViewController {
         super.viewDidLoad();
         
         sim.start();
-        
-        setupAesthetics();
         createTiles();
         startGameTime();
+        setupAesthetics();
     }
     
     @objc func tick() {
@@ -233,6 +233,17 @@ class ViewController: UIViewController {
         for node in NE_viewPositions {
             node.addBorders(width: 3.0, color: UIColor.black.cgColor);
         }
+        
+        for i in 0 ..< sim.POPULATION.regions.count {
+            var topicText = "";
+            for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
+                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + sim.POPULATION.regions[i].getTopics()[j].getName();
+                if j < 3 { topicText += "\n"; }
+            }
+            regionTopicsLabels[i].text = topicText;
+        }
+        
+        animateDataBars();
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -417,10 +428,10 @@ class ViewController: UIViewController {
     func animateDataBars() {
         stopGameTime();
         
-        companyFunds.text = "$\(sim.COMPANY.getFunds())";
-        yesterdaysProfit.text = "$\(sim.COMPANY.getYesterdaysProfit())";
-        totalSubscribers.text = "\(sim.POPULATION.getTotalSubscriberCount())";
-        newSubscribers.text = "\(sim.POPULATION.getNewSubscriberCount())";
+        companyFunds.text = "$" + sim.COMPANY.getFunds().commaFormat();
+        yesterdaysProfit.text = "$" + sim.COMPANY.getYesterdaysProfit().commaFormat();
+        totalSubscribers.text = sim.POPULATION.getTotalSubscriberCount().commaFormat();
+        newSubscribers.text = sim.POPULATION.getNewSubscriberCount().commaFormat();
         
         for i in 0 ..< self.regionBars.count {
             if self.sim.POPULATION.regions[i].getNewSubscriberCount() > 0 {
@@ -523,9 +534,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.morale.text = "\(sim.employedAuthors[indexPath.row].getMoraleSymbol())";
             cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
             cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-            cell.salary.text = "$" + sim.employedAuthors[indexPath.row].getFormattedSalary();
+            cell.salary.text = "$" + (sim.employedAuthors[indexPath.row].getSalary() * 365).commaFormat();
             cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
-            cell.experience.text = "\(Int(sim.employedAuthors[indexPath.row].getExperience()))";
+            cell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
             
             cell.topicList.text = "";
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
@@ -543,7 +554,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
             cell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
             cell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
-            cell.salary.text = sim.applicantAuthors[indexPath.row].getFormattedSalary();
+            cell.salary.text = "$" + (sim.applicantAuthors[indexPath.row].getSalary() * 365).commaFormat();
             
             cell.topicList.text = "";
             for topic in sim.applicantAuthors[indexPath.row].getTopics() {

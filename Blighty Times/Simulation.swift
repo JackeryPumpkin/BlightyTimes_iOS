@@ -29,8 +29,8 @@ class Simulation {
             var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
     //Time properties
-    private var _gameTimeElapsed: Int = 60;
-    private var _gameDaysElapsed: Int { return _gameTimeElapsed / Simulation.TICKS_PER_DAY; }
+    private var _ticksElapsed: Int = 60;
+    private var _gameDaysElapsed: Int { return _ticksElapsed / Simulation.TICKS_PER_DAY; }
     private var _gameDayOfTheWeek: Int = 1;
 //    private let _GAME_MINUTE: Double = Double(Simulation.TICKS_PER_DAY / 24 / 60);
     private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24;
@@ -46,6 +46,8 @@ class Simulation {
     static let TICK_RATE: TimeInterval = 0.03;
     static let TICKS_PER_DAY: Int = 1800;
     
+    private var NE_releasedEarly: Bool = false;
+    
     
     @objc func tick() {
         moveTimeForward();
@@ -54,7 +56,10 @@ class Simulation {
         authorTick();
         
         if isEndOfDay() {
-            publishNextEdition(is: false);
+            if !NE_releasedEarly {
+                publishNextEdition(is: false);
+            }
+            NE_releasedEarly = false;
             nextDay();
         }
     }
@@ -72,6 +77,7 @@ class Simulation {
     
     func publishNextEdition(is early: Bool) {
         POPULATION.tick(published: _nextEditionArticles, is: early);
+        NE_releasedEarly = early;
         
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
@@ -159,6 +165,10 @@ class Simulation {
         hire(_applicantAuthors[0]);
     }
     
+    func spawnTestAuthor() {
+        _employedAuthors.append(Author(portrait: UIImage(), name: "Test", topics: [TopicLibrary.list[0]], quality: 5, articleRate: ((Double(Simulation.TICKS_PER_DAY) / 60) / 30) * 3))
+    }
+    
     func chanceToSpawnApplicant() -> Bool {
         var spawned = false;
         if Random(int: 0 ... 0) == 0 {
@@ -241,9 +251,9 @@ class Simulation {
     
     //Time Methods
     private func moveTimeForward() {
-        _gameTimeElapsed += 1;
+        _ticksElapsed += 1;
         
-        if _gameTimeElapsed % _TICKS_PER_HOUR == 0 {
+        if _ticksElapsed % _TICKS_PER_HOUR == 0 {
             _gameDayHoursElapsed = _gameDayHoursElapsed > 23 ? 1 : _gameDayHoursElapsed + 1;
         }
         
@@ -254,11 +264,10 @@ class Simulation {
     }
     
     func forceNextDay() {
-        let timeDelta = Simulation.TICKS_PER_DAY - (_gameTimeElapsed % Simulation.TICKS_PER_DAY);
+        let timeDelta = Simulation.TICKS_PER_DAY - (_ticksElapsed % Simulation.TICKS_PER_DAY);
         
         for _ in 1 ... timeDelta {
 //            moveTimeForward();
-            
             tick();
         }
         
@@ -266,10 +275,10 @@ class Simulation {
     }
     
     func getPlayheadLength(maxLength: CGFloat) -> CGFloat {
-        if _gameTimeElapsed == 0 {
+        if _ticksElapsed == 0 {
             return CGFloat(0);
         } else {
-            return maxLength * ((CGFloat(_gameTimeElapsed) - CGFloat(Simulation.TICKS_PER_DAY * _gameDaysElapsed)) / CGFloat(Simulation.TICKS_PER_DAY));
+            return maxLength * ((CGFloat(_ticksElapsed) - CGFloat(Simulation.TICKS_PER_DAY * _gameDaysElapsed)) / CGFloat(Simulation.TICKS_PER_DAY));
         }
     }
     
@@ -278,7 +287,7 @@ class Simulation {
     }
     
     func isEndOfDay() -> Bool {
-        return _gameTimeElapsed % Simulation.TICKS_PER_DAY == 0;
+        return _ticksElapsed % Simulation.TICKS_PER_DAY == 0;
     }
     
     private func nextDay() {

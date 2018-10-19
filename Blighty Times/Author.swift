@@ -55,7 +55,7 @@ class Author {
         _topics = TopicLibrary.getRandomTopics();
         _quality = AuthorLibrary.getRandomQuality();
         _articleRate = AuthorLibrary.getRandomRate();
-        _salary = Int(_articleRate * 300) + (_quality * 10);
+        _salary = Int(_articleRate * 1000) + (_quality * 10);
     }
     
     //Public interface for custom author creation
@@ -121,13 +121,13 @@ class Author {
         let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
         
         if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
-            return "►";
+            return "Very Slow";
         } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
-            return "►►";
+            return "Slow";
         } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
-            return "►►►";
+            return "Fast";
         } else {
-            return "►►►►";
+            return "Very Fast";
         }
     }
     
@@ -201,15 +201,8 @@ class Author {
         return _salary;
     }
     
-    func getFormattedSalary() -> String {
-        let numberFormatter = NumberFormatter();
-        numberFormatter.numberStyle = NumberFormatter.Style.decimal;
-        
-        return numberFormatter.string(from: NSNumber(value:_salary * 365))!;
-    }
-    
     func setNewSalary() {
-        _salary = _articleRate == Author.ARTICLE_RATE_MAX ? _salary + (_quality * 10) : Int(_articleRate * 300) + (_quality * 10);
+        _salary = _articleRate == Author.ARTICLE_RATE_MAX ? _salary + (_quality * 10) : Int(_articleRate * 1000) + (_quality * 10);
     }
     
     func getCommission() -> Int {

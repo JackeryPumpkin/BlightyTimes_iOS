@@ -62,6 +62,8 @@ class TopicLibrary {
         Topic(name: "Religion", approval: false, color: #colorLiteral(red: 0.7872382614, green: 0.2930592953, blue: 0.5784626659, alpha: 1)),
         Topic(name: "Video Games", approval: true, color: #colorLiteral(red: 0.740938006, green: 0.1459471947, blue: 0.9279299378, alpha: 1)),
         Topic(name: "Video Games", approval: false, color: #colorLiteral(red: 0.740938006, green: 0.1459471947, blue: 0.9279299378, alpha: 1)),
+        Topic(name: "Technology", approval: true, color: #colorLiteral(red: 0.3351085484, green: 0.05537386984, blue: 0.7984034419, alpha: 1)),
+        Topic(name: "Technology", approval: false, color: #colorLiteral(red: 0.3351085484, green: 0.05537386984, blue: 0.7984034419, alpha: 1)),
         Topic(name: "Music", approval: true, color: #colorLiteral(red: 0.357692138, green: 0.7539047226, blue: 0.7730805838, alpha: 1)),
         Topic(name: "Music", approval: false, color: #colorLiteral(red: 0.357692138, green: 0.7539047226, blue: 0.7730805838, alpha: 1))
     ];
