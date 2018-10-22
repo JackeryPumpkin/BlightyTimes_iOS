@@ -22,6 +22,11 @@ class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var experience: UILabel!
     
     @IBOutlet weak var overlayView: UIView!
+    @IBOutlet weak var fireButton: UIButton!
+    
+    var toggleOverlay : (() -> Void)? = nil;
+    var fire : (() -> Void)? = nil;
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,6 +38,23 @@ class EmployedAuthorCell: UITableViewCell {
             return CGFloat(0);
         } else {
             return progressMaxConstraint.constant * CGFloat(progress / Double(Simulation.TICKS_PER_DAY));
+        }
+    }
+    
+    @IBAction func toggleOverlay(_ sender: Any) {
+        if let action = self.toggleOverlay {
+            action();
+        }
+    }
+    
+    func hideOverlay() {
+        overlayView.isHidden = true;
+        fireButton.isHidden = true;
+    }
+    
+    @IBAction func fire(_ sender: Any) {
+        if let action = self.fire {
+            action();
         }
     }
 }

@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     var NE_articleTiles: NSPointerArray = .weakObjects();
     @IBOutlet var NE_viewPositions: [UIView]!
     
-    
+    var lastSelectedTableRow: IndexPath?
     @IBOutlet weak var employedAuthorsTable: UITableView!;
     @IBOutlet weak var applicantAuthorsTable: UITableView!
     @IBOutlet weak var applicantsButton: UIButton!
@@ -89,6 +89,18 @@ class ViewController: UIViewController {
             if let tile = articleTiles.object(at: i) {
                 if tile.article.getLifetime() <= 0 {
                     tile.setBlank();
+                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
+                    //Start blinking animation here
+                }
+            }
+        }
+        
+        for i in 0 ..< NE_articleTiles.count {
+            if let tile = NE_articleTiles.object(at: i) {
+                if tile.article.getLifetime() <= 0 {
+                    tile.setBlank();
+                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
+                    //Start blinking animation here
                 }
             }
         }
@@ -237,7 +249,7 @@ class ViewController: UIViewController {
         for i in 0 ..< sim.POPULATION.regions.count {
             var topicText = "";
             for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
-                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + sim.POPULATION.regions[i].getTopics()[j].getName();
+                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
                 if j < 3 { topicText += "\n"; }
             }
             regionTopicsLabels[i].text = topicText;
@@ -436,13 +448,13 @@ class ViewController: UIViewController {
         for i in 0 ..< self.regionBars.count {
             if self.sim.POPULATION.regions[i].getNewSubscriberCount() > 0 {
                 self.regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1);
-                self.regionBarProgressSymbols[i].text = ">";
+                self.regionBarProgressSymbols[i].text = "▲";
             } else if self.sim.POPULATION.regions[i].getNewSubscriberCount() < 0 {
                 self.regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1);
-                self.regionBarProgressSymbols[i].text = "<";
+                self.regionBarProgressSymbols[i].text = "▼";
             } else {
                 self.regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1);
-                self.regionBarProgressSymbols[i].text = "";
+                self.regionBarProgressSymbols[i].text = "⏤";
             }
             
             if self.sim.POPULATION.regions[i].getTotalSubscriberCount() == 0 {
@@ -528,10 +540,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("Employed Author cell downcasting didn't work");
             }
             
+//            var previousCell: EmployedAuthorCell?;
+//            if lastSelectedTableRow != nil {
+//                previousCell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: lastSelectedTableRow!) as? EmployedAuthorCell
+//            }
+            
             cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
             cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
             cell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
-            cell.morale.text = "\(sim.employedAuthors[indexPath.row].getMoraleSymbol())";
+            cell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
+            cell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
             cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
             cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
             cell.salary.text = "$" + (sim.employedAuthors[indexPath.row].getSalary() * 365).commaFormat();
@@ -541,6 +559,31 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.topicList.text = "";
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
                 cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+            }
+            
+            cell.toggleOverlay = {
+                if cell.overlayView.isHidden {
+//                    if let pCell = previousCell {
+//                        pCell.hideOverlay();
+//                    }
+//
+//                    self.lastSelectedTableRow = indexPath;
+                    
+                    cell.overlayView.isHidden = false;
+                    cell.fireButton.isHidden = false;
+                } else {
+//                    self.lastSelectedTableRow = nil;
+                    
+                    cell.overlayView.isHidden = true;
+                    cell.fireButton.isHidden = true;
+                }
+            }
+            
+            cell.fire = {
+                cell.overlayView.isHidden = true;
+                cell.fireButton.isHidden = true;
+                
+                self.sim.fire(self.sim.employedAuthors[indexPath.row])
             }
             
             return cell;
@@ -572,13 +615,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableViewCell();
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-                fatalError("Employed Author cell downcasting didn't work");
-            }
             
-            cell.overlayView.isHidden = false;
         }
     }
 }

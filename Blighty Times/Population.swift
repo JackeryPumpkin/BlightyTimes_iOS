@@ -18,8 +18,6 @@ class Population {
         for _ in 1 ... 4 { _regions.append(Region()); }
 //        TEST:
 //        for _ in 1 ... 4 { _regions.append(Region(size: 1000000, topics: [TopicLibrary.list[0]], startWithSubs: true)) }
-        
-        print("Region's topics: ")
     }
     
     init(regions: Region ...) {
@@ -27,8 +25,6 @@ class Population {
     }
     
     func tick(published articles: [Article], is early: Bool) {
-        print("=========== Population Tick ===============")
-        
         for region in _regions {
             region.tick(published: articles, isEarly: early);
         }
@@ -74,10 +70,7 @@ class Region {
     init() {
         _SIZE = RegionHelper.randomSize();
         _TOPICS = RegionHelper.randomTopics();
-        _subscribers = _SIZE / 4;
-        
-        
-        print("\n\n");
+        _subscribers = 10000//_SIZE// / 4;
     }
     
     init(size: Int, topics: [Topic], startWithSubs: Bool) {
@@ -87,9 +80,6 @@ class Region {
     }
     
     func tick(published articles: [Article], isEarly: Bool) {
-        print("=========== Region Tick ===============");
-        for topic in _TOPICS { print(topic.getApprovalSymbol() + topic.getName()); }
-        
         var topicsLiked: Int = 0;
         var overallQuality: Int = 0;
         var blankArticles: Int = 0;
@@ -108,7 +98,7 @@ class Region {
         _missedDeadline = blankArticles == 6 ? true : false;
         setNewSubs(statuses: topicsLiked, isEarly, overallQuality);
         
-        print("New subs: \(_newSubscribers)\nLoyalty: \(_loyalty)\n\n");
+        print("Subs: \(_subscribers), Size: \(_SIZE)");
     }
     
     func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ overallQuality: Int) {
@@ -118,13 +108,15 @@ class Region {
         let size = Float(_SIZE);
         let loyalty = Float(_loyalty);
         
+        setNewLoyalty(from: topicsLiked);
+        
         let random = GKRandomSource();
         var newSubGen = GKGaussianDistribution();
         
         if !_missedDeadline {
             newSubGen = GKGaussianDistribution(randomSource: random,
                         mean: Float(topicsLiked > 1 ? topicsLiked : 1) * (1000 * quality) * (isEarly ? loyalty + 0.1 : loyalty) * (daysSinceApproval > 0 ? -daysSinceApproval: 1),
-                        deviation: sqrtf(subs + 1) / 2 * Float(topicsLiked));
+                        deviation: sqrtf(subs + 1) / 2 * Float(topicsLiked + 1));
         } else {
             newSubGen = GKGaussianDistribution(randomSource: random,
                         mean: Float(_daysSinceLastApproval) * -1000,
@@ -145,9 +137,6 @@ class Region {
             newSubs = size - subs;
         }
         
-        
-        
-        setNewLoyalty(from: topicsLiked);
         _missedDeadline = false;
         _newSubscribers = Int(newSubs);
         _subscribers += _newSubscribers;
@@ -209,9 +198,9 @@ class Region {
     }
     
     func getApprovalSymbol() -> String {
-        if _loyalty <= 0.5 {
+        if _loyalty <= _MIN_LOYALTY + (_LOYALTY_INCREMENT * 3) {
             return "☠︎";
-        } else if _loyalty > 1.0 {
+        } else if _loyalty >= _MAX_LOYALTY - (_LOYALTY_INCREMENT * 3) {
             return "❤︎";
         }
         

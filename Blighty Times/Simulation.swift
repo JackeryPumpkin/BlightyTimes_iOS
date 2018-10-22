@@ -24,7 +24,7 @@ class Simulation {
     private var _writtenArticles: [Article] = [];
             var writtenArticles: [Article] { return _writtenArticles; }
      var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
-            var nextEditionArticles: [Article] { return _nextEditionArticles; }
+//            var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
             var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
@@ -40,7 +40,7 @@ class Simulation {
     
     //Player properties
     private let _MAX_PAUSES: Int = 5;
-    private var _playerPausesLeft: Int = 5; //Fewer pauses for higher player level
+    private var _playerPausesLeft: Int = 5;
     
     //Game Constants
     static let TICK_RATE: TimeInterval = 0.03;
@@ -53,6 +53,7 @@ class Simulation {
         moveTimeForward();
         
         writtenArticleTick();
+        nextEditionArticleTick();
         authorTick();
         
         if isEndOfDay() {
@@ -107,6 +108,19 @@ class Simulation {
         }
     }
     
+    func nextEditionArticleTick() {
+        var i = _nextEditionArticles.count - 1;
+        for _ in 0 ..< _nextEditionArticles.count {
+            _nextEditionArticles[i].tick();
+            
+            if _nextEditionArticles[i].getLifetime() <= 0 {
+                _nextEditionArticles[i] = ArticleLibrary.blank;
+            }
+            
+            i -= 1;
+        }
+    }
+    
     func authorTick() {
         var i = _employedAuthors.count - 1;
         for _ in 0 ..< _employedAuthors.count {
@@ -151,7 +165,6 @@ class Simulation {
     }
     
     func quit(_ author: Author) {
-        print(author.getName() + " quit");
         fire(author);
     }
     
@@ -218,12 +231,9 @@ class Simulation {
     func backToPending(ne_index: Int) -> Bool {
         var didPend = false;
         
-        print("_writtenArticles.count before = \(_writtenArticles.count)")
         if _writtenArticles.count < 12 {
             _writtenArticles.append(_nextEditionArticles[ne_index]);
             _nextEditionArticles[ne_index] = ArticleLibrary.blank;
-            
-            print("_writtenArticles.count before = \(_writtenArticles.count)")
             
             didPend = true;
         }
@@ -364,7 +374,6 @@ class Simulation {
     }
     
     func isPaused() -> Bool {
-        print("Pause status: \(_gameIsPaused)");
         return _gameIsPaused;
     }
     

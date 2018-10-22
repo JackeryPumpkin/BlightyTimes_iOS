@@ -20,7 +20,7 @@ class Author {
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
     private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
-    private var _morale: Int = 800; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
+    private var _morale: Int = 500; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int;
 //    private var _needsPromotion: Bool = false;
@@ -160,23 +160,27 @@ class Author {
     func getMoraleSymbol() -> String {
         if _paycheckCooldown == 0 {
             if _morale < 80 {
-                return "🤬";
-            } else if _morale < 200 {
-                return "😡";
-            } else if _morale < 300 {
-                return "😤";
-            } else if _morale < 500 {
-                return "☹️";
-            } else if _morale < 600 {
-                return "😐";
-            } else if _morale < 801 {
-                return "😀";
+                return "☠︎";
+            } else if _morale <= 200 {
+                return "☹︎-";
+            } else if _morale <= 300 {
+                return "☹︎";
+            } else if _morale <= 500 {
+                return "☺︎";
+            } else if _morale <= 600 {
+                return "☺︎+";
+            } else if _morale <= 800 {
+                return "☺︎++";
             } else {
-                return "🤩";
+                return "✪";
             }
         } else {
-            return "🤑";
+            return "$";
         }
+    }
+    
+    func getMoraleColor() -> UIColor {
+        return _paycheckCooldown == 0 ? (_morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1)) : #colorLiteral(red: 0, green: 0.8052026629, blue: 0.3195570111, alpha: 1);
     }
     
     private func adjustMorale() {
@@ -215,8 +219,8 @@ class Author {
     
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
-        increaseExperience(75);
-        _paycheckCooldown = 120;
+        increaseExperience(Double(_quality) * 10);
+        _paycheckCooldown = Simulation.TICKS_PER_DAY / 12;
     }
     
     func getSubmittedThisWeek() -> Int {
@@ -226,7 +230,7 @@ class Author {
     func submitArticle() {
         _articlesWrittenThisWeek += 1;
         _articleProgress = 0;
-        increaseExperience(10);
+        increaseExperience(Double(_quality) * 2);
     }
     
     func getExperience() -> Double {
@@ -283,7 +287,7 @@ class AuthorLibrary {
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Meresa Plaingull"),
         Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Norman Shugal"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Lizzy Frankly"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Les Wursthumor"),
+        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Les Beastline"),
         Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Helga Harbinger"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Chaz Gesture"),
         Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Fletcher Klankapot"),
