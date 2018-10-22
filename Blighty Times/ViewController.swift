@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     //Article Outlets & Properties
+    @IBOutlet weak var publishButton: UIButton!
+    
     @IBOutlet weak var NE_articleSlotsTop: UIStackView!
     @IBOutlet weak var NE_articleSlotsBottom: UIStackView!
     @IBOutlet weak var NE_bonusTopic: UILabel!
@@ -106,6 +108,7 @@ class ViewController: UIViewController {
         }
         
         if sim.isEndOfDay() {
+            publishButton.isEnabled = false;
             stopGameTime();
             
             for i in 0 ..< self.NE_articleTiles.count {
@@ -468,6 +471,7 @@ class ViewController: UIViewController {
             self.view.layoutIfNeeded();
         }) { (finished) in
             self.startGameTime();
+            self.publishButton.isEnabled = true;
         }
     }
     
@@ -494,6 +498,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func publishButton(_ sender: Any) {
+        publishButton.isEnabled = false;
         stopGameTime();
         
         UIView.animate(withDuration: 1, animations: {
@@ -545,46 +550,55 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 //                previousCell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: lastSelectedTableRow!) as? EmployedAuthorCell
 //            }
             
-            cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
-            cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
-            cell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
-            cell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
-            cell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
-            cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
-            cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-            cell.salary.text = "$" + (sim.employedAuthors[indexPath.row].getSalary() * 365).commaFormat();
-            cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
-            cell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
-            
-            cell.topicList.text = "";
-            for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
-            }
-            
-            cell.toggleOverlay = {
-                if cell.overlayView.isHidden {
-//                    if let pCell = previousCell {
-//                        pCell.hideOverlay();
+//            cell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
+//            cell.authorName.text = sim.employedAuthors[indexPath.row].getName();
+//            cell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
+//            cell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
+//            cell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
+//            cell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
+//            cell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
+//            cell.salary.text = "$" + (sim.employedAuthors[indexPath.row].getSalary() * 365).commaFormat();
+//            cell.progressConstraint.constant = cell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
+//            cell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
+//            cell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+//            
+//            cell.topicList.text = "";
+//            for topic in sim.employedAuthors[indexPath.row].getTopics() {
+//                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+//            }
+//            
+//            cell.toggleOverlay = {
+//                if cell.overlayView.isHidden {
+//                    cell.overlayView.isHidden = false;
+//                    cell.overlayButton.setTitle("✗", for: .normal);
+//                    
+//                    if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
+//                        cell.qualityButton.isHidden = false;
+//                        cell.speedButton.isHidden = false;
+//                    } else {
+//                        cell.qualityButton.isHidden = true;
+//                        cell.speedButton.isHidden = true;
 //                    }
-//
-//                    self.lastSelectedTableRow = indexPath;
-                    
-                    cell.overlayView.isHidden = false;
-                    cell.fireButton.isHidden = false;
-                } else {
-//                    self.lastSelectedTableRow = nil;
-                    
-                    cell.overlayView.isHidden = true;
-                    cell.fireButton.isHidden = true;
-                }
-            }
-            
-            cell.fire = {
-                cell.overlayView.isHidden = true;
-                cell.fireButton.isHidden = true;
-                
-                self.sim.fire(self.sim.employedAuthors[indexPath.row])
-            }
+//                } else {
+//                    cell.overlayView.isHidden = true;
+//                    cell.overlayButton.setTitle("⚙︎", for: .normal);
+//                }
+//            }
+//            
+//            cell.fire = {
+//                self.sim.fire(self.sim.employedAuthors[indexPath.row]);
+//                cell.overlayView.isHidden = true;
+//            }
+//            
+//            cell.promoteQuality = {
+//                self.sim.employedAuthors[indexPath.row].promoteQuality();
+//                cell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+//            }
+//            
+//            cell.promoteSpeed = {
+//                self.sim.employedAuthors[indexPath.row].promoteSpeed();
+//                cell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+//            }
             
             return cell;
             
@@ -593,21 +607,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("Applicant Author cell downcasting didn't work");
             }
             
-            cell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
-            cell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
-            cell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
-            cell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
-            cell.salary.text = "$" + (sim.applicantAuthors[indexPath.row].getSalary() * 365).commaFormat();
-            
-            cell.topicList.text = "";
-            for topic in sim.applicantAuthors[indexPath.row].getTopics() {
-                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
-            }
-            
-            cell.onButtonTapped = {
-                self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
-                tableView.reloadData();
-            }
+//            cell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
+//            cell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
+//            cell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+//            cell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
+//            cell.salary.text = "$" + (sim.applicantAuthors[indexPath.row].getSalary() * 365).commaFormat();
+//
+//            cell.topicList.text = "";
+//            for topic in sim.applicantAuthors[indexPath.row].getTopics() {
+//                cell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+//            }
+//
+//            cell.onButtonTapped = {
+//                self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
+//                tableView.reloadData();
+//            }
             
             return cell;
         }
@@ -617,7 +631,100 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
+            (cell as! EmployedAuthorCell).authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
+            (cell as! EmployedAuthorCell).authorName.text = sim.employedAuthors[indexPath.row].getName();
+            (cell as! EmployedAuthorCell).level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
+            (cell as! EmployedAuthorCell).morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
+            (cell as! EmployedAuthorCell).morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
+            (cell as! EmployedAuthorCell).publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
+            (cell as! EmployedAuthorCell).speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
+            (cell as! EmployedAuthorCell).salary.text = "$" + (sim.employedAuthors[indexPath.row].getSalary() * 365).commaFormat();
+            (cell as! EmployedAuthorCell).progressConstraint.constant = (cell as! EmployedAuthorCell).getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
+            (cell as! EmployedAuthorCell).experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
+            (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
             
+            (cell as! EmployedAuthorCell).topicList.text = "";
+            for topic in sim.employedAuthors[indexPath.row].getTopics() {
+                (cell as! EmployedAuthorCell).topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+            }
+            
+            (cell as! EmployedAuthorCell).toggleOverlay = {
+                if (cell as! EmployedAuthorCell).overlayView.isHidden {
+                    (cell as! EmployedAuthorCell).overlayView.isHidden = false;
+                    (cell as! EmployedAuthorCell).overlayButton.setTitle("✗", for: .normal);
+                    
+                    if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
+                        (cell as! EmployedAuthorCell).qualityButton.isEnabled = true;
+                        (cell as! EmployedAuthorCell).speedButton.isEnabled = true;
+                        (cell as! EmployedAuthorCell).qualityButton.alpha = 1;
+                        (cell as! EmployedAuthorCell).speedButton.alpha = 1;
+                    } else {
+                        (cell as! EmployedAuthorCell).qualityButton.isEnabled = false;
+                        (cell as! EmployedAuthorCell).speedButton.isEnabled = false;
+                        (cell as! EmployedAuthorCell).qualityButton.alpha = 0.1;
+                        (cell as! EmployedAuthorCell).speedButton.alpha = 0.1;
+                    }
+                } else {
+                    (cell as! EmployedAuthorCell).overlayView.isHidden = true;
+                    (cell as! EmployedAuthorCell).overlayButton.setTitle("⚙︎", for: .normal);
+                }
+            }
+            
+            (cell as! EmployedAuthorCell).fire = {
+                self.sim.fire(self.sim.employedAuthors[indexPath.row]);
+                (cell as! EmployedAuthorCell).overlayView.isHidden = true;
+            }
+            
+            (cell as! EmployedAuthorCell).promoteQuality = {
+                self.sim.employedAuthors[indexPath.row].promoteQuality();
+                (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+                
+                if self.sim.employedAuthors[indexPath.row].getSkillPoints() <= 0 {
+                    (cell as! EmployedAuthorCell).qualityButton.isEnabled = false;
+                    (cell as! EmployedAuthorCell).speedButton.isEnabled = false;
+                    (cell as! EmployedAuthorCell).qualityButton.alpha = 0.1;
+                    (cell as! EmployedAuthorCell).speedButton.alpha = 0.1;
+                } else {
+                    (cell as! EmployedAuthorCell).qualityButton.isEnabled = true;
+                    (cell as! EmployedAuthorCell).speedButton.isEnabled = true;
+                    (cell as! EmployedAuthorCell).qualityButton.alpha = 1;
+                    (cell as! EmployedAuthorCell).speedButton.alpha = 1;
+                }
+            }
+            
+            (cell as! EmployedAuthorCell).promoteSpeed = {
+                self.sim.employedAuthors[indexPath.row].promoteSpeed();
+                (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+                
+                if self.sim.employedAuthors[indexPath.row].getSkillPoints() <= 0 {
+                    (cell as! EmployedAuthorCell).qualityButton.isEnabled = false;
+                    (cell as! EmployedAuthorCell).speedButton.isEnabled = false;
+                    (cell as! EmployedAuthorCell).qualityButton.alpha = 0.1;
+                    (cell as! EmployedAuthorCell).speedButton.alpha = 0.1;
+                } else {
+                    (cell as! EmployedAuthorCell).qualityButton.isEnabled = true;
+                    (cell as! EmployedAuthorCell).speedButton.isEnabled = true;
+                    (cell as! EmployedAuthorCell).qualityButton.alpha = 1;
+                    (cell as! EmployedAuthorCell).speedButton.alpha = 1;
+                }
+            }
+            
+        } else if tableView == applicantAuthorsTable {
+            (cell as! ApplicantAuthorCell).authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
+            (cell as! ApplicantAuthorCell).authorName.text = sim.applicantAuthors[indexPath.row].getName();
+            (cell as! ApplicantAuthorCell).quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+            (cell as! ApplicantAuthorCell).speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
+            (cell as! ApplicantAuthorCell).salary.text = "$" + (sim.applicantAuthors[indexPath.row].getSalary() * 365).commaFormat();
+            
+            (cell as! ApplicantAuthorCell).topicList.text = "";
+            for topic in sim.applicantAuthors[indexPath.row].getTopics() {
+                (cell as! ApplicantAuthorCell).topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+            }
+            
+            (cell as! ApplicantAuthorCell).onButtonTapped = {
+                self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
+                tableView.reloadData();
+            }
         }
     }
 }

@@ -51,10 +51,11 @@ class Simulation {
     
     @objc func tick() {
         moveTimeForward();
-        
+        chanceToSpawnApplicant();
         writtenArticleTick();
         nextEditionArticleTick();
         authorTick();
+        applicantTick();
         
         if isEndOfDay() {
             if !NE_releasedEarly {
@@ -91,7 +92,7 @@ class Simulation {
         if early { forceNextDay(); }
     }
     
-    func writtenArticleTick() {
+    private func writtenArticleTick() {
         var i = _writtenArticles.count - 1;
         for _ in 0 ..< _writtenArticles.count{
             _writtenArticles[i].tick();
@@ -108,7 +109,7 @@ class Simulation {
         }
     }
     
-    func nextEditionArticleTick() {
+    private func nextEditionArticleTick() {
         var i = _nextEditionArticles.count - 1;
         for _ in 0 ..< _nextEditionArticles.count {
             _nextEditionArticles[i].tick();
@@ -121,10 +122,10 @@ class Simulation {
         }
     }
     
-    func authorTick() {
+    private func authorTick() {
         var i = _employedAuthors.count - 1;
         for _ in 0 ..< _employedAuthors.count {
-            _employedAuthors[i].tick(elapsed: _gameDaysElapsed);
+            _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed);
             
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
@@ -140,9 +141,23 @@ class Simulation {
         }
     }
     
+    private func applicantTick() {
+        var i = _applicantAuthors.count - 1;
+        for _ in 0 ..< _applicantAuthors.count {
+            _applicantAuthors[i].applicantTick(elapsed: _gameDaysElapsed);
+            
+            if _applicantAuthors[i].getMorale() < 1 {
+                withdraw(_applicantAuthors[i]);
+            }
+            
+            i -= 1;
+        }
+    }
+    
     
     //Author Methods
     func hire(_ author: Author) {
+        author.becomeHired();
         _employedAuthors.append(author);
         
         hireLoop: for i in 0 ..< _applicantAuthors.count {
@@ -168,6 +183,17 @@ class Simulation {
         fire(author);
     }
     
+    func withdraw(_ author: Author) {
+        var i: Int = 0;
+        for _ in 0 ..< _applicantAuthors.count {
+            if _applicantAuthors[i].getName() == author.getName() {
+                _applicantAuthors.remove(at: i);
+                i -= 1;
+            }
+            i += 1;
+        }
+    }
+    
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
         _applicantAuthors.append(Author(exluding: &auths));
@@ -182,13 +208,12 @@ class Simulation {
         _employedAuthors.append(Author(portrait: UIImage(), name: "Test", topics: [TopicLibrary.list[0]], quality: 5, articleRate: ((Double(Simulation.TICKS_PER_DAY) / 60) / 30) * 3))
     }
     
-    func chanceToSpawnApplicant() -> Bool {
-        var spawned = false;
-        if Random(int: 0 ... 0) == 0 {
-            spawnApplicant();
-            spawned = true;
+    func chanceToSpawnApplicant() {
+        if _ticksElapsed % 200 == 0 {
+            if Random(int: 1 ... 5) == 5 {
+                spawnApplicant();
+            }
         }
-        return spawned;
     }
     
     private func assignToNextEdition(article: inout Article) {
@@ -308,7 +333,6 @@ class Simulation {
         }
         
         COMPANY.tick(subscribers: POPULATION.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
-        chanceToSpawnApplicant();
     }
     
     func getDayOfTheWeek() -> String {

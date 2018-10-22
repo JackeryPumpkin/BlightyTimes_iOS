@@ -22,10 +22,16 @@ class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var experience: UILabel!
     
     @IBOutlet weak var overlayView: UIView!
+    @IBOutlet weak var overlayButton: UIButton!
     @IBOutlet weak var fireButton: UIButton!
+    @IBOutlet weak var qualityButton: UIButton!
+    @IBOutlet weak var speedButton: UIButton!
+    @IBOutlet weak var skillPoints: UILabel!
     
     var toggleOverlay : (() -> Void)? = nil;
     var fire : (() -> Void)? = nil;
+    var promoteQuality : (() -> Void)? = nil;
+    var promoteSpeed : (() -> Void)? = nil;
     
     
     override func awakeFromNib() {
@@ -54,6 +60,17 @@ class EmployedAuthorCell: UITableViewCell {
     
     @IBAction func fire(_ sender: Any) {
         if let action = self.fire {
+            action();
+        }
+    }
+    @IBAction func qualityButton(_ sender: Any) {
+        if let action = self.promoteQuality {
+            action();
+        }
+    }
+    
+    @IBAction func speedButton(_ sender: Any) {
+        if let action = self.promoteSpeed {
             action();
         }
     }

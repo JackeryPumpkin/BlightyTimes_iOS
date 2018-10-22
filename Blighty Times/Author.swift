@@ -13,6 +13,7 @@ class Author {
     private var _name: String;
     private var _experience: Double;
     private var _currentLevel: Int = 1;
+    private var _skillPoints: Int = 0;
     private var _topics: [Topic];
     private var _quality: Int;
     private var _articleRate: Double;
@@ -20,13 +21,13 @@ class Author {
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
     private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
-    private var _morale: Int = 500; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
+    private var _morale: Int; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int;
-//    private var _needsPromotion: Bool = false;
     
-    //Morale Bonus Properties
+    //Morale cooldown Properties
     private var _paycheckCooldown = 0;
+    private var _promotionCooldown = 0;
     
     //Constants
     private let PROGRESS_MAX: Double = Double(Simulation.TICKS_PER_DAY);
@@ -42,6 +43,7 @@ class Author {
         _experience = 0;
         _topics = newAuthor.getTopics();
         _quality = newAuthor.getQuality();
+        _morale = newAuthor.getMorale();
         _articleRate = newAuthor.getRate();
         _salary = newAuthor.getSalary();
     }
@@ -54,6 +56,7 @@ class Author {
         _experience = 0;
         _topics = TopicLibrary.getRandomTopics();
         _quality = AuthorLibrary.getRandomQuality();
+        _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = AuthorLibrary.getRandomRate();
         _salary = Int(_articleRate * 1000) + (_quality * 10);
     }
@@ -65,11 +68,12 @@ class Author {
         _experience = 0;
         _topics = topics;
         _quality = quality;
+        _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = articleRate;
         _salary = Int(_articleRate * 300);
     }
     
-    func tick(elapsed days: Int) {
+    func employedTick(elapsed days: Int) {
         reduceCooldowns();
         
         if _lastKnownGameDaysElapsed != days {
@@ -78,8 +82,17 @@ class Author {
             adjustMorale();
         }
         
-        promoteIfNecessary();
+        checkforPromotion();
         increaseArticleProgress();
+    }
+    
+    func applicantTick(elapsed days: Int) {
+        if _lastKnownGameDaysElapsed != days {
+            _lastKnownGameDaysElapsed = days;
+            _daysEmployed += 1;
+        }
+        
+        adjustApplicantMorale();
     }
     
     func newWeekReset() {
@@ -158,7 +171,11 @@ class Author {
     }
     
     func getMoraleSymbol() -> String {
-        if _paycheckCooldown == 0 {
+        if _paycheckCooldown <= 0 {
+            return "$";
+        } else if _promotionCooldown <= 0 {
+            return "♔";
+        } else {
             if _morale < 80 {
                 return "☠︎";
             } else if _morale <= 200 {
@@ -174,13 +191,11 @@ class Author {
             } else {
                 return "✪";
             }
-        } else {
-            return "$";
         }
     }
     
     func getMoraleColor() -> UIColor {
-        return _paycheckCooldown == 0 ? (_morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1)) : #colorLiteral(red: 0, green: 0.8052026629, blue: 0.3195570111, alpha: 1);
+        return _morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1);
     }
     
     private func adjustMorale() {
@@ -197,8 +212,13 @@ class Author {
         }
     }
     
+    private func adjustApplicantMorale() {
+        _morale -= 1;
+    }
+    
     func reduceCooldowns() {
         _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;
+        _promotionCooldown -= _promotionCooldown > 0 ? 1 : 0;
     }
     
     func getSalary() -> Int {
@@ -242,18 +262,43 @@ class Author {
         _experience += exp;
     }
     
-    func promoteIfNecessary() {
+    func getSkillPoints() -> Int {
+        return _skillPoints;
+    }
+    
+    func checkforPromotion() {
         if getSeniorityLevel() != _currentLevel {
+            
+            _skillPoints += 1;
+            _currentLevel = getSeniorityLevel();
+        }
+    }
+    
+    func promoteQuality() {
+        if _skillPoints > 0 {
             setNewQuality();
+            setNewSalary();
+            _skillPoints -= 1;
+            _promotionCooldown = Simulation.TICKS_PER_DAY / 2;
+        }
+    }
+    
+    func promoteSpeed() {
+        if _skillPoints > 0 {
             setNewRate();
             setNewSalary();
-            
-            _currentLevel = getSeniorityLevel();
+            _skillPoints -= 1;
+            _promotionCooldown = Simulation.TICKS_PER_DAY / 2;
         }
     }
     
     func newArticleTopic() -> Topic {
         return _topics[Random(index: _topics.count)];
+    }
+    
+    func becomeHired() {
+        _daysEmployed = 0;
+        _morale = 500;
     }
 }
 
@@ -311,7 +356,7 @@ class AuthorLibrary {
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Bill Festerville")
     ];
     
-    var blank: Author = Author(portrait: UIImage(), name: "blank", topics: [], quality: 0, articleRate: 0);
+    var blank: Author = Author(portrait: UIImage(), name: "blank", topics: [], quality: 1, articleRate: 0);
     
     fileprivate static func getRandom(employedAuthors: inout [Author]) -> Author {
         var rAuthor = AuthorLibrary._AUTHORS[Random(index: AuthorLibrary._AUTHORS.count)];
