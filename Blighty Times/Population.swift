@@ -70,7 +70,7 @@ class Region {
     init() {
         _SIZE = RegionHelper.randomSize();
         _TOPICS = RegionHelper.randomTopics();
-        _subscribers = RegionHelper.randomStartingSubs(withRegion: _SIZE)//_SIZE// / 4;
+        _subscribers = RegionHelper.randomStartingSubs(withRegion: _SIZE);
     }
     
     init(size: Int, topics: [Topic], startWithSubs: Bool) {

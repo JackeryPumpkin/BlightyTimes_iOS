@@ -37,6 +37,10 @@ class EmployedAuthorCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         authorPortrait.roundCorners(withIntensity: .full);
+        qualityButton.setTitleColor(.white, for: .normal);
+        qualityButton.setTitleColor(#colorLiteral(red: 0.6198541522, green: 0.7646024823, blue: 0.9832029939, alpha: 1), for: .disabled);
+        speedButton.setTitleColor(.white, for: .normal);
+        speedButton.setTitleColor(#colorLiteral(red: 0.6198541522, green: 0.7646024823, blue: 0.9832029939, alpha: 1), for: .disabled);
     }
     
     func getProgressLength(_ progress: Double) -> CGFloat {
@@ -48,6 +52,12 @@ class EmployedAuthorCell: UITableViewCell {
     }
     
     @IBAction func toggleOverlay(_ sender: Any) {
+        if overlayView.isHidden {
+            showOverlay();
+        } else {
+            hideOverlay();
+        }
+        
         if let action = self.toggleOverlay {
             action();
         }
@@ -55,7 +65,26 @@ class EmployedAuthorCell: UITableViewCell {
     
     func hideOverlay() {
         overlayView.isHidden = true;
-        fireButton.isHidden = true;
+        self.backgroundColor = .white;
+        overlayButton.setTitle("⚙︎", for: .normal);
+    }
+    
+    func showOverlay() {
+        overlayView.isHidden = false;
+        self.backgroundColor = #colorLiteral(red: 0.9276894927, green: 0.9221747518, blue: 0.9319286346, alpha: 1);
+        overlayButton.setTitle("✗", for: .normal);
+        overlayButton.setValue(0.6, forKeyPath: "alpha")
+        showSkillButtons();
+    }
+    
+    func showSkillButtons() {
+        if skillPoints.text != "0" {
+            qualityButton.isEnabled = true;
+            speedButton.isEnabled = true;
+        } else {
+            qualityButton.isEnabled = false;
+            speedButton.isEnabled = false;
+        }
     }
     
     @IBAction func fire(_ sender: Any) {

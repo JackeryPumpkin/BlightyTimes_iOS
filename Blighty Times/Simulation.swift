@@ -39,8 +39,8 @@ class Simulation {
     private var _gameIsPaused: Bool = false;
     
     //Player properties
-    private let _MAX_PAUSES: Int = 5;
-    private var _playerPausesLeft: Int = 5;
+    private let _MAX_PAUSES: Int = 7;
+    private var _playerPausesLeft: Int = 7;
     
     //Game Constants
     static let TICK_RATE: TimeInterval = 0.03;
@@ -147,7 +147,7 @@ class Simulation {
             _applicantAuthors[i].applicantTick(elapsed: _gameDaysElapsed);
             
             if _applicantAuthors[i].getMorale() < 1 {
-                withdraw(_applicantAuthors[i]);
+                withdraw(applicantIndex: i);
             }
             
             i -= 1;
@@ -183,15 +183,8 @@ class Simulation {
         fire(author);
     }
     
-    func withdraw(_ author: Author) {
-        var i: Int = 0;
-        for _ in 0 ..< _applicantAuthors.count {
-            if _applicantAuthors[i].getName() == author.getName() {
-                _applicantAuthors.remove(at: i);
-                i -= 1;
-            }
-            i += 1;
-        }
+    func withdraw(applicantIndex i: Int) {
+        _applicantAuthors.remove(at: i);
     }
     
     func spawnApplicant() {
@@ -323,6 +316,10 @@ class Simulation {
     
     func isEndOfDay() -> Bool {
         return _ticksElapsed % Simulation.TICKS_PER_DAY == 0;
+    }
+    
+    func isEndOfWeek() -> Bool {
+        return _ticksElapsed % (Simulation.TICKS_PER_DAY * 7) == 0;
     }
     
     private func nextDay() {
