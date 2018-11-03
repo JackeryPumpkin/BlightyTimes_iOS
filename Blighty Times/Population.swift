@@ -13,6 +13,7 @@ class Population {
             var regions: [Region] { return _regions; }
     
     private var _yesterdaysNewSubs: Int = 0;
+    private var _subscriberFluxuationThisWeek: Int = 0;
     
     init() {
         for _ in 1 ... 4 { _regions.append(Region()); }
@@ -30,6 +31,7 @@ class Population {
         }
         
         _yesterdaysNewSubs = getNewSubscriberCount();
+        _subscriberFluxuationThisWeek += _yesterdaysNewSubs;
     }
     
     func getTotalSubscriberCount() -> Int {
@@ -50,6 +52,14 @@ class Population {
         }
         
         return new;
+    }
+    
+    func getSubscriberFluxuationThisWeek() -> Int {
+        return _subscriberFluxuationThisWeek;
+    }
+    
+    func weeklyReset() {
+        _subscriberFluxuationThisWeek = 0;
     }
 }
 

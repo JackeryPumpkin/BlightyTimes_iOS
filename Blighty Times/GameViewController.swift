@@ -118,9 +118,10 @@ class GameViewController: UIViewController {
             updateDataPanels();
         }
         
-        if sim.isEndOfWeek() {
-            //Present the end-of-week score card
-        }
+//        if sim.isEndOfWeek() {
+//            stopGameTime();
+//            performSegue(withIdentifier: "scoreSegue", sender: nil);
+//        }
         
         //Adds in new articles
         a: for article in 0 ..< sim.newArticles.count {
@@ -201,6 +202,33 @@ class GameViewController: UIViewController {
     
     func stopGameTime() {
         gameTimer.invalidate();
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender for: Any?) {
+        if segue.identifier == "scoreSegue" {
+            if let scoreVC = segue.destination as? ScoreCardViewController {
+                scoreVC.iweekNumber = sim.getWeekNumber();
+                
+                scoreVC.ipaidToEmployees = sim.COMPANY.getPaidToEmployeesThisWeek();
+                scoreVC.iearnedRevenue = sim.COMPANY.getEarnedRevenueThisWeek();
+                scoreVC.isubscriberFluxuation = sim.POPULATION.getSubscriberFluxuationThisWeek();
+                
+                
+                scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
+                scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
+                scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek();
+                scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek();
+                scoreVC.iaverageQuality = sim.getAverageQualityThisWeek();
+                
+                sim.COMPANY.weeklyReset();
+                sim.POPULATION.weeklyReset();
+                sim.weeklyReset();
+            }
+        }
+    }
+    
+    @IBAction func unwindToGame(segue:UIStoryboardSegue) {
+        startGameTime();
     }
     
     func createTiles() {
@@ -478,7 +506,13 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded();
         }) { (finished) in
-            self.startGameTime();
+            if self.sim.isEndOfWeek() {
+//                self.stopGameTime();
+                self.performSegue(withIdentifier: "scoreSegue", sender: nil);
+            } else {
+                self.startGameTime();
+            }
+            
             self.publishButton.isEnabled = true;
         }
     }
@@ -599,6 +633,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             (cell as! EmployedAuthorCell).fire = {
                 self.sim.fire(self.sim.employedAuthors[indexPath.row]);
                 (cell as! EmployedAuthorCell).hideOverlay();
+                tableView.reloadData();
             }
             
             (cell as! EmployedAuthorCell).promoteQuality = {

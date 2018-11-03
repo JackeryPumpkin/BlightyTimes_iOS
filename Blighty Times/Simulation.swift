@@ -20,11 +20,11 @@ class Simulation {
     
     //Article Properties
             var newArticles: [Article] = [];
-//    var newArticles: [Article] { return newArticles; }
+            //var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
             var writtenArticles: [Article] { return _writtenArticles; }
      var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
-//            var nextEditionArticles: [Article] { return _nextEditionArticles; }
+    //var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
             var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
@@ -32,11 +32,18 @@ class Simulation {
     private var _ticksElapsed: Int = 60;
     private var _gameDaysElapsed: Int { return _ticksElapsed / Simulation.TICKS_PER_DAY; }
     private var _gameDayOfTheWeek: Int = 1;
-//    private let _GAME_MINUTE: Double = Double(Simulation.TICKS_PER_DAY / 24 / 60);
+    //private let _GAME_MINUTE: Double = Double(Simulation.TICKS_PER_DAY / 24 / 60);
     private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24;
-//    private var _gameDayMinutesElapsed: Int = 60;
+    //private var _gameDayMinutesElapsed: Int = 60;
     private var _gameDayHoursElapsed: Int = 1;
     private var _gameIsPaused: Bool = false;
+    
+    //Weekly Properties
+    private var _employeesHiredThisWeek: Int = 0;
+    private var _employeesFiredThisWeek: Int = 0;
+    private var _promotionsGivenThisWeek: Int = 0;
+    private var _articlesPublishedThisWeek: Int = 0;
+    private var _averageQualityThisWeek: Int = 0;
     
     //Player properties
     private let _MAX_PAUSES: Int = 7;
@@ -87,6 +94,7 @@ class Simulation {
                 COMPANY.payCommission(to: _nextEditionArticles[i].getAuthor());
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
+                _articlesPublishedThisWeek += 1;
             }
         }
         if early { forceNextDay(); }
@@ -154,6 +162,18 @@ class Simulation {
         }
     }
     
+    func weeklyReset() {
+        _employeesHiredThisWeek = 0;
+        _employeesFiredThisWeek = 0;
+        _promotionsGivenThisWeek = 0;
+        _articlesPublishedThisWeek = 0;
+        _averageQualityThisWeek = 0;
+        
+        for author in _employedAuthors {
+            author.weeklyReset();
+        }
+    }
+    
     
     //Author Methods
     func hire(_ author: Author) {
@@ -166,6 +186,8 @@ class Simulation {
                 break hireLoop;
             }
         }
+        
+        _employeesHiredThisWeek += 1;
     }
     
     func fire(_ author: Author) {
@@ -177,10 +199,13 @@ class Simulation {
             }
             i += 1;
         }
+        
+        _employeesFiredThisWeek += 1;
     }
     
     func quit(_ author: Author) {
         fire(author);
+        _employeesFiredThisWeek -= 1; //Neutralizes the increase in fire()
     }
     
     func withdraw(applicantIndex i: Int) {
@@ -207,6 +232,22 @@ class Simulation {
                 spawnApplicant();
             }
         }
+    }
+    
+    func getEmployeesHiredThisWeek() -> Int {
+        return _employeesHiredThisWeek;
+    }
+    
+    func getEmployeesFiredThisWeek() -> Int {
+        return _employeesFiredThisWeek;
+    }
+    
+    func getPromotionsGivenThisWeek() -> Int {
+        for author in _employedAuthors {
+            _promotionsGivenThisWeek += author.getPromotionsThisWeek();
+        }
+        
+        return _promotionsGivenThisWeek;
     }
     
     private func assignToNextEdition(article: inout Article) {
@@ -274,6 +315,14 @@ class Simulation {
             _writtenArticles.append(newArticles.first!);
             newArticles.removeFirst();
         }
+    }
+    
+    func getArticlesPublishedThisWeek() -> Int {
+        return _articlesPublishedThisWeek;
+    }
+    
+    func getAverageQualityThisWeek() -> Int {
+        return _averageQualityThisWeek;
     }
     
     
@@ -392,6 +441,10 @@ class Simulation {
         //        }
         
         return time;
+    }
+    
+    func getWeekNumber() -> Int {
+        return _gameDaysElapsed > 0 ? _gameDaysElapsed / 7 : 0;
     }
     
     func isPaused() -> Bool {

@@ -13,6 +13,9 @@ class Company {
     private var _yesterdaysProfit: Int = 0;
     private var _commissionsPaid: Int = 0;
     
+    private var _paidToEmployeesThisWeek: Int = 0;
+    private var _earnedRevenueThisWeek: Int = 0;
+    
     //Constants
     private let _OPERATIONS_COSTS: Int = 5000;
     private let _SUBSCRIPTION_FEE: Double = 0.05;
@@ -24,11 +27,13 @@ class Company {
         
         for author in employedAuthors {
             _yesterdaysProfit -= author.getSalary();
+            _paidToEmployeesThisWeek += author.getSalary();
         }
         
         _yesterdaysProfit -= _commissionsPaid;
         _yesterdaysProfit -= _OPERATIONS_COSTS;
         _funds += _yesterdaysProfit;
+        _earnedRevenueThisWeek += _yesterdaysProfit;
         
         _commissionsPaid = 0;
     }
@@ -49,7 +54,21 @@ class Company {
         return _SUBSCRIPTION_FEE;
     }
     
+    func getPaidToEmployeesThisWeek() -> Int {
+        return _paidToEmployeesThisWeek;
+    }
+    
+    func getEarnedRevenueThisWeek() -> Int {
+        return _earnedRevenueThisWeek;
+    }
+    
+    func weeklyReset() {
+        _paidToEmployeesThisWeek = 0;
+        _earnedRevenueThisWeek = 0;
+    }
+    
     func payCommission(to author: Author) {
         _commissionsPaid += author.getCommission();
+        _paidToEmployeesThisWeek += author.getCommission();
     }
 }

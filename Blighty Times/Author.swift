@@ -25,6 +25,8 @@ class Author {
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int;
     
+    private var _promotionsThisWeek: Int = 0;
+    
     //Morale cooldown Properties
     private var _paycheckCooldown = 0;
     private var _promotionCooldown = 0;
@@ -116,7 +118,7 @@ class Author {
         return _quality;
     }
     
-    func setNewQuality() {
+    func setIncreasedQuality() {
         _quality += 1;
     }
     
@@ -124,7 +126,7 @@ class Author {
         return _articleRate;
     }
     
-    func setNewRate() {
+    func setIncreasedRate() {
         //Increases rate by a 10th of the difference between the min and max rates
         let rateIncrease: Double = (Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN) / 10.0;
         _articleRate = _articleRate + rateIncrease > Author.ARTICLE_RATE_MAX ? Author.ARTICLE_RATE_MAX : _articleRate + rateIncrease;
@@ -171,9 +173,9 @@ class Author {
     }
     
     func getMoraleSymbol() -> String {
-        if _paycheckCooldown <= 0 {
+        if _paycheckCooldown > 0 {
             return "$";
-        } else if _promotionCooldown <= 0 {
+        } else if _promotionCooldown > 0 {
             return "♔";
         } else {
             if _morale < 80 {
@@ -268,7 +270,6 @@ class Author {
     
     func checkforPromotion() {
         if getSeniorityLevel() != _currentLevel {
-            
             _skillPoints += 1;
             _currentLevel = getSeniorityLevel();
         }
@@ -276,20 +277,31 @@ class Author {
     
     func promoteQuality() {
         if _skillPoints > 0 {
-            setNewQuality();
-            setNewSalary();
-            _skillPoints -= 1;
-            _promotionCooldown = Simulation.TICKS_PER_DAY / 2;
+            setIncreasedQuality();
+            promote();
         }
     }
     
     func promoteSpeed() {
         if _skillPoints > 0 {
-            setNewRate();
-            setNewSalary();
-            _skillPoints -= 1;
-            _promotionCooldown = Simulation.TICKS_PER_DAY / 2;
+            setIncreasedRate();
+            promote();
         }
+    }
+    
+    private func promote() {
+        setNewSalary();
+        _skillPoints -= 1;
+        _promotionsThisWeek += 1;
+        _promotionCooldown = Simulation.TICKS_PER_DAY / 2;
+    }
+    
+    func getPromotionsThisWeek() -> Int {
+        return _promotionsThisWeek;
+    }
+    
+    func weeklyReset() {
+        _promotionsThisWeek = 0;
     }
     
     func newArticleTopic() -> Topic {
