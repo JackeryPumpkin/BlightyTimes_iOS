@@ -11,6 +11,7 @@ import UIKit
 class Simulation {
     let COMPANY: Company = Company();
     let POPULATION: Population = Population();
+    var eventList: [Event] = [];
     
     //Author properties
     private var _employedAuthors: [Author] = [];
@@ -19,6 +20,7 @@ class Simulation {
             var applicantAuthors: [Author] { return _applicantAuthors; }
     
     //Article Properties
+    private var NE_releasedEarly: Bool = false;
             var newArticles: [Article] = [];
             //var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
@@ -43,17 +45,17 @@ class Simulation {
     private var _employeesFiredThisWeek: Int = 0;
     private var _promotionsGivenThisWeek: Int = 0;
     private var _articlesPublishedThisWeek: Int = 0;
-    private var _averageQualityThisWeek: Int = 0;
+    private var _articleQualitiesThisWeek: [Int] = [];
     
     //Player properties
-    private let _MAX_PAUSES: Int = 7;
-    private var _playerPausesLeft: Int = 7;
+    static private let _MAX_PAUSES: Int = 7;
+    private var _playerPausesLeft: Int = Simulation._MAX_PAUSES;
     
     //Game Constants
     static let TICK_RATE: TimeInterval = 0.03;
     static let TICKS_PER_DAY: Int = 1800;
     
-    private var NE_releasedEarly: Bool = false;
+    
     
     
     @objc func tick() {
@@ -63,6 +65,7 @@ class Simulation {
         nextEditionArticleTick();
         authorTick();
         applicantTick();
+        eventTick();
         
         if isEndOfDay() {
             if !NE_releasedEarly {
@@ -95,6 +98,7 @@ class Simulation {
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
                 _articlesPublishedThisWeek += 1;
+                _articleQualitiesThisWeek.append(_nextEditionArticles[i].getQuality());
             }
         }
         if early { forceNextDay(); }
@@ -162,12 +166,34 @@ class Simulation {
         }
     }
     
+    private func eventTick() {
+        var i = eventList.count - 1;
+        for _ in 0 ..< eventList.count {
+            eventList[i].tick();
+            if eventList[i].lifetime <= 0 {
+                eventList.remove(at: i);
+            }
+            i -= 1;
+        }
+    }
+    
+    func setNewEvent(with message: String, type: EventType) {
+//        eventList.append(Event(message: message, type: type));
+        eventList.insert(Event(message: message, type: type), at: 0);
+        if eventList.count > 10 {
+//            eventList.removeFirst();
+            eventList.removeLast();
+        }
+    }
+    
     func weeklyReset() {
+        _playerPausesLeft = Simulation._MAX_PAUSES;
+        
         _employeesHiredThisWeek = 0;
         _employeesFiredThisWeek = 0;
         _promotionsGivenThisWeek = 0;
         _articlesPublishedThisWeek = 0;
-        _averageQualityThisWeek = 0;
+        _articleQualitiesThisWeek = [];
         
         for author in _employedAuthors {
             author.weeklyReset();
@@ -188,9 +214,21 @@ class Simulation {
         }
         
         _employeesHiredThisWeek += 1;
+        setNewEvent(with: "You hired " + author.getName() + ".", type: .company);
     }
     
     func fire(_ author: Author) {
+        employeeLeaves(author);
+        _employeesFiredThisWeek += 1;
+        setNewEvent(with: "You fired " + author.getName() + ".", type: .company);
+    }
+    
+    func quit(_ author: Author) {
+        employeeLeaves(author);
+        setNewEvent(with: author.getName() + " has left the company in disgust.", type: .employee);
+    }
+    
+    func employeeLeaves(_ author: Author) {
         var i: Int = 0;
         for _ in 0 ..< _employedAuthors.count {
             if _employedAuthors[i].getName() == author.getName() {
@@ -199,13 +237,6 @@ class Simulation {
             }
             i += 1;
         }
-        
-        _employeesFiredThisWeek += 1;
-    }
-    
-    func quit(_ author: Author) {
-        fire(author);
-        _employeesFiredThisWeek -= 1; //Neutralizes the increase in fire()
     }
     
     func withdraw(applicantIndex i: Int) {
@@ -215,6 +246,7 @@ class Simulation {
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
         _applicantAuthors.append(Author(exluding: &auths));
+        setNewEvent(with: _applicantAuthors.last!.getName() + " has just applied for a job.", type: .applicant);
     }
     
     func spawnFirstAuthor() {
@@ -322,7 +354,13 @@ class Simulation {
     }
     
     func getAverageQualityThisWeek() -> Int {
-        return _averageQualityThisWeek;
+        var sum: Int = 0;
+        
+        for quality in _articleQualitiesThisWeek {
+            sum += quality;
+        }
+        
+        return sum / _articleQualitiesThisWeek.count;
     }
     
     

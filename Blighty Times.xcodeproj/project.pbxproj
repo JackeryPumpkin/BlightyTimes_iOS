@@ -24,6 +24,8 @@
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
 		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
+		C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D7218F7A6100A91E6E /* Event.swift */; };
+		C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D9218FDA9500A91E6E /* EventCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
 		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
+		C3E3B5D7218F7A6100A91E6E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		C3E3B5D9218FDA9500A91E6E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,7 @@
 				C3153104215848790054684F /* GameViewController.swift */,
 				C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */,
 				C3153102215848790054684F /* Simulation.swift */,
+				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
 				C3153110215916040054684F /* Company.swift */,
 				C37D81CB216FAE0800CD2E85 /* Population.swift */,
 				C3153101215848790054684F /* Author.swift */,
@@ -90,6 +95,7 @@
 				C31530FD215848790054684F /* ArticleTile.xib */,
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
 				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
+				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
 				C31530FF215848790054684F /* Main.storyboard */,
 				C31531122159485C0054684F /* Utilities.swift */,
 				C31530F1215846D50054684F /* Assets.xcassets */,
@@ -179,11 +185,13 @@
 				C315310D215848790054684F /* EmployedAuthorCell.swift in Sources */,
 				C3153108215848790054684F /* Article.swift in Sources */,
 				C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */,
+				C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
 				C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */,
 				C31531132159485C0054684F /* Utilities.swift in Sources */,
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
+				C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

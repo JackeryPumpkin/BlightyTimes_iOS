@@ -53,10 +53,7 @@ class GameViewController: UIViewController {
     @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
     @IBOutlet var regionBarProgressSymbols: [UILabel]!
-    
-    //Game Properties
-    private var sim = Simulation();
-    private var gameTimer: Timer!;
+    @IBOutlet weak var eventsTable: UITableView!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -65,6 +62,10 @@ class GameViewController: UIViewController {
     private var movingTileIndex: Int?;
     private var NE_movingTileIndex: Int?;
     private var lastknownTileLocation: CGPoint?;
+    
+    //Game Properties
+    private var sim = Simulation();
+    private var gameTimer: Timer!;
     
     
     override func viewDidLoad() {
@@ -82,6 +83,7 @@ class GameViewController: UIViewController {
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
+        eventsTable.reloadData();
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
@@ -573,9 +575,10 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == employedAuthorsTable {
             return sim.employedAuthors.count;
-            
         } else if tableView == applicantAuthorsTable {
             return sim.applicantAuthors.count;
+        } else if tableView == eventsTable {
+            return sim.eventList.count;
         }
         
         return 0;
@@ -586,14 +589,18 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
                 fatalError("Employed Author cell downcasting didn't work");
             }
-            
             return cell;
             
         } else if tableView == applicantAuthorsTable {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "applicantAuthorCell", for: indexPath) as? ApplicantAuthorCell else {
                 fatalError("Applicant Author cell downcasting didn't work");
             }
+            return cell;
             
+        } else if tableView == eventsTable {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
+                fatalError("Event cell downcasting didn't work");
+            }
             return cell;
         }
         
@@ -621,7 +628,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             (cell as! EmployedAuthorCell).toggleOverlay = {
-                if self.lastSelectedIndexPath != indexPath
+                if self.lastSelectedIndexPath.row != indexPath.row
                 && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
                     let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as! EmployedAuthorCell;
                     pCell.hideOverlay();
@@ -666,6 +673,10 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
                 tableView.reloadData();
             }
+        } else if tableView == eventsTable {
+            (cell as! EventCell).view.backgroundColor = sim.eventList[indexPath.row].color;
+            (cell as! EventCell).message.text = sim.eventList[indexPath.row].message;
+            (cell as! EventCell).symbol.text = sim.eventList[indexPath.row].symbol;
         }
     }
 }
