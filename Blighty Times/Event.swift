@@ -27,11 +27,11 @@ class Event {
             symbol = "👤";
             lifetime = Simulation.TICKS_PER_DAY / 4;
         case .applicant:
-            color = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1);
-            symbol = "🗣";
+            color = #colorLiteral(red: 0.5624527335, green: 0.9134209752, blue: 0.9260821939, alpha: 1);
+            symbol = "📥";
             lifetime = Simulation.TICKS_PER_DAY / 5;
         case .company:
-            color = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1);
+            color = #colorLiteral(red: 0.9059416652, green: 0.9005564451, blue: 0.910081327, alpha: 1);
             symbol = "🏛";
             lifetime = Simulation.TICKS_PER_DAY / 4;
         case .readership:

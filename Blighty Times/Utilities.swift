@@ -88,7 +88,6 @@ extension NSPointerArray {
 }
 
 extension UIView {
-    
     func addShadow(radius: CGFloat, height: CGFloat, color: UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)) {
         self.layer.shadowOpacity = 1
         self.layer.shadowRadius = radius
@@ -151,5 +150,15 @@ extension Int {
             return "-$" + numberFormatter.string(from: NSNumber(value: self * -1))!;
         }
         
+    }
+}
+
+extension UINavigationController {
+    func fadeTo(_ viewController: UIViewController) {
+        let transition: CATransition = CATransition();
+        transition.duration = 0.3;
+        transition.type = .fade;
+        view.layer.add(transition, forKey: nil);
+        pushViewController(viewController, animated: false);
     }
 }

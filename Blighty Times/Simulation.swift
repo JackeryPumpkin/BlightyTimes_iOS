@@ -360,7 +360,7 @@ class Simulation {
             sum += quality;
         }
         
-        return sum / _articleQualitiesThisWeek.count;
+        return sum > 0 ? sum / _articleQualitiesThisWeek.count : 0;
     }
     
     

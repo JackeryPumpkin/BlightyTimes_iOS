@@ -10,7 +10,6 @@ import UIKit
 
 class ScoreCardViewController: UIViewController {
     @IBOutlet weak var firstStack: UIStackView!
-    @IBOutlet weak var firstStackConstraint: NSLayoutConstraint!
     @IBOutlet weak var weekNumber: UILabel!
     @IBOutlet weak var paidToEmployees: UILabel!
     @IBOutlet weak var earnedRevenue: UILabel!
@@ -52,13 +51,14 @@ class ScoreCardViewController: UIViewController {
     
     @IBAction func next(_ sender: Any) {
         if tapCount == 0 {
-            UIView.animate(withDuration: 0.2) {
-                self.firstStackConstraint.constant = 0;
-                self.firstStack.isHidden = true;
-                self.secondStack.isHidden = false;
-                self.tapCount += 1;
-                
-                self.view.layoutIfNeeded();
+            tapCount += 1;
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.firstStack.alpha = 0.0;
+            }) { (finished) in
+                UIView.animate(withDuration: 0.2) {
+                    self.secondStack.alpha = 1.0;
+                }
             }
             
         } else {

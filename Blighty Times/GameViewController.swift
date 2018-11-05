@@ -83,7 +83,8 @@ class GameViewController: UIViewController {
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
-        eventsTable.reloadData();
+        if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count { eventsTable.reloadData(); }
+        
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
@@ -119,11 +120,6 @@ class GameViewController: UIViewController {
             
             updateDataPanels();
         }
-        
-//        if sim.isEndOfWeek() {
-//            stopGameTime();
-//            performSegue(withIdentifier: "scoreSegue", sender: nil);
-//        }
         
         //Adds in new articles
         a: for article in 0 ..< sim.newArticles.count {
@@ -509,7 +505,6 @@ class GameViewController: UIViewController {
             self.view.layoutIfNeeded();
         }) { (finished) in
             if self.sim.isEndOfWeek() {
-//                self.stopGameTime();
                 self.performSegue(withIdentifier: "scoreSegue", sender: nil);
             } else {
                 self.startGameTime();
