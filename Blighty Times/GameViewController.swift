@@ -54,6 +54,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
     @IBOutlet var regionBarProgressSymbols: [UILabel]!
     @IBOutlet weak var eventsTable: UITableView!
+    @IBOutlet weak var noEventsSymbol: UILabel!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -83,7 +84,10 @@ class GameViewController: UIViewController {
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
-        if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count { eventsTable.reloadData(); }
+        if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count {
+            noEventsSymbol.isHidden = sim.eventList.count == 0 ? false : true;
+            eventsTable.reloadSections(IndexSet(integersIn: 0...0), with: .fade);
+        }
         
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
@@ -227,6 +231,7 @@ class GameViewController: UIViewController {
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
         startGameTime();
+        pausesLeft.text = "\(sim.getPausesLeft())";
     }
     
     func createTiles() {
@@ -622,6 +627,14 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 (cell as! EmployedAuthorCell).topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
             }
             
+            if (cell as! EmployedAuthorCell).overlayView.isHidden {
+                if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
+                    (cell as! EmployedAuthorCell).overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
+                } else {
+                    (cell as! EmployedAuthorCell).overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
+                }
+            }
+            
             (cell as! EmployedAuthorCell).toggleOverlay = {
                 if self.lastSelectedIndexPath.row != indexPath.row
                 && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
@@ -633,8 +646,9 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             }
         
             (cell as! EmployedAuthorCell).fire = {
-                self.sim.fire(self.sim.employedAuthors[indexPath.row]);
+                self.sim.fire(authorAt: indexPath.row);
                 (cell as! EmployedAuthorCell).hideOverlay();
+                self.lastSelectedIndexPath.row = 0;
                 tableView.reloadData();
             }
             

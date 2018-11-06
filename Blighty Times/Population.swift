@@ -107,8 +107,6 @@ class Region {
         
         _missedDeadline = blankArticles == 6 ? true : false;
         setNewSubs(statuses: topicsLiked, isEarly, overallQuality);
-        
-        print("Subs: \(_subscribers), Size: \(_SIZE)");
     }
     
     func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ overallQuality: Int) {

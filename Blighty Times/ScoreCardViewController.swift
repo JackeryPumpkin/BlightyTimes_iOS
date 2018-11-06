@@ -47,6 +47,13 @@ class ScoreCardViewController: UIViewController {
         promotionsGiven.text = "\(ipromotionsGiven)";
         articlesPublished.text = "\(iarticlesPublished)";
         averageQuality.text = "\(iaverageQuality)";
+        
+        view.backgroundColor = .white;
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.backgroundColor = #colorLiteral(red: 0.2615382373, green: 0.2616910338, blue: 0.315728873, alpha: 1);
+            self.firstStack.alpha = 1.0;
+        }
     }
     
     @IBAction func next(_ sender: Any) {
@@ -62,7 +69,12 @@ class ScoreCardViewController: UIViewController {
             }
             
         } else {
-            performSegue(withIdentifier: "unwindScore", sender: self);
+            UIView.animate(withDuration: 0.2, animations: {
+                self.secondStack.alpha = 0.0
+                self.view.backgroundColor = .white;
+            }) { (finished) in
+                self.performSegue(withIdentifier: "unwindScore", sender: self);
+            }
         }
     }
 }

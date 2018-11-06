@@ -67,6 +67,7 @@ class EmployedAuthorCell: UITableViewCell {
         overlayView.isHidden = true;
         self.backgroundColor = .white;
         overlayButton.setTitle("⚙︎", for: .normal);
+        overlayButton.setValue(1.0, forKeyPath: "alpha")
     }
     
     func showOverlay() {

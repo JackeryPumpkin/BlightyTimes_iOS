@@ -82,28 +82,60 @@
 		C31530E9215846D40054684F /* Blighty Times */ = {
 			isa = PBXGroup;
 			children = (
+				C3FE7BD02190CBEB003720C5 /* Controllers */,
+				C3FE7BD12190CC31003720C5 /* Model */,
+				C3FE7BD22190CC8C003720C5 /* Types */,
+				C3FE7BD32190CCA0003720C5 /* Views */,
+				C31531122159485C0054684F /* Utilities.swift */,
+				C31530EA215846D40054684F /* AppDelegate.swift */,
+				C31530F6215846D50054684F /* Info.plist */,
+			);
+			path = "Blighty Times";
+			sourceTree = "<group>";
+		};
+		C3FE7BD02190CBEB003720C5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
 				C3153104215848790054684F /* GameViewController.swift */,
 				C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */,
+				C3153103215848790054684F /* EmployedAuthorCell.swift */,
+				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
+				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
+				C31530FC215848790054684F /* ArticleTile.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		C3FE7BD12190CC31003720C5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
 				C3153102215848790054684F /* Simulation.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		C3FE7BD22190CC8C003720C5 /* Types */ = {
+			isa = PBXGroup;
+			children = (
 				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
 				C3153110215916040054684F /* Company.swift */,
 				C37D81CB216FAE0800CD2E85 /* Population.swift */,
 				C3153101215848790054684F /* Author.swift */,
 				C31530FE215848790054684F /* Article.swift */,
 				C3153105215848790054684F /* Topic.swift */,
-				C31530FC215848790054684F /* ArticleTile.swift */,
-				C31530FD215848790054684F /* ArticleTile.xib */,
-				C3153103215848790054684F /* EmployedAuthorCell.swift */,
-				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
-				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
-				C31530FF215848790054684F /* Main.storyboard */,
-				C31531122159485C0054684F /* Utilities.swift */,
-				C31530F1215846D50054684F /* Assets.xcassets */,
-				C31530F3215846D50054684F /* LaunchScreen.storyboard */,
-				C31530EA215846D40054684F /* AppDelegate.swift */,
-				C31530F6215846D50054684F /* Info.plist */,
 			);
-			path = "Blighty Times";
+			name = Types;
+			sourceTree = "<group>";
+		};
+		C3FE7BD32190CCA0003720C5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C31530FF215848790054684F /* Main.storyboard */,
+				C31530F3215846D50054684F /* LaunchScreen.storyboard */,
+				C31530FD215848790054684F /* ArticleTile.xib */,
+				C31530F1215846D50054684F /* Assets.xcassets */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

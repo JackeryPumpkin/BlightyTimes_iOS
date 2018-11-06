@@ -63,7 +63,7 @@ class Simulation {
         chanceToSpawnApplicant();
         writtenArticleTick();
         nextEditionArticleTick();
-        authorTick();
+        employeeTick();
         applicantTick();
         eventTick();
         
@@ -73,6 +73,7 @@ class Simulation {
             }
             NE_releasedEarly = false;
             nextDay();
+            chanceToSpawnNewsEvent();
         }
     }
     
@@ -93,14 +94,23 @@ class Simulation {
         
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
+                //Adjusts author stats and company funds
                 _nextEditionArticles[i].publish();
                 COMPANY.payCommission(to: _nextEditionArticles[i].getAuthor());
+                
+                //Adds the current topic to your history to be shown in an infograph
+                //then resets the article to .blank
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
+                
+                //Tracks stats for end-of-week score card
                 _articlesPublishedThisWeek += 1;
                 _articleQualitiesThisWeek.append(_nextEditionArticles[i].getQuality());
             }
         }
+        
+        //This happens at the botton to ensure that early published
+        //articles don't time-out before being published
         if early { forceNextDay(); }
     }
     
@@ -134,10 +144,31 @@ class Simulation {
         }
     }
     
-    private func authorTick() {
+    private func employeeTick() {
         var i = _employedAuthors.count - 1;
+        
+        //Checks the employed authors backwards so that low-morale authors
+        //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed);
+            
+            if _employedAuthors[i].hasInfrequentPublished {
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is annoyed that their articles aren't published."));
+                _employedAuthors[i].hasInfrequentPublished = false;
+            }
+            if _employedAuthors[i].hasPromotionAnxiety {
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is getting promotion anxiety."));
+                _employedAuthors[i].hasPromotionAnxiety = false;
+            }
+            if _employedAuthors[i].hasPendingPromotion {
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is up for a promotion."));
+                _employedAuthors[i].hasPendingPromotion = false;
+            }
+            if _employedAuthors[i].hasCriticalMorale {
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + "'s morale is getting very low."));
+                _employedAuthors[i].hasCriticalMorale = false;
+            }
+            
             
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
@@ -146,7 +177,7 @@ class Simulation {
             }
             
             if _employedAuthors[i].getMorale() < 1 {
-                quit(_employedAuthors[i]);
+                quit(authorAt: i);
             }
             
             i -= 1;
@@ -155,11 +186,14 @@ class Simulation {
     
     private func applicantTick() {
         var i = _applicantAuthors.count - 1;
+        
+        //Checks the applicant authors backwards so that low-morale authors
+        //can withdraw and not put the index out of bounds
         for _ in 0 ..< _applicantAuthors.count {
             _applicantAuthors[i].applicantTick(elapsed: _gameDaysElapsed);
             
             if _applicantAuthors[i].getMorale() < 1 {
-                withdraw(applicantIndex: i);
+                withdraw(applicantAt: i);
             }
             
             i -= 1;
@@ -167,6 +201,8 @@ class Simulation {
     }
     
     private func eventTick() {
+        //Checks the eventList backwards so that expired Events
+        //can be removed and not put the index out of bounds
         var i = eventList.count - 1;
         for _ in 0 ..< eventList.count {
             eventList[i].tick();
@@ -177,27 +213,39 @@ class Simulation {
         }
     }
     
-    func setNewEvent(with message: String, type: EventType) {
-//        eventList.append(Event(message: message, type: type));
-        eventList.insert(Event(message: message, type: type), at: 0);
-        if eventList.count > 10 {
-//            eventList.removeFirst();
-            eventList.removeLast();
+    func add(_ event: Event) {
+        //If there is a NewsEvent currently in the queue, put the next event
+        //underneath it so that the News is always at the top
+        if eventList.first.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
+                eventList.insert(event, at: 1);
+        } else {
+            eventList.insert(event, at: 0);
+        }
+    }
+    
+    func chanceToSpawnNewsEvent() {
+        let newsEvent = NewsEvent();
+        
+        //Checks to see if there is already news in the eventList
+        //Right now, I only want one NewsEvent at a time
+        if eventList.first.debugDescription != "Optional(Blighty_Times.NewsEvent)" {
+            if Random(int: 0 ... 5) == 3 {
+                add(newsEvent);
+            }
         }
     }
     
     func weeklyReset() {
+        //Player property reset
         _playerPausesLeft = Simulation._MAX_PAUSES;
         
+        //Stat tracking reset
         _employeesHiredThisWeek = 0;
         _employeesFiredThisWeek = 0;
         _promotionsGivenThisWeek = 0;
         _articlesPublishedThisWeek = 0;
         _articleQualitiesThisWeek = [];
-        
-        for author in _employedAuthors {
-            author.weeklyReset();
-        }
+        for author in _employedAuthors { author.weeklyReset(); }
     }
     
     
@@ -214,39 +262,35 @@ class Simulation {
         }
         
         _employeesHiredThisWeek += 1;
-        setNewEvent(with: "You hired " + author.getName() + ".", type: .company);
+        add(CompanyEvent(message: "You hired " + author.getName() + "."));
     }
     
-    func fire(_ author: Author) {
-        employeeLeaves(author);
+    func fire(authorAt index: Int) {
+        add(CompanyEvent(message: "You fired " + _employedAuthors[index].getName() + "."));
+        employeeLeaves(index);
         _employeesFiredThisWeek += 1;
-        setNewEvent(with: "You fired " + author.getName() + ".", type: .company);
     }
     
-    func quit(_ author: Author) {
-        employeeLeaves(author);
-        setNewEvent(with: author.getName() + " has left the company in disgust.", type: .employee);
+    func quit(authorAt index: Int) {
+        add(EmployeeEvent(message: _employedAuthors[index].getName() + " has left the company in disgust."));
+        employeeLeaves(index);
     }
     
-    func employeeLeaves(_ author: Author) {
-        var i: Int = 0;
-        for _ in 0 ..< _employedAuthors.count {
-            if _employedAuthors[i].getName() == author.getName() {
-                _employedAuthors.remove(at: i);
-                i -= 1;
-            }
-            i += 1;
-        }
+    func employeeLeaves(_ index: Int) {
+        //Tracks promotions given this week from employee
+        //before removing them
+        _promotionsGivenThisWeek += _employedAuthors[index].getPromotionsThisWeek();
+        _employedAuthors.remove(at: index);
     }
     
-    func withdraw(applicantIndex i: Int) {
-        _applicantAuthors.remove(at: i);
+    func withdraw(applicantAt index: Int) {
+        _applicantAuthors.remove(at: index);
     }
     
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
         _applicantAuthors.append(Author(exluding: &auths));
-        setNewEvent(with: _applicantAuthors.last!.getName() + " has just applied for a job.", type: .applicant);
+        add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     
     func spawnFirstAuthor() {

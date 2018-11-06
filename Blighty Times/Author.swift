@@ -20,16 +20,30 @@ class Author {
     private var _articleProgress: Double = 0;
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
+    private var _daysSinceLastPublication: Int = 0;
     private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
     private var _morale: Int; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int;
     
+    //EmployeeEvent flags
+    var hasPendingPromotion: Bool = false; //1 skill point available
+    var hasCriticalMorale: Bool = false; //when morale is in the lowest or second lowest state
+    var hasInfrequentPublished: Bool = false; //0 articles published in a week
+    var hasPromotionAnxiety: Bool = false; //2 or more skill points available
+    
+    //Weekly stat properties
     private var _promotionsThisWeek: Int = 0;
     
     //Morale cooldown Properties
     private var _paycheckCooldown = 0;
     private var _promotionCooldown = 0;
+    
+    //EmployeeEvent cooldown properties
+    private var _pendingPromotionCooldown: Int = 0
+    private var _criticalMoraleCooldown: Int = 0;
+    private var _infrequentPublishedColldown: Int = 0;
+    private var _promotionAnxiety: Int = 0;
     
     //Constants
     private let PROGRESS_MAX: Double = Double(Simulation.TICKS_PER_DAY);
@@ -72,7 +86,7 @@ class Author {
         _quality = quality;
         _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = articleRate;
-        _salary = Int(_articleRate * 300);
+        _salary = Int(_articleRate * 200);
     }
     
     func employedTick(elapsed days: Int) {
@@ -81,7 +95,13 @@ class Author {
         if _lastKnownGameDaysElapsed != days {
             _lastKnownGameDaysElapsed = days;
             _daysEmployed += 1;
+            _daysSinceLastPublication += 1
             adjustMorale();
+            
+            if _daysSinceLastPublication > 5
+            && _infrequentPublishedColldown == 0 {
+                hasInfrequentPublished = true;
+            }
         }
         
         checkforPromotion();
@@ -95,6 +115,16 @@ class Author {
         }
         
         adjustApplicantMorale();
+    }
+    
+    func reduceCooldowns() {
+        _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;
+        _promotionCooldown -= _promotionCooldown > 0 ? 1 : 0;
+        
+        _pendingPromotionCooldown -= _pendingPromotionCooldown > 0 ? 1 : 0;
+        _criticalMoraleCooldown -= _criticalMoraleCooldown > 0 ? 1 : 0;
+        _infrequentPublishedColldown -= _infrequentPublishedColldown > 0 ? 1 : 0;
+        _promotionAnxiety -= _promotionAnxiety > 0 ? 1 : 0;
     }
     
     func newWeekReset() {
@@ -212,15 +242,14 @@ class Author {
                 _morale -= 200;
             }
         }
+        
+        if _morale <= 200 && _criticalMoraleCooldown == 0 {
+            hasCriticalMorale = true;
+        }
     }
     
     private func adjustApplicantMorale() {
         _morale -= 1;
-    }
-    
-    func reduceCooldowns() {
-        _paycheckCooldown -= _paycheckCooldown > 0 ? 1 : 0;
-        _promotionCooldown -= _promotionCooldown > 0 ? 1 : 0;
     }
     
     func getSalary() -> Int {
@@ -228,7 +257,7 @@ class Author {
     }
     
     func setNewSalary() {
-        _salary = _articleRate == Author.ARTICLE_RATE_MAX ? _salary + (_quality * 10) : Int(_articleRate * 1000) + (_quality * 10);
+        _salary += _quality * 10;
     }
     
     func getCommission() -> Int {
@@ -241,7 +270,8 @@ class Author {
     
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
-        increaseExperience(Double(_quality) * 10);
+        _daysSinceLastPublication = 0;
+        increaseExperience(Double(_quality) * 5);
         _paycheckCooldown = Simulation.TICKS_PER_DAY / 12;
     }
     
@@ -252,7 +282,7 @@ class Author {
     func submitArticle() {
         _articlesWrittenThisWeek += 1;
         _articleProgress = 0;
-        increaseExperience(Double(_quality) * 2);
+        increaseExperience(Double(_quality));
     }
     
     func getExperience() -> Double {
@@ -272,6 +302,12 @@ class Author {
         if getSeniorityLevel() != _currentLevel {
             _skillPoints += 1;
             _currentLevel = getSeniorityLevel();
+            
+            if _skillPoints > 2 && _promotionAnxiety == 0 {
+                hasPromotionAnxiety = true;
+            } else if _skillPoints == 1 && _pendingPromotionCooldown == 0 {
+                hasPendingPromotion = true;
+            }
         }
     }
     
