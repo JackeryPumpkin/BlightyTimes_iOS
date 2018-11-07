@@ -15,6 +15,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var NE_articleSlotsTop: UIStackView!
     @IBOutlet weak var NE_articleSlotsBottom: UIStackView!
     @IBOutlet weak var NE_bonusTopic: UILabel!
+    @IBOutlet weak var NE_bonusLabel: UILabel!
     @IBOutlet weak var pendingSlotsFullWarning: UILabel!
     @IBOutlet weak var articlePane: UIView!
     @IBOutlet weak var articleSlotsStack: UIStackView!
@@ -55,6 +56,8 @@ class GameViewController: UIViewController {
     @IBOutlet var regionBarProgressSymbols: [UILabel]!
     @IBOutlet weak var eventsTable: UITableView!
     @IBOutlet weak var noEventsSymbol: UILabel!
+    @IBOutlet weak var newsBonusTopicOverlay: UIView!
+    @IBOutlet weak var newsBonusTopic: UILabel!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -92,6 +95,8 @@ class GameViewController: UIViewController {
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
+        setRegionTopics();
+        
         
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
@@ -284,16 +289,36 @@ class GameViewController: UIViewController {
             node.addBorders(width: 3.0, color: UIColor.black.cgColor);
         }
         
-        for i in 0 ..< sim.POPULATION.regions.count {
-            var topicText = "";
-            for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
-                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
-                if j < 3 { topicText += "\n"; }
-            }
-            regionTopicsLabels[i].text = topicText;
-        }
-        
+        setRegionTopics();
         updateDataPanels();
+    }
+    
+    func setRegionTopics() {
+        //Makes sure there is a News Topic to show
+        if sim.getCurrentNewsEventTopic() != nil {
+            newsBonusTopicOverlay.isHidden = false;
+            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
+            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
+            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.getColor();
+            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.getColor();
+        } else {
+            //Makes sure its not processing the same UI info repeatedly
+            if !newsBonusTopicOverlay.isHidden {
+                newsBonusTopicOverlay.isHidden = true;
+                NE_bonusTopic.text = "Topic";
+                NE_bonusTopic.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
+                NE_bonusLabel.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
+                
+                for i in 0 ..< sim.POPULATION.regions.count {
+                    var topicText = "";
+                    for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
+                        topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
+                        if j < 3 { topicText += "\n"; }
+                    }
+                    regionTopicsLabels[i].text = topicText;
+                }
+            }
+        }
     }
     
     func pan() -> UIPanGestureRecognizer {
@@ -306,7 +331,7 @@ class GameViewController: UIViewController {
         return panRecognizer;
     }
     
-    @objc func handlePan(recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(recognizer: UIPanGestureRecognizer) { /////// Need to add in a check for game being paused. It'll prevent glitches and cheating ///////////
         //Dragging for Pending Tiles
         if let index = movingTileIndex {
             if let tile = articleTiles.object(at: index) {
@@ -478,6 +503,7 @@ class GameViewController: UIViewController {
     func updateDataPanels() {
         stopGameTime();
         
+        //Update Company statistics
         companyFunds.text = sim.COMPANY.getFunds().dollarFormat();
         companyFunds.textColor = sim.COMPANY.getFunds() < 0 ? .red : .black;
         yesterdaysProfit.text = sim.COMPANY.getYesterdaysProfit().dollarFormat();
@@ -485,8 +511,7 @@ class GameViewController: UIViewController {
         totalSubscribers.text = sim.POPULATION.getTotalSubscriberCount().commaFormat();
         newSubscribers.text = sim.POPULATION.getNewSubscriberCount().commaFormat();
         
-        
-        
+        //Update Region Bars and Topics
         for i in 0 ..< self.regionBars.count {
             if self.sim.POPULATION.regions[i].getNewSubscriberCount() > 0 {
                 self.regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1);

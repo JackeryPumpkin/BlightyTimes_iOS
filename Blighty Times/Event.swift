@@ -32,7 +32,7 @@ class NewsEvent: Event {
     
     init() {
         _NEWS_TOPIC = TopicLibrary.getRandomTopics()[0];
-        super.init(message: "", color: _NEWS_TOPIC.getColor(), symbol: "🗞", lifetime: 0);
+        super.init(message: "", color: _NEWS_TOPIC.getColor(), symbol: "📰", lifetime: 0);
         
         message = message();
         lifetime = lifetime();
@@ -100,43 +100,74 @@ class NewsEvent: Event {
             
         case "Travel":
             let options: [String] = [
-                "The new mayor of Blighty has put a travel ban on all flights to "
+                "The mayor of Blighty has put a travel ban on all flights to Babylon.",
+                "A wild fire has sprung up preventing commuters traveling to the west.",
+                "An upscale resort in the Caribbean is 50% off to all Blighty residents.",
+                "Blighty's Got Talent is filming its finale in Springfield next week."
             ]
             
             return options[Random(index: options.count)];
             
         case "Sports":
-            let options: [String] = [ "test" ]
+            let options: [String] = [
+                "Blighty City Stadium will be hosting an American \"football\" game today.",
+                "Blighty won 2 medals at the Olympics and they were bronze.",
+                "Tickets to the West Blight vs Blighty United game have sold out.",
+                "Another day goes by and still no one cares about fencing.",
+                "Longest cricket match in Blighty history continues into its fifth day."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Film":
-            let options: [String] = [ "kjhgmj" ]
+            let options: [String] = [
+                "Stephen Fry is premiering a documentary on ravens and writing desks.",
+                "New film by Quentin Tarantino is sparking an intense dialogue amoung viewers.",
+                "Fawlty Towers is being made into a Hollywood film staring Tom Cruise.",
+                "Lock, Stock and Three Smoking Barrels script details were leaked online."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Science":
-            let options: [String] = [ ",nvmnbv" ]
+            let options: [String] = [
+                "Elon Musk showed a personal size rocket car that's powered by time.",
+                "Richard Dawkins to give three live zoology presentations for kids."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Religion":
-            let options: [String] = [ "mb,bv,nbv" ]
+            let options: [String] = [
+                "Religious conflict intensifies.",
+                "Local church raises money for medical aid.",
+                "Tis the season. Christmas decorations are going up all over town.",
+                "Menorah lighting at local synagogue.",
+                "People going door singing Festivus songs."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Video Games":
-            let options: [String] = [ "jvmnvmnv" ]
+            let options: [String] = [
+                "Journalist uncovers lengthy \"death march\" practice at local video game studio.",
+                "Yet again violence in video games is at the fore of the public's conversation.",
+                "New mobile game topping the charts."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Technology":
-            let options: [String] = [ "bmvcxsaqqq" ]
+            let options: [String] = [
+                "Fancy gizmos are being invented around the world."
+            ]
             
             return options[Random(index: options.count)];
             
         case "Music":
-            let options: [String] = [ "hd gkjhgkjy jj" ]
+            let options: [String] = [
+                "Groovy tunes are making the world's booty shake."
+            ]
             
             return options[Random(index: options.count)];
             

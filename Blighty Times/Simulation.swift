@@ -66,6 +66,7 @@ class Simulation {
         employeeTick();
         applicantTick();
         eventTick();
+        POPULATION.spreadNews(getCurrentNewsEventTopic());
         
         if isEndOfDay() {
             if !NE_releasedEarly {
@@ -390,6 +391,14 @@ class Simulation {
         while !newArticles.isEmpty {
             _writtenArticles.append(newArticles.first!);
             newArticles.removeFirst();
+        }
+    }
+    
+    func getCurrentNewsEventTopic() -> Topic? {
+        if eventList.first.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
+            return (eventList[0] as! NewsEvent).getTopic();
+        } else {
+            return nil;
         }
     }
     

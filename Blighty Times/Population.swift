@@ -34,6 +34,12 @@ class Population {
         _subscriberFluxuationThisWeek += _yesterdaysNewSubs;
     }
     
+    func spreadNews(_ topic: Topic?) {
+        for region in regions {
+            region.setNewsTopic(topic);
+        }
+    }
+    
     func getTotalSubscriberCount() -> Int {
         var total = 0
         
@@ -67,6 +73,8 @@ import GameplayKit
 class Region {
     private let _SIZE: Int;
     private let _TOPICS: [Topic];
+    private var _newsTopic: Topic? = nil;
+    private var _releventTopics: [Topic] { return _newsTopic != nil ? [_newsTopic!] : _TOPICS }
     private let _MAX_LOYALTY: Double = 1.5;
     private let _MIN_LOYALTY: Double = 0.5;
     private let _LOYALTY_INCREMENT: Double = 0.01
@@ -107,6 +115,10 @@ class Region {
         
         _missedDeadline = blankArticles == 6 ? true : false;
         setNewSubs(statuses: topicsLiked, isEarly, overallQuality);
+    }
+    
+    func setNewsTopic(_ topic: Topic?) {
+        _newsTopic = topic;
     }
     
     func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ overallQuality: Int) {
@@ -216,11 +228,11 @@ class Region {
     }
     
     func getTopics() -> [Topic] {
-        return _TOPICS;
+        return _releventTopics;
     }
     
     private func approves(of article: Article) -> Bool {
-        for t in _TOPICS {
+        for t in _releventTopics {
             if t.getApproval() == article.getTopic().getApproval() &&
                t.getName() == article.getTopic().getName() {
                 return true;
