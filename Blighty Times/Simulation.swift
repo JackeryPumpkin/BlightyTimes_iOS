@@ -99,14 +99,14 @@ class Simulation {
                 _nextEditionArticles[i].publish();
                 COMPANY.payCommission(to: _nextEditionArticles[i].getAuthor());
                 
+                //Tracks stats for end-of-week score card
+                _articlesPublishedThisWeek += 1;
+                _articleQualitiesThisWeek.append(_nextEditionArticles[i].getQuality());
+                
                 //Adds the current topic to your history to be shown in an infograph
                 //then resets the article to .blank
                 _publishedTopicHistory.append(_nextEditionArticles[i].getTopic());
                 _nextEditionArticles[i] = ArticleLibrary.blank;
-                
-                //Tracks stats for end-of-week score card
-                _articlesPublishedThisWeek += 1;
-                _articleQualitiesThisWeek.append(_nextEditionArticles[i].getQuality());
             }
         }
         

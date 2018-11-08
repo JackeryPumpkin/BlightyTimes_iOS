@@ -226,7 +226,6 @@ class GameViewController: UIViewController {
                 scoreVC.iearnedRevenue = sim.COMPANY.getEarnedRevenueThisWeek();
                 scoreVC.isubscriberFluxuation = sim.POPULATION.getSubscriberFluxuationThisWeek();
                 
-                
                 scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
                 scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
                 scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek();
@@ -242,6 +241,8 @@ class GameViewController: UIViewController {
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
         startGameTime();
+        
+        //Explicit repainting of pauses label. The sim resets the number every week.
         pausesLeft.text = "\(sim.getPausesLeft())";
     }
     
