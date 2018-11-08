@@ -81,6 +81,12 @@ class GameViewController: UIViewController {
         setupAesthetics();
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+//        if NE_articleTiles.count == 0 {
+//            createTiles();
+//        }
+    }
+    
     @objc func tick() {
         //Game Simulation
         sim.tick();
@@ -240,6 +246,8 @@ class GameViewController: UIViewController {
     }
     
     func createTiles() {
+        view.layoutIfNeeded();
+        
         // NE Tiles
         for i in 1 ... 6 {
             guard let tile = Bundle.main.loadNibNamed("ArticleTile", owner: self, options: nil)?.first as? ArticleTile else { fatalError(); }

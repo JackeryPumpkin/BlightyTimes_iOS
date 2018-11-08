@@ -353,7 +353,7 @@ class Author {
 class AuthorLibrary {
     private static let _AUTHORS: [Author] = [
         Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Suzy Joe"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Snazzy Jack Bricklayer"),
+        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Jack Bricklayer"),
         Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Frank Bottomwealth"),
         Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Harold Knickers"),
         Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Theresa Froshet"),
