@@ -101,7 +101,7 @@ class GameViewController: UIViewController {
         dayOfTheWeek.text = sim.getDayOfTheWeek();
         timeOfDay.text = sim.getTimeOfDay();
         timePlayHeadConstraint.constant = sim.getPlayheadLength(maxLength: timelineWidth.constant);
-        setRegionTopics();
+        setRegionTopicsUI();
         
         
         //Cleans up dead articles
@@ -302,10 +302,11 @@ class GameViewController: UIViewController {
         updateDataPanels();
     }
     
-    func setRegionTopics() {
+    func setRegionTopicsUI() {
         //Makes sure there is a News Topic to show
         if sim.getCurrentNewsEventTopic() != nil {
             newsBonusTopicOverlay.isHidden = false;
+            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.getColor();
             newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
             NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
             NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.getColor();
@@ -313,20 +314,24 @@ class GameViewController: UIViewController {
         } else {
             //Makes sure its not processing the same UI info repeatedly
             if !newsBonusTopicOverlay.isHidden {
+                setRegionTopics();
+                
                 newsBonusTopicOverlay.isHidden = true;
                 NE_bonusTopic.text = "Topic";
                 NE_bonusTopic.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
                 NE_bonusLabel.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
-                
-                for i in 0 ..< sim.POPULATION.regions.count {
-                    var topicText = "";
-                    for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
-                        topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
-                        if j < 3 { topicText += "\n"; }
-                    }
-                    regionTopicsLabels[i].text = topicText;
-                }
             }
+        }
+    }
+    
+    func setRegionTopics() {
+        for i in 0 ..< sim.POPULATION.regions.count {
+            var topicText = "";
+            for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
+                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
+                if j < 3 { topicText += "\n"; }
+            }
+            regionTopicsLabels[i].text = topicText;
         }
     }
     
@@ -670,9 +675,11 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             (cell as! EmployedAuthorCell).toggleOverlay = {
+                //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
                 if self.lastSelectedIndexPath.row != indexPath.row
                 && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
-                    let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as! EmployedAuthorCell;
+                    //Returns nil when referenced while scrolled out of sight
+                    guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return };
                     pCell.hideOverlay();
                 }
                 

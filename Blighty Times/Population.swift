@@ -75,11 +75,11 @@ class Region {
     private let _TOPICS: [Topic];
     private var _newsTopic: Topic? = nil;
     private var _releventTopics: [Topic] { return _newsTopic != nil ? [_newsTopic!] : _TOPICS }
-    private let _MAX_LOYALTY: Double = 1.5;
-    private let _MIN_LOYALTY: Double = 0.5;
-    private let _LOYALTY_INCREMENT: Double = 0.01
+    private let _MAX_LOYALTY: Double = 1;
+    private let _MIN_LOYALTY: Double = 0.05;
+    private let _LOYALTY_INCREMENT: Double = 0.05;
     
-    private var _loyalty: Double = 1.0;
+    private var _loyalty: Double = 0.5;
     private var _subscribers: Int;
     private var _newSubscribers: Int = 0;
     private var _daysSinceLastApproval: Int = 0;
@@ -99,58 +99,61 @@ class Region {
     
     func tick(published articles: [Article], isEarly: Bool) {
         var topicsLiked: Int = 0;
-        var overallQuality: Int = 0;
+        var sum: Int = 0;
         var blankArticles: Int = 0;
         
         for article in articles {
             if approves(of: article) {
                 topicsLiked += 1;
-                overallQuality += article.getQuality();
             }
             
             if article === ArticleLibrary.blank {
                 blankArticles += 1;
+            } else {
+                //The sum of qualities must not include the '1s' from the blank articles
+                sum += article.getQuality();
             }
         }
         
         _missedDeadline = blankArticles == 6 ? true : false;
-        setNewSubs(statuses: topicsLiked, isEarly, overallQuality);
+        setNewSubs(statuses: topicsLiked, isEarly, sum > 0 ? Float(sum) / Float(6 - blankArticles) : 0.0);
     }
     
     func setNewsTopic(_ topic: Topic?) {
         _newsTopic = topic;
     }
     
-    func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ overallQuality: Int) {
+    func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ averageQuality: Float) {
         let daysSinceApproval = Float(_daysSinceLastApproval);
-        let quality = Float(overallQuality > 0 ? overallQuality : 1);
         let subs = Float(_subscribers);
         let size = Float(_SIZE);
-        let loyalty = Float(_loyalty);
+        let loyalty = Float(_loyalty == 0 ? 0.00001 : _loyalty);
         
+        //daysSinceLastApproval is reset in here. Use daysSinceApproval for
         setNewLoyalty(from: topicsLiked);
         
-        let random = GKRandomSource();
-        var newSubGen = GKGaussianDistribution();
+        /*
+         - if the deadline was missed
+                + Random(-1 ... 1000 * (2 if NewsEvent)) / loyalty
+         - if they didnt like any article
+                + Random(-500 * (2+daysSinceApproval if NewsEvent else daysSinceApproval) ... 500 * (0 if NewsEvent else averageQuality)) * loyalty
+         - if they liked at least one article:
+                + Random(1 * (2+quality if NewsEvent else quality) ... 1000 * (2+quality if NewsEvent else quality)) * loyalty
+        */
         
-        if !_missedDeadline {
-            newSubGen = GKGaussianDistribution(randomSource: random,
-                        mean: Float(topicsLiked > 1 ? topicsLiked : 1) * (1000 * quality) * (isEarly ? loyalty + 0.1 : loyalty) * (daysSinceApproval > 0 ? -daysSinceApproval: 1),
-                        deviation: sqrtf(subs + 1) / 2 * Float(topicsLiked + 1));
+        var newSubs: Float = 0.0;
+        
+        if _missedDeadline {
+            newSubs = -Float.random(in: powf(2, daysSinceApproval) ... powf(7, daysSinceApproval)) / loyalty;
+        } else if topicsLiked == 0 {
+            newSubs = Float.random(in: -5000 * daysSinceApproval ... 5000 * averageQuality) * loyalty;
         } else {
-            newSubGen = GKGaussianDistribution(randomSource: random,
-                        mean: Float(_daysSinceLastApproval) * -1000,
-                        deviation: sqrtf(subs + 1) / 2 * daysSinceApproval);
+            newSubs = Float.random(in: 1000 * Float(topicsLiked) * averageQuality ... 10000 * Float(topicsLiked) * averageQuality) * loyalty
         }
         
-        var newSubs: Float = Float(newSubGen.nextInt());
-        
-        if newSubs >= 0 {
-            newSubs *= loyalty;
-        } else {
-            newSubs /= loyalty;
-        }
-        
+        //This ensures that new subscribers are never so negative that it would
+        //bring total subscriber count to less than 0 & likewise that it's never
+        //so positive that it brings total subscriber count to greater than the region size
         if subs + newSubs < 0 {
             newSubs = -subs;
         } else if subs + newSubs > size {
