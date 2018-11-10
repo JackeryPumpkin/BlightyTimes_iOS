@@ -122,7 +122,7 @@ class NewsEvent: Event {
         case "Film":
             let options: [String] = [
                 "Stephen Fry is premiering a documentary on ravens and writing desks.",
-                "New film by Quentin Tarantino is sparking an intense dialogue amoung viewers.",
+                "New film by Quentin Tarantino is sparking an intense dialogue among viewers.",
                 "Fawlty Towers is being made into a Hollywood film staring Tom Cruise.",
                 "Lock, Stock and Three Smoking Barrels script details were leaked online."
             ]

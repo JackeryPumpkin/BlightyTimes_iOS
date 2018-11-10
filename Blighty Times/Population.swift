@@ -130,7 +130,7 @@ class Region {
         let loyalty = Float(_loyalty == 0 ? 0.00001 : _loyalty);
         
         //daysSinceLastApproval is reset in here. Use daysSinceApproval for
-        setNewLoyalty(from: topicsLiked);
+        setNewLoyalty(from: topicsLiked, isEarly);
         
         /*
          - if the deadline was missed
@@ -165,10 +165,12 @@ class Region {
         _subscribers += _newSubscribers;
     }
     
-    func setNewLoyalty(from topicsLiked: Int) {
+    func setNewLoyalty(from topicsLiked: Int, _ isEarly: Bool) {
         if topicsLiked > 0 {
-            increaseLoyalty(divide: topicsLiked, by: 6);
+            increaseLoyalty(by: topicsLiked);
             _daysSinceLastApproval = 0;
+            
+            if isEarly { increaseLoyalty(by: 1); }
         } else {
             reduceLoyalty(by: 1);
             _daysSinceLastApproval += 1;

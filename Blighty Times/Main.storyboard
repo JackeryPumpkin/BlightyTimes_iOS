@@ -1517,14 +1517,14 @@
                                                     <constraint firstItem="1kI-Sg-Q7X" firstAttribute="height" secondItem="jdU-TX-059" secondAttribute="height" id="qlM-Eh-h3T"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="uUR-C5-2he" userLabel="NE Article Stack">
-                                                <rect key="frame" x="21" y="20" width="701" height="151"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="uUR-C5-2he" userLabel="NE Article Stack">
+                                                <rect key="frame" x="217" y="20" width="586" height="151"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8lT-Zl-ruj" userLabel="Top Row">
-                                                        <rect key="frame" x="0.0" y="0.0" width="701" height="73"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8lT-Zl-ruj" userLabel="Top Row">
+                                                        <rect key="frame" x="0.0" y="0.0" width="586" height="73"/>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3jr-hx-oTn" userLabel="Bottom Row">
-                                                        <rect key="frame" x="0.0" y="78" width="701" height="73"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3jr-hx-oTn" userLabel="Bottom Row">
+                                                        <rect key="frame" x="0.0" y="78" width="586" height="73"/>
                                                         <color key="backgroundColor" red="0.87843137250000003" green="0.18039215689999999" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </stackView>
                                                 </subviews>
@@ -1597,6 +1597,7 @@
                                             <constraint firstItem="4Ec-1G-7F7" firstAttribute="trailing" secondItem="muE-4U-o7E" secondAttribute="trailing" id="gic-uP-wUy"/>
                                             <constraint firstItem="C6w-NJ-7hh" firstAttribute="width" secondItem="jdU-TX-059" secondAttribute="width" id="htr-KM-qTA"/>
                                             <constraint firstAttribute="bottom" secondItem="muE-4U-o7E" secondAttribute="bottom" constant="20" id="j1d-X6-R1w"/>
+                                            <constraint firstItem="uUR-C5-2he" firstAttribute="width" secondItem="jdU-TX-059" secondAttribute="width" multiplier="3" constant="10" id="kMt-BD-H6n"/>
                                             <constraint firstItem="P16-vN-2MF" firstAttribute="height" secondItem="jdU-TX-059" secondAttribute="height" id="kcA-j5-aEy"/>
                                             <constraint firstItem="PtG-e9-f8k" firstAttribute="leading" secondItem="wKh-3Z-0fw" secondAttribute="trailing" constant="5" id="m5k-TQ-UbE"/>
                                             <constraint firstItem="muE-4U-o7E" firstAttribute="top" secondItem="f9n-jQ-ftm" secondAttribute="top" constant="20" id="mb7-5O-Ivc"/>

@@ -153,6 +153,7 @@ class Simulation {
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed);
             
+            //This chunk checks for various author
             if _employedAuthors[i].hasInfrequentPublished {
                 add(EmployeeEvent(message: _employedAuthors[i].getName() + " is annoyed that their articles aren't published."));
                 _employedAuthors[i].hasInfrequentPublished = false;
@@ -426,6 +427,7 @@ class Simulation {
         }
         
         //// This setup is for tracking time by minutes
+        //
         //if _gameTimeElapsed % _TICKS_PER_HOUR == 0 {
         //    _gameDayMinutesElapsed = _gameDayMinutesElapsed > 1500 ? 60 : _gameDayMinutesElapsed + 1;
         //}
