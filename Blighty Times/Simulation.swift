@@ -66,15 +66,16 @@ class Simulation {
         employeeTick();
         applicantTick();
         eventTick();
-        POPULATION.spreadNews(getCurrentNewsEventTopic());
         
         if isEndOfDay() {
             if !NE_releasedEarly {
                 publishNextEdition(is: false);
             }
+            
             NE_releasedEarly = false;
             nextDay();
             chanceToSpawnNewsEvent();
+            POPULATION.spreadNews(getCurrentNewsEventTopic());
         }
     }
     

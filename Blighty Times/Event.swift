@@ -185,7 +185,7 @@ class NewsEvent: Event {
         case "Children":
             return Simulation.TICKS_PER_DAY;
         case "Violence":
-            return Simulation.TICKS_PER_DAY;
+            return Simulation.TICKS_PER_DAY * 2;
         case "Education":
             return Simulation.TICKS_PER_DAY;
         case "Theatre":

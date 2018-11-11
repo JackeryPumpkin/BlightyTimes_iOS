@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lmt-x0-A4b">
     <device id="ipad11_0rounded" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,6 +9,106 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="1tz-dG-Rod">
+            <objects>
+                <viewController id="lmt-x0-A4b" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PfY-93-V72">
+                        <rect key="frame" x="0.0" y="0.0" width="1194" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAIN MENU" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GyE-ea-RXw">
+                                <rect key="frame" x="479" y="104" width="236" height="48"/>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="67R-2p-cGU">
+                                <rect key="frame" x="347" y="232" width="500" height="500"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Game" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q7e-zr-KdP">
+                                        <rect key="frame" x="0.0" y="0.0" width="198.5" height="46"/>
+                                        <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="40"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pSD-TL-qd8">
+                                        <rect key="frame" x="0.0" y="66" width="500" height="60"/>
+                                        <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="lPt-JY-cFe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                        <state key="normal" title="          STORY">
+                                            <color key="titleColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbV-dm-2MN">
+                                        <rect key="frame" x="0.0" y="146" width="500" height="60"/>
+                                        <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="1MP-IB-zcr"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                        <state key="normal" title="          RANDOM START">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="show" id="X7L-0w-9k5"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RS7-gf-dcP">
+                                        <rect key="frame" x="0.0" y="266" width="141.5" height="46"/>
+                                        <fontDescription key="fontDescription" name="Baskerville-SemiBoldItalic" family="Baskerville" pointSize="40"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cp6-FP-cpb">
+                                        <rect key="frame" x="0.0" y="332" width="500" height="60"/>
+                                        <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="6zY-aD-UEG"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                        <state key="normal" title="          DARK MODE">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.49729773116438358" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="IbV-dm-2MN" firstAttribute="top" secondItem="pSD-TL-qd8" secondAttribute="bottom" constant="20" id="22I-87-kxs"/>
+                                    <constraint firstAttribute="trailing" secondItem="pSD-TL-qd8" secondAttribute="trailing" id="5rV-CJ-Nbm"/>
+                                    <constraint firstAttribute="width" constant="500" id="6Vy-5I-CCW"/>
+                                    <constraint firstItem="Cp6-FP-cpb" firstAttribute="top" secondItem="RS7-gf-dcP" secondAttribute="bottom" constant="20" id="P9C-7o-hQd"/>
+                                    <constraint firstItem="RS7-gf-dcP" firstAttribute="leading" secondItem="67R-2p-cGU" secondAttribute="leading" id="Px0-Mb-nKE"/>
+                                    <constraint firstItem="IbV-dm-2MN" firstAttribute="leading" secondItem="67R-2p-cGU" secondAttribute="leading" id="S4s-VQ-6PG"/>
+                                    <constraint firstItem="pSD-TL-qd8" firstAttribute="top" secondItem="Q7e-zr-KdP" secondAttribute="bottom" constant="20" id="TP8-lu-Vdr"/>
+                                    <constraint firstItem="Q7e-zr-KdP" firstAttribute="top" secondItem="67R-2p-cGU" secondAttribute="top" id="Z3b-kv-OQn"/>
+                                    <constraint firstAttribute="trailing" secondItem="Cp6-FP-cpb" secondAttribute="trailing" id="axy-XL-HbG"/>
+                                    <constraint firstItem="Cp6-FP-cpb" firstAttribute="leading" secondItem="67R-2p-cGU" secondAttribute="leading" id="idJ-h8-XtW"/>
+                                    <constraint firstAttribute="height" constant="500" id="kT0-s8-SuM"/>
+                                    <constraint firstItem="pSD-TL-qd8" firstAttribute="leading" secondItem="67R-2p-cGU" secondAttribute="leading" id="pWF-np-AA2"/>
+                                    <constraint firstItem="RS7-gf-dcP" firstAttribute="top" secondItem="IbV-dm-2MN" secondAttribute="bottom" constant="60" id="qvm-7S-eIJ"/>
+                                    <constraint firstItem="Q7e-zr-KdP" firstAttribute="leading" secondItem="67R-2p-cGU" secondAttribute="leading" id="r4g-BV-yGD"/>
+                                    <constraint firstAttribute="trailing" secondItem="IbV-dm-2MN" secondAttribute="trailing" id="uGW-1F-DWS"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.98046809434890747" green="0.98820751905441284" blue="0.98823672533035278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="67R-2p-cGU" firstAttribute="top" secondItem="GyE-ea-RXw" secondAttribute="bottom" constant="80" id="6bs-DL-PSB"/>
+                            <constraint firstItem="GyE-ea-RXw" firstAttribute="top" secondItem="Vqe-6f-MWs" secondAttribute="top" constant="80" id="8U6-q3-cuf"/>
+                            <constraint firstItem="67R-2p-cGU" firstAttribute="centerX" secondItem="PfY-93-V72" secondAttribute="centerX" id="UQX-mZ-s0W"/>
+                            <constraint firstItem="GyE-ea-RXw" firstAttribute="centerX" secondItem="PfY-93-V72" secondAttribute="centerX" id="g2A-hO-VXj"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Vqe-6f-MWs"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="maR-zC-sBq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-79" y="-592"/>
+        </scene>
         <!--Game View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -143,7 +243,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="❤︎ Conservatism ✗ Video Games ❤︎ Film" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9UQ-n6-WeU">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="86" height="32.5"/>
-                                                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
@@ -203,7 +303,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="❤︎ Technology ✗ Religion" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Ui-uL-JsX">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="85.5" height="21.5"/>
-                                                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
@@ -262,7 +362,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="❤︎ Theatre ❤︎ Film" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MMK-Pt-EK4">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="86" height="21.5"/>
-                                                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
@@ -321,7 +421,7 @@
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="❤︎ Liberalism ✗ Violence ❤︎ Film" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ux8-Fe-qQa">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="85.5" height="32.5"/>
-                                                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
@@ -453,10 +553,10 @@
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pYP-BA-XUR">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="238" height="26"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="358" height="26"/>
                                                                                     <subviews>
                                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ywO-1m-0qg">
-                                                                                            <rect key="frame" x="5" y="0.0" width="233" height="26"/>
+                                                                                            <rect key="frame" x="5" y="0.0" width="353" height="26"/>
                                                                                             <subviews>
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🗞" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz3-vl-qj4">
                                                                                                     <rect key="frame" x="2" y="6" width="17" height="14.5"/>
@@ -468,7 +568,7 @@
                                                                                                     <nil key="highlightedColor"/>
                                                                                                 </label>
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nuclear &quot;incident&quot; near primary school " lineBreakMode="tailTruncation" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="soL-yI-5K8">
-                                                                                                    <rect key="frame" x="24" y="4.5" width="204" height="17"/>
+                                                                                                    <rect key="frame" x="24" y="4.5" width="324" height="17"/>
                                                                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                     <color key="textColor" white="0.0" alpha="0.55918236301369861" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                     <nil key="highlightedColor"/>
@@ -2002,7 +2102,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GtN-nn-dlh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Dxe-za-26f" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="581.65467625899282" y="496.40287769784175"/>
+            <point key="canvasLocation" x="599" y="131"/>
         </scene>
     </scenes>
 </document>

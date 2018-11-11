@@ -75,9 +75,9 @@ class Region {
     private let _TOPICS: [Topic];
     private var _newsTopic: Topic? = nil;
     private var _releventTopics: [Topic] { return _newsTopic != nil ? [_newsTopic!] : _TOPICS }
-    private let _MAX_LOYALTY: Double = 1;
-    private let _MIN_LOYALTY: Double = 0.05;
-    private let _LOYALTY_INCREMENT: Double = 0.05;
+    private let _MAX_LOYALTY: Double = 1.5;
+    private let _MIN_LOYALTY: Double = 0.015;
+    private let _LOYALTY_INCREMENT: Double = 0.015;
     
     private var _loyalty: Double = 0.5;
     private var _subscribers: Int;
@@ -116,20 +116,23 @@ class Region {
         }
         
         _missedDeadline = blankArticles == 6 ? true : false;
-        setNewSubs(statuses: topicsLiked, isEarly, sum > 0 ? Float(sum) / Float(6 - blankArticles) : 0.0);
+        setNewSubs(statuses: topicsLiked, isEarly, sum > 0 ? Double(sum) / Double(6 - blankArticles) : 0.0);
     }
     
     func setNewsTopic(_ topic: Topic?) {
         _newsTopic = topic;
     }
     
-    func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ averageQuality: Float) {
-        let daysSinceApproval = Float(_daysSinceLastApproval);
-        let subs = Float(_subscribers);
-        let size = Float(_SIZE);
-        let loyalty = Float(_loyalty == 0 ? 0.00001 : _loyalty);
+    func setNewSubs(statuses topicsLiked: Int, _ isEarly: Bool, _ averageQuality: Double) {
+        let daysSinceApproval = Double(_daysSinceLastApproval);
+        let subs = Double(_subscribers);
+        let size = Double(_SIZE);
         
-        //daysSinceLastApproval is reset in here. Use daysSinceApproval for
+        //This checks for 0 and being greater than 1
+        let loyalty: Double = _loyalty == 0 ? 0.00001 : _loyalty > 1 ? 1 : _loyalty;
+        
+        //daysSinceLastApproval is set in setNewLoyalty().
+        //Use daysSinceApproval below
         setNewLoyalty(from: topicsLiked, isEarly);
         
         /*
@@ -141,14 +144,24 @@ class Region {
                 + Random(1 * (2+quality if NewsEvent else quality) ... 1000 * (2+quality if NewsEvent else quality)) * loyalty
         */
         
-        var newSubs: Float = 0.0;
+        var newSubs: Double = 0.0;
         
         if _missedDeadline {
-            newSubs = -Float.random(in: powf(2, daysSinceApproval) ... powf(7, daysSinceApproval)) / loyalty;
+            newSubs = -Double.random(in: pow(2, daysSinceApproval)
+                                     ... pow(10, daysSinceApproval));
         } else if topicsLiked == 0 {
-            newSubs = Float.random(in: -5000 * daysSinceApproval ... 5000 * averageQuality) * loyalty;
+            newSubs = Double.random(in: -5000 * (daysSinceApproval * 2)
+                                     ... 5000 * (_newsTopic == nil ? 0 : averageQuality));
         } else {
-            newSubs = Float.random(in: 1000 * Float(topicsLiked) * averageQuality ... 10000 * Float(topicsLiked) * averageQuality) * loyalty
+            newSubs = Double.random(in: 1000 * Double(_newsTopic == nil ? topicsLiked : topicsLiked * 2) * averageQuality
+                                    ... 10000 * Double(_newsTopic == nil ? topicsLiked : topicsLiked * 2) * averageQuality);
+        }
+        
+        print("Region's loyalty: \(_loyalty)");
+        if newSubs > 0 {
+            newSubs *= loyalty;
+        } else if newSubs < 0 {
+            newSubs /= loyalty;
         }
         
         //This ensures that new subscribers are never so negative that it would
@@ -186,9 +199,11 @@ class Region {
     }
     
     func increaseLoyalty(by increments: Int) {
-        _loyalty = _loyalty + (_LOYALTY_INCREMENT * Double(increments)) < _MAX_LOYALTY
-                    ? _loyalty + (_LOYALTY_INCREMENT * Double(increments))
-                    : _MAX_LOYALTY;
+        //Commented out the ternary expression which disallows _loyalty to go beyond its maximum
+        //I'm allowing it to go above the max so that reducing loyalty takes longer
+        _loyalty = _loyalty + (_LOYALTY_INCREMENT * Double(increments))// < _MAX_LOYALTY
+                    //? _loyalty + (_LOYALTY_INCREMENT * Double(increments))
+                    //: _MAX_LOYALTY;
     }
     
     func increaseLoyalty(divide numerator: Int, by denominator: Int) {
