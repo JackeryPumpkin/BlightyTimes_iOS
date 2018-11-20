@@ -87,6 +87,7 @@ class GameViewController: UIViewController {
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
+        
         if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count {
             noEventsSymbol.isHidden = sim.eventList.count == 0 ? false : true;
             eventsTable.reloadSections(IndexSet(integersIn: 0...0), with: .fade);
@@ -145,12 +146,15 @@ class GameViewController: UIViewController {
         
         sim.syncNewArticles();
         
-        if sim.writtenArticles.count == 12 { pendingSlotsFullWarning.isHidden = false; }
-        else { pendingSlotsFullWarning.isHidden = true; }
+        if sim.writtenArticles.count == 12 {
+            pendingSlotsFullWarning.isHidden = false;
+        } else {
+            pendingSlotsFullWarning.isHidden = true;
+        }
         
         //Handles the behavior of the moving tile from pending
         for i in 0 ..< articleTiles.count {
-            if articleTiles.object(at: i)!.isTouched {
+            if articleTiles.object(at: i)!.isTouched && movingTileIndex != i {
                 movingTileIndex = i;
                 
                 movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
@@ -161,7 +165,7 @@ class GameViewController: UIViewController {
         
         //Handles the behavior of the moving tile from NE
         for i in 0 ..< NE_articleTiles.count {
-            if NE_articleTiles.object(at: i)!.isTouched {
+            if NE_articleTiles.object(at: i)!.isTouched && NE_movingTileIndex != i {
                 NE_movingTileIndex = i;
                 
                 movingTileTitle.text = NE_articleTiles.object(at: i)!.article.getTitle();
@@ -176,6 +180,7 @@ class GameViewController: UIViewController {
                 applicantsCountBadge.text = "\(sim.applicantAuthors.count)";
                 applicantsCountBadge.isHidden = false;
             } else {
+                applicantsCountBadge.isHidden = true;
                 applicantBadgeCooldown = 10;
             }
         } else {
@@ -642,33 +647,35 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
-            (cell as! EmployedAuthorCell).authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
-            (cell as! EmployedAuthorCell).authorName.text = sim.employedAuthors[indexPath.row].getName();
-            (cell as! EmployedAuthorCell).level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
-            (cell as! EmployedAuthorCell).morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
-            (cell as! EmployedAuthorCell).morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
-            (cell as! EmployedAuthorCell).publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
-            (cell as! EmployedAuthorCell).speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-            (cell as! EmployedAuthorCell).salary.text = (sim.employedAuthors[indexPath.row].getSalary() * 365).dollarFormat();
-            (cell as! EmployedAuthorCell).progressConstraint.constant = (cell as! EmployedAuthorCell).getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
-            (cell as! EmployedAuthorCell).experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
-            (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
-            (cell as! EmployedAuthorCell).showSkillButtons();
+            let employedCell = cell as! EmployedAuthorCell;
             
-            (cell as! EmployedAuthorCell).topicList.text = "";
+            employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
+            employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName();
+            employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
+            employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
+            employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
+            employedCell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
+            employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
+            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary() * 365).dollarFormat();
+            employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
+            employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
+            employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+            employedCell.showSkillButtons();
+            
+            employedCell.topicList.text = "";
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                (cell as! EmployedAuthorCell).topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+                employedCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
             }
             
-            if (cell as! EmployedAuthorCell).overlayView.isHidden {
+            if employedCell.overlayView.isHidden {
                 if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
-                    (cell as! EmployedAuthorCell).overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
                 } else {
-                    (cell as! EmployedAuthorCell).overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
                 }
             }
             
-            (cell as! EmployedAuthorCell).toggleOverlay = {
+            employedCell.toggleOverlay = {
                 //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
                 if self.lastSelectedIndexPath.row != indexPath.row
                 && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
@@ -680,47 +687,64 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 self.lastSelectedIndexPath = indexPath;
             }
         
-            (cell as! EmployedAuthorCell).fire = {
+            employedCell.fire = {
                 self.sim.fire(authorAt: indexPath.row);
-                (cell as! EmployedAuthorCell).hideOverlay();
+                employedCell.hideOverlay();
                 self.lastSelectedIndexPath.row = 0;
                 tableView.reloadData();
             }
             
-            (cell as! EmployedAuthorCell).promoteQuality = {
+            employedCell.promoteQuality = {
                 self.sim.employedAuthors[indexPath.row].promoteQuality();
-                (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+                employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
                 
-                (cell as! EmployedAuthorCell).showSkillButtons();
+                employedCell.showSkillButtons();
             }
             
-            (cell as! EmployedAuthorCell).promoteSpeed = {
+            employedCell.promoteSpeed = {
                 self.sim.employedAuthors[indexPath.row].promoteSpeed();
-                (cell as! EmployedAuthorCell).skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
+                employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
                 
-                (cell as! EmployedAuthorCell).showSkillButtons();
+                employedCell.showSkillButtons();
             }
             
         } else if tableView == applicantAuthorsTable {
-            (cell as! ApplicantAuthorCell).authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
-            (cell as! ApplicantAuthorCell).authorName.text = sim.applicantAuthors[indexPath.row].getName();
-            (cell as! ApplicantAuthorCell).quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
-            (cell as! ApplicantAuthorCell).speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
-            (cell as! ApplicantAuthorCell).salary.text = (sim.applicantAuthors[indexPath.row].getSalary() * 365).dollarFormat();
+            let applicantCell = cell as! ApplicantAuthorCell;
             
-            (cell as! ApplicantAuthorCell).topicList.text = "";
+            applicantCell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
+            applicantCell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
+            applicantCell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
+            applicantCell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
+            applicantCell.salary.text = (sim.applicantAuthors[indexPath.row].getSalary() * 365).dollarFormat();
+            
+            applicantCell.topicList.text = "";
             for topic in sim.applicantAuthors[indexPath.row].getTopics() {
-                (cell as! ApplicantAuthorCell).topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+                applicantCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
             }
             
-            (cell as! ApplicantAuthorCell).onButtonTapped = {
+            applicantCell.onButtonTapped = {
                 self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
                 tableView.reloadData();
             }
+            
         } else if tableView == eventsTable {
-            (cell as! EventCell).view.backgroundColor = sim.eventList[indexPath.row].color;
-            (cell as! EventCell).message.text = sim.eventList[indexPath.row].message;
-            (cell as! EventCell).symbol.text = sim.eventList[indexPath.row].symbol;
+            let eventCell = cell as! EventCell;
+            
+            eventCell.view.backgroundColor = sim.eventList[indexPath.row].color;
+            eventCell.message.text = sim.eventList[indexPath.row].message;
+            eventCell.symbol.text = sim.eventList[indexPath.row].symbol;
+        }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print("Last selected index: \(lastSelectedIndexPath.row)")
+        if scrollView == employedAuthorsTable {
+            if employedAuthorsTable.numberOfRows(inSection: 0) > lastSelectedIndexPath.row {
+                guard let cell = employedAuthorsTable.cellForRow(at: lastSelectedIndexPath) as? EmployedAuthorCell else {
+                    return;
+                }
+                cell.hideOverlay();
+            }
         }
     }
 }

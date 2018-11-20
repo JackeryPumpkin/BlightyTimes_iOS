@@ -74,7 +74,7 @@ class Author {
         _quality = AuthorLibrary.getRandomQuality();
         _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = AuthorLibrary.getRandomRate();
-        _salary = Int(_articleRate * 1000) + (_quality * 10);
+        _salary = Int(_articleRate * 100) + (_quality * 10);
     }
     
     //Public interface for custom author creation
@@ -257,7 +257,7 @@ class Author {
     }
     
     func setNewSalary() {
-        _salary += _quality * 10;
+        _salary += Int(_articleRate * 10) + (_quality * 10);
     }
     
     func getCommission() -> Int {
@@ -352,56 +352,56 @@ class Author {
 
 class AuthorLibrary {
     private static let _AUTHORS: [Author] = [
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Suzy Joe"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Jack Bricklayer"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Frank Bottomwealth"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Harold Knickers"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Theresa Froshet"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Lincoln Matherlips"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Freddie Plicks"),
-        Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Wendy Mysten"),
-        Author(portrait: #imageLiteral(resourceName: "Author2"), name: "Elaine Mendihooks"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Chuck Vandel"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Greg Heartis"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Jesse Flickmaster"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Nichole Tremble"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Leonard Teaspray"),
-        Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Catherine Humble"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Samuel Barth"),
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Jackie Westerpile"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Pete Underknuckle"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Arthur Tinmonk"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Richard Feak"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Timothy Whiskerly"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Matthew Snote"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Brittany Blossoms"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Nigel Tuntilly"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "James Heath"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Meresa Plaingull"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Norman Shugal"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Lizzy Frankly"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Les Beastline"),
-        Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Helga Harbinger"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Chaz Gesture"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Fletcher Klankapot"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Nathan Zimpeck"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Osmund Honeyfront"),
-        Author(portrait: #imageLiteral(resourceName: "Author3"), name: "Terry Smackeral"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Oliver Klipfin"),
-        Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Abbigail Mowrett"),
-        Author(portrait: #imageLiteral(resourceName: "Author2"), name: "Jen Thistlebeak"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Hank Prestal"),
-        Author(portrait: #imageLiteral(resourceName: "Author1"), name: "Jerome Filks"),
-        Author(portrait: #imageLiteral(resourceName: "Author8"), name: "Justin Hestile"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Marie Gilphon"),
-        Author(portrait: #imageLiteral(resourceName: "Author4"), name: "Emma Venbracket"),
-        Author(portrait: #imageLiteral(resourceName: "Author6"), name: "Charlotte Klumph"),
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Ava Estmire"),
-        Author(portrait: #imageLiteral(resourceName: "Author9"), name: "Ike Crimmelflank"),
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Kaylin Sprockets"),
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Snutty Leftcut"),
-        Author(portrait: #imageLiteral(resourceName: "Author7"), name: "Marcus Guildabreck"),
-        Author(portrait: #imageLiteral(resourceName: "Author5"), name: "Bill Festerville")
+        Author(portrait: #imageLiteral(resourceName: "SuzyJoe"), name: "Suzy Joe"),
+        Author(portrait: #imageLiteral(resourceName: "JackBricklayer"), name: "Jack Bricklayer"),
+        Author(portrait: #imageLiteral(resourceName: "FrankBottomwealth"), name: "Frank Bottomwealth"),
+        Author(portrait: #imageLiteral(resourceName: "HaroldKnickers"), name: "Harold Knickers"),
+        Author(portrait: #imageLiteral(resourceName: "TheresaFroshet"), name: "Theresa Froshet"),
+        Author(portrait: #imageLiteral(resourceName: "LincolnMatherlips"), name: "Lincoln Matherlips"),
+        Author(portrait: #imageLiteral(resourceName: "FreddiePlicks"), name: "Freddie Plicks"),
+        Author(portrait: #imageLiteral(resourceName: "WendyMysten"), name: "Wendy Mysten"),
+        Author(portrait: #imageLiteral(resourceName: "ElaineMendihooks"), name: "Elaine Mendihooks"),
+        Author(portrait: #imageLiteral(resourceName: "ChuckVandel"), name: "Chuck Vandel"),
+        Author(portrait: #imageLiteral(resourceName: "GregHeartis"), name: "Greg Heartis"),
+        Author(portrait: #imageLiteral(resourceName: "JesseFlickmaster"), name: "Jesse Flickmaster"),
+        Author(portrait: #imageLiteral(resourceName: "NicholeTremble"), name: "Nichole Tremble"),
+        Author(portrait: #imageLiteral(resourceName: "LeonardTeaspray"), name: "Leonard Teaspray"),
+        Author(portrait: #imageLiteral(resourceName: "CatherineHumble"), name: "Catherine Humble"),
+        Author(portrait: #imageLiteral(resourceName: "SamuelBarth"), name: "Samuel Barth"),
+        Author(portrait: #imageLiteral(resourceName: "JackieWesterpile"), name: "Jackie Westerpile"),
+        Author(portrait: #imageLiteral(resourceName: "PeteUnderknuckle"), name: "Pete Underknuckle"),
+        Author(portrait: #imageLiteral(resourceName: "ArthurTinmonk"), name: "Arthur Tinmonk"),
+        Author(portrait: #imageLiteral(resourceName: "RichardFeak"), name: "Richard Feak"),
+        Author(portrait: #imageLiteral(resourceName: "TimothyWhiskerly"), name: "Timothy Whiskerly"),
+        Author(portrait: #imageLiteral(resourceName: "MatthewSnote"), name: "Matthew Snote"),
+        Author(portrait: #imageLiteral(resourceName: "BrittanyBlossoms"), name: "Brittany Blossoms"),
+        Author(portrait: #imageLiteral(resourceName: "NigelTuntilly"), name: "Nigel Tuntilly"),
+        Author(portrait: #imageLiteral(resourceName: "JamesHeath"), name: "James Heath"),
+        Author(portrait: #imageLiteral(resourceName: "MeresaPlaingull"), name: "Meresa Plaingull"),
+        Author(portrait: #imageLiteral(resourceName: "NormanShugal"), name: "Norman Shugal"),
+        Author(portrait: #imageLiteral(resourceName: "LizzyFrankly"), name: "Lizzy Frankly"),
+        Author(portrait: #imageLiteral(resourceName: "LesBeastline"), name: "Les Beastline"),
+        Author(portrait: #imageLiteral(resourceName: "HelgaHarbinger"), name: "Helga Harbinger"),
+        Author(portrait: #imageLiteral(resourceName: "ChazGesture"), name: "Chaz Gesture"),
+        Author(portrait: #imageLiteral(resourceName: "FletcherKlankapot"), name: "Fletcher Klankapot"),
+        Author(portrait: #imageLiteral(resourceName: "NathanZimpeck"), name: "Nathan Zimpeck"),
+        Author(portrait: #imageLiteral(resourceName: "OsmundHoneyfront"), name: "Osmund Honeyfront"),
+        Author(portrait: #imageLiteral(resourceName: "TerrySmackeral"), name: "Terry Smackeral"),
+        Author(portrait: #imageLiteral(resourceName: "OliverKlipfin"), name: "Oliver Klipfin"),
+        Author(portrait: #imageLiteral(resourceName: "AbbigailMowrett"), name: "Abbigail Mowrett"),
+        Author(portrait: #imageLiteral(resourceName: "JenThistlebeak"), name: "Jen Thistlebeak"),
+        Author(portrait: #imageLiteral(resourceName: "HankPrestal"), name: "Hank Prestal"),
+        Author(portrait: #imageLiteral(resourceName: "JeromeFilks"), name: "Jerome Filks"),
+        Author(portrait: #imageLiteral(resourceName: "JustinHestile"), name: "Justin Hestile"),
+        Author(portrait: #imageLiteral(resourceName: "MarieGilphon"), name: "Marie Gilphon"),
+        Author(portrait: #imageLiteral(resourceName: "EmmaVenbracket"), name: "Emma Venbracket"),
+        Author(portrait: #imageLiteral(resourceName: "CharlotteKlumph"), name: "Charlotte Klumph"),
+        Author(portrait: #imageLiteral(resourceName: "AvaEstmire"), name: "Ava Estmire"),
+        Author(portrait: #imageLiteral(resourceName: "IkeCrimmelflank"), name: "Ike Crimmelflank"),
+        Author(portrait: #imageLiteral(resourceName: "KaylinSprockets"), name: "Kaylin Sprockets"),
+        Author(portrait: #imageLiteral(resourceName: "SnuttyLeftcut"), name: "Snutty Leftcut"),
+        Author(portrait: #imageLiteral(resourceName: "MarcusGuildabreck"), name: "Marcus Guildabreck"),
+        Author(portrait: #imageLiteral(resourceName: "BillFesterville"), name: "Bill Festerville")
     ];
     
     var blank: Author = Author(portrait: UIImage(), name: "blank", topics: [], quality: 1, articleRate: 0);
