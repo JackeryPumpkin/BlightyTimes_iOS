@@ -25,7 +25,7 @@ class Simulation {
             //var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
             var writtenArticles: [Article] { return _writtenArticles; }
-     var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
+            var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
     //var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
             var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
@@ -219,21 +219,21 @@ class Simulation {
     func add(_ event: Event) {
         //If there is a NewsEvent currently in the queue, put the next event
         //underneath it so that the News is always at the top
-        if eventList.first.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
-                eventList.insert(event, at: 1);
+        if eventList.first is NewsEvent {//.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
+            eventList.insert(event, at: 1);
         } else {
             eventList.insert(event, at: 0);
         }
     }
     
     func chanceToSpawnNewsEvent() {
-        let newsEvent = NewsEvent();
-        
         //Checks to see if there is already news in the eventList
         //Right now, I only want one NewsEvent at a time
-        if eventList.first.debugDescription != "Optional(Blighty_Times.NewsEvent)" {
-            if Random(int: 0 ... 5) == 3 {
-                add(newsEvent);
+        if let event = eventList.first {
+            if !(event is NewsEvent) {//.debugDescription != "Optional(Blighty_Times.NewsEvent)" {
+                if Random(int: 0 ... 5) == 3 {
+                    add(NewsEvent());
+                }
             }
         }
     }

@@ -63,13 +63,14 @@ class GameViewController: UIViewController {
     @IBOutlet weak var movingTileReferenceView: UIView!
     @IBOutlet weak var movingTileTitle: UILabel!
     @IBOutlet weak var movingTileAuthor: UILabel!
-    private var movingTileIndex: Int?;
-    private var NE_movingTileIndex: Int?;
-    private var lastknownTileLocation: CGPoint?;
+    var movingTileIndex: Int?;
+    var NE_movingTileIndex: Int?;
+    var lastknownTileLocation: CGPoint?;
     
     //Game Properties
-    private var sim = Simulation();
+    var sim = Simulation();
     private var gameTimer: Timer!;
+    var stateMachine = StateMachine(state: PlayState())
     
     
     override func viewDidLoad() {
@@ -344,58 +345,65 @@ class GameViewController: UIViewController {
         return panRecognizer;
     }
     
-    @objc func handlePan(recognizer: UIPanGestureRecognizer) { /////// Need to add in a check for game being paused. It'll prevent glitches and cheating ///////////
+    @objc func handlePan(recognizer: UIPanGestureRecognizer) {
+        let updatedGameState = gameState.handle(sender: recognizer);
+        gameState = updatedGameState ?? gameState;
+        
         //Dragging for Pending Tiles
         if let index = movingTileIndex {
             if let tile = articleTiles.object(at: index) {
-                
+
                 if recognizer.state == .began {
                     tile.layer.opacity = 0;
-                    
+
                     if index < 4 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 10) - (articleSlotsTop.frame.height * 2.5));
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20,
+                                                        y: (articleSlotsStack.frame.maxY - 10) - (articleSlotsTop.frame.height * 2.5));
                     } else if index < 8 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 5) - (articleSlotsMiddle.frame.height * 1.5));
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20,
+                                                        y: (articleSlotsStack.frame.maxY - 5) - (articleSlotsMiddle.frame.height * 1.5));
                     } else if index < 12 {
-                        lastknownTileLocation = CGPoint(x: tile.center.x + 20, y: (articleSlotsStack.frame.maxY) - (articleSlotsBottom.frame.height * 0.5));
+                        lastknownTileLocation = CGPoint(x: tile.center.x + 20,
+                                                        y: (articleSlotsStack.frame.maxY) - (articleSlotsBottom.frame.height * 0.5));
                     }
-                    
+
                     movingTileReferenceView.center = lastknownTileLocation!;
                     movingTileReferenceView.isHidden = false;
                 }// End .began
-                
-                
-                
+
+
+
                 let translation = recognizer.translation(in: self.view);
-                movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x, y: movingTileReferenceView.center.y + translation.y);
+                movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x,
+                                                         y: movingTileReferenceView.center.y + translation.y);
                 recognizer.setTranslation(CGPoint.zero, in: self.view);
-                
-                
-                
+
+
+
                 if recognizer.state == .ended || recognizer.state == .cancelled {
                     let dropLocation = recognizer.location(in: articlePane);
 //                    var NE_newLocation: CGPoint? = nil;
                     var NE_newIndex: Int? = nil;
-                    
+
                     hitLoop: for ne_view in NE_viewPositions {
                         if dropLocation.x > ne_view.frame.minX &&
                             dropLocation.y > ne_view.frame.minY &&
                             dropLocation.x < ne_view.frame.maxX &&
                             dropLocation.y < ne_view.frame.maxY {
-                            
+
                             if sim.addToNextEdition(article: &tile.article, index: ne_view.tag) {
                                 lastknownTileLocation = ne_view.center;
                                 NE_newIndex = ne_view.tag;
 //                                lastknownTileLocation = nil;
-                                
+
                                 NE_articleTiles.object(at: ne_view.tag)!.set(article: &sim._nextEditionArticles[ne_view.tag]);
                                 NE_articleTiles.object(at: ne_view.tag)!.layer.opacity = 0;
                             }
-                            
+
                             break hitLoop;
                         }
                     }
-                    
+
                     //Animate movingTileReferenceView back to its destination
                     UIView.animate(withDuration: 0.2, animations: {
                         self.movingTileReferenceView.center = self.lastknownTileLocation!;
@@ -411,27 +419,27 @@ class GameViewController: UIViewController {
                     }
                 }// End .ended || .cancelled
             }
-            
+
         //Dragging for NE Tiles
         } else if let index = NE_movingTileIndex {
             if let tile = NE_articleTiles.object(at: index) {
                 if recognizer.state == .began {
                     tile.layer.opacity = 0;
-                    
+
                     lastknownTileLocation = NE_viewPositions[index].center;
-                    
+
                     movingTileReferenceView.center = lastknownTileLocation!;
                     movingTileReferenceView.isHidden = false;
                 }// End .began
-                
-                
-                
+
+
+
                 let translation = recognizer.translation(in: self.view);
                 movingTileReferenceView.center = CGPoint(x: movingTileReferenceView.center.x + translation.x, y: movingTileReferenceView.center.y + translation.y);
                 recognizer.setTranslation(CGPoint.zero, in: self.view);
-                
-                
-                
+
+
+
                 //One of three things can happen when tile from NE is dropped
                 //1. It's in the same spot or another non-blank NE slot -- Must slide back to its orig position
                 //2. It's in another blank NE slot -- It must slide into its new position
@@ -440,16 +448,16 @@ class GameViewController: UIViewController {
                     let dropLocation = recognizer.location(in: articlePane);
                     var NE_newIndex: Int? = nil;
                     var Pending_newIndex: Int? = nil;
-                    
+
                     hitLoop: for ne_view in NE_viewPositions {
                         if dropLocation.x > ne_view.frame.minX &&
                             dropLocation.y > ne_view.frame.minY &&
                             dropLocation.x < ne_view.frame.maxX &&
                             dropLocation.y < ne_view.frame.maxY {
-                            
+
                             lastknownTileLocation = NE_viewPositions[index].center;
                             NE_newIndex = index;
-                            
+
                             // If the NE slot dropped on is blank we put it down, if not, it goes back to lastknownTileLocation
                             if sim.changeIndexNextEdition(from: index, to: ne_view.tag) {
                                 lastknownTileLocation = ne_view.center;
@@ -457,11 +465,11 @@ class GameViewController: UIViewController {
                                 NE_articleTiles.object(at: ne_view.tag)!.set(article: &tile.article);//sim._nextEditionArticles[ne_view.tag]);
                                 NE_articleTiles.object(at: ne_view.tag)!.layer.opacity = 0;
                             }
-                            
+
                             break hitLoop;
                         }
                     }
-                    
+
                     // if NE_newIndex is still nil here that means we need to find the Pending_newIndex & location
                     if NE_newIndex == nil {
                         pendLoop: for i in 0 ..< articleTiles.count {
@@ -469,27 +477,30 @@ class GameViewController: UIViewController {
                                 //Unassign from NE back to Pending
                                 if sim.backToPending(ne_index: index) {
                                     if i < 4 {
-                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 10) - (articleSlotsTop.frame.height * 2.5));
+                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20,
+                                                                        y: (articleSlotsStack.frame.maxY - 10) - (articleSlotsTop.frame.height * 2.5));
                                     } else if i < 8 {
-                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20, y: (articleSlotsStack.frame.maxY - 5) - (articleSlotsMiddle.frame.height * 1.5));
+                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20,
+                                                                        y: (articleSlotsStack.frame.maxY - 5) - (articleSlotsMiddle.frame.height * 1.5));
                                     } else if i < 12 {
-                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20, y: (articleSlotsStack.frame.maxY) - (articleSlotsBottom.frame.height * 0.5));
+                                        lastknownTileLocation = CGPoint(x: (tile.frame.width * CGFloat(i)) + tile.center.x + 20,
+                                                                        y: (articleSlotsStack.frame.maxY) - (articleSlotsBottom.frame.height * 0.5));
                                     }
                                     Pending_newIndex = i;
                                     articleTiles.object(at: i)!.set(article: &tile.article);
                                     articleTiles.object(at: i)!.layer.opacity = 0;
                                 }
-                                
+
                                 break pendLoop;
                             }
                         }
                     }
-                    
+
                     //If both NE and Pending indices are nil the tile needs to head back to its orig location
                     if Pending_newIndex == nil && NE_newIndex == nil {
                         NE_newIndex = index;
                     }
-                    
+
                     //Animate movingTileReferenceView to its destination
                     UIView.animate(withDuration: 0.1, animations: {
                         self.movingTileReferenceView.center = self.lastknownTileLocation!;
@@ -503,7 +514,7 @@ class GameViewController: UIViewController {
                             self.articleTiles.object(at: Pending_newIndex!)!.layer.opacity = 1;
                             tile.setBlank();
                         }
-                        
+
                         tile.layer.opacity = 1;
                         self.movingTileIndex = nil;
                         self.movingTileReferenceView.isHidden = true;
