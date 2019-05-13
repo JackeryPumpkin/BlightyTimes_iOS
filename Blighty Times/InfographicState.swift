@@ -10,6 +10,10 @@ import Foundation
 
 
 class InfographicState: State {
+    init() {
+        print("[STATE MACHINE]  º InfographicState")
+    }
+    
     func handle(input: Input) -> State? {
         if input == .done {
             return PlayState()

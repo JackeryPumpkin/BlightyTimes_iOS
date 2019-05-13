@@ -10,8 +10,12 @@ import Foundation
 
 
 class PauseState: State {
+    init() {
+        print("[STATE MACHINE]  º PausedState")
+    }
+    
     func handle(input: Input) -> State? {
-        if input == .play {
+        if input == .pause {
             return PlayState()
         }
         

@@ -11,6 +11,7 @@
 		C3133E30227DFD8300905F00 /* PausedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3133E2F227DFD8300905F00 /* PausedState.swift */; };
 		C3133E32227DFDB600905F00 /* TutorialState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3133E31227DFDB600905F00 /* TutorialState.swift */; };
 		C3133E34227DFE1800905F00 /* InfographicState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3133E33227DFE1800905F00 /* InfographicState.swift */; };
+		C3133E36227F658200905F00 /* PublishingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3133E35227F658200905F00 /* PublishingState.swift */; };
 		C31530EB215846D40054684F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31530EA215846D40054684F /* AppDelegate.swift */; };
 		C31530F2215846D50054684F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31530F1215846D50054684F /* Assets.xcassets */; };
 		C31530F5215846D50054684F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31530F3215846D50054684F /* LaunchScreen.storyboard */; };
@@ -38,6 +39,7 @@
 		C3133E2F227DFD8300905F00 /* PausedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausedState.swift; sourceTree = "<group>"; };
 		C3133E31227DFDB600905F00 /* TutorialState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialState.swift; sourceTree = "<group>"; };
 		C3133E33227DFE1800905F00 /* InfographicState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfographicState.swift; sourceTree = "<group>"; };
+		C3133E35227F658200905F00 /* PublishingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishingState.swift; sourceTree = "<group>"; };
 		C31530E7215846D40054684F /* Blighty Times.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blighty Times.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31530EA215846D40054684F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31530F1215846D50054684F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				C317831721ADC78700347CB9 /* StateMachine.swift */,
 				C3133E2D227DFD6D00905F00 /* PlayState.swift */,
 				C3133E2F227DFD8300905F00 /* PausedState.swift */,
+				C3133E35227F658200905F00 /* PublishingState.swift */,
 				C3133E33227DFE1800905F00 /* InfographicState.swift */,
 				C3133E31227DFDB600905F00 /* TutorialState.swift */,
 			);
@@ -251,6 +254,7 @@
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
 				C3133E30227DFD8300905F00 /* PausedState.swift in Sources */,
 				C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */,
+				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 				C3133E32227DFDB600905F00 /* TutorialState.swift in Sources */,
 			);

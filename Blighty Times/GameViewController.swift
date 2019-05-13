@@ -103,7 +103,8 @@ class GameViewController: UIViewController {
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
             if let tile = articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 {
+                if tile.article.getLifetime() <= 0 || tile.article.getTitle().count < 5 {
+                    sim.removeFromPending(article: tile.article)
                     tile.setBlank();
                 } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
                     //Start blinking animation here
@@ -113,7 +114,7 @@ class GameViewController: UIViewController {
         
         for i in 0 ..< NE_articleTiles.count {
             if let tile = NE_articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 {
+                if tile.article.getLifetime() <= 0 || tile.article.getTitle().count < 5 {
                     tile.setBlank();
                 } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
                     //Start blinking animation here
@@ -191,20 +192,24 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func pauseButton(_ sender: Any) {
-        sim.pauseplayButtonPressed();
+        stateMachine.handleInput(input: .pause)
         
-        if sim.isPaused() {
-            pauseButton.setTitle("▶︎", for: .normal);
-            pausesLeft.text = "\(sim.getPausesLeft())";
-            stopGameTime();
-        } else {
-            if sim.getPausesLeft() == 0 {
-                pauseButton.setTitle("᰽", for: .normal);
-                startGameTime();
-                pauseButton.isEnabled = false;
+        if stateMachine.state is PlayState || stateMachine.state is PauseState {
+            sim.pauseplayButtonPressed();
+            
+            if sim.isPaused() {
+                pauseButton.setTitle("▶︎", for: .normal);
+                pausesLeft.text = "\(sim.getPausesLeft())";
+                stopGameTime();
             } else {
-                pauseButton.setTitle("||", for: .normal);
-                startGameTime();
+                if sim.getPausesLeft() == 0 {
+                    pauseButton.setTitle("᰽", for: .normal);
+                    startGameTime();
+                    pauseButton.isEnabled = false;
+                } else {
+                    pauseButton.setTitle("||", for: .normal);
+                    startGameTime();
+                }
             }
         }
     }
@@ -346,8 +351,8 @@ class GameViewController: UIViewController {
     }
     
     @objc func handlePan(recognizer: UIPanGestureRecognizer) {
-        let updatedGameState = gameState.handle(sender: recognizer);
-        gameState = updatedGameState ?? gameState;
+        if !(stateMachine.state is PlayState) { /*print("[STATE MACHINE]  * Drag prevented");*/ return }
+        //print("[STATE MACHINE]  * Drag enabled")
         
         //Dragging for Pending Tiles
         if let index = movingTileIndex {
@@ -558,10 +563,17 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded();
         }) { (finished) in
+            self.stateMachine.handleInput(input: .publishComplete)
+            
             if self.sim.isEndOfWeek() {
-                self.performSegue(withIdentifier: "scoreSegue", sender: nil);
+                self.stateMachine.handleInput(input: .weekend)
+                if self.stateMachine.state is InfographicState {
+                    self.performSegue(withIdentifier: "scoreSegue", sender: nil);
+                }
             } else {
-                self.startGameTime();
+                if self.stateMachine.state is PlayState {
+                    self.startGameTime();
+                }
             }
             
             self.publishButton.isEnabled = true;
@@ -591,20 +603,24 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func publishButton(_ sender: Any) {
-        publishButton.isEnabled = false;
-        stopGameTime();
+        stateMachine.handleInput(input: .publish)
         
-        UIView.animate(withDuration: 1, animations: {
-            self.timePlayHeadConstraint.constant = self.timelineWidth.constant;
-            self.view.layoutIfNeeded();
-        }) { (finished) in
-            self.sim.publishNextEdition(is: true);
-
-            for i in 0 ..< self.NE_articleTiles.count {
-                self.NE_articleTiles.object(at: i)!.setBlank();
-            }
+        if stateMachine.state is PublishingState {
+            publishButton.isEnabled = false;
+            stopGameTime();
             
-            self.updateDataPanels();
+            UIView.animate(withDuration: 1, animations: {
+                self.timePlayHeadConstraint.constant = self.timelineWidth.constant;
+                self.view.layoutIfNeeded();
+            }) { (finished) in
+                self.sim.publishNextEdition(early: true);
+
+                for i in 0 ..< self.NE_articleTiles.count {
+                    self.NE_articleTiles.object(at: i)!.setBlank();
+                }
+                
+                self.updateDataPanels();
+            }
         }
     }
 }
@@ -681,8 +697,12 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             if employedCell.overlayView.isHidden {
                 if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
                     employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitle("↑", for: .normal)
+                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
                 } else {
                     employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitle("⚙︎", for: .normal)
+                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
                 }
             }
             

@@ -18,6 +18,7 @@ class StateMachine {
     }
     
     func handleInput(input: Input) {
+        print("[STATE MACHINE]  > Input: " + input.rawValue)
         lastState = state
         state = state.handle(input: input) ?? state
     }
@@ -28,11 +29,12 @@ protocol State {
 }
 
 enum Input: String {
-    case play = "Play"
     case pause = "Pause"
-    case weekend = "Weekend"
-    case tutorial = "Tutorial"
-    
+    case publish = "Publish"
     case next = "Next"
     case done = "Done"
+    
+    case publishComplete = "Publish Complete"
+    case weekend = "Weekend"
+    case tutorial = "Tutorial"
 }

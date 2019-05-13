@@ -1,21 +1,21 @@
 //
-//  TutorialState.swift
+//  PublishingState.swift
 //  Blighty Times
 //
-//  Created by Zachary Duncan on 5/4/19.
+//  Created by Zachary Duncan on 5/5/19.
 //  Copyright © 2019 Zachary Duncan. All rights reserved.
 //
 
 import Foundation
 
 
-class TutorialState: State {
+class PublishingState: State {
     init() {
-        print("[STATE MACHINE]  º TutorialState")
+        print("[STATE MACHINE]  º PublishingState")
     }
     
     func handle(input: Input) -> State? {
-        if input == .done {
+        if input == .publishComplete {
             return PlayState()
         }
         

@@ -50,8 +50,8 @@ class Author {
     fileprivate static let ARTICLE_RATE_MAX: Double = ((Double(Simulation.TICKS_PER_DAY) / 60) / 30) * 3; // 3 articles per day
     fileprivate static let ARTICLE_RATE_MIN: Double =  (Double(Simulation.TICKS_PER_DAY) / 60) / 30;      // 1:1 with the in-game day
     
-    //Is the public interface for adding new pre-made Authors
-    //in context of the currently employed authors
+    ///Is the public interface for adding new pre-made Authors
+    ///in context of the currently employed authors
     init(exluding employedAuthors: inout [Author]) {
         let newAuthor = AuthorLibrary.getRandom(employedAuthors: &employedAuthors);
         _portrait = newAuthor.getPortrait();
@@ -64,8 +64,8 @@ class Author {
         _salary = newAuthor.getSalary();
     }
     
-    //Handles the inits for the pre-made Authors with random stats
-    //Used by AuthorLibrary
+    ///Handles the inits for the pre-made Authors with random stats
+    ///Used by AuthorLibrary
     fileprivate init(portrait: UIImage, name: String) {
         _portrait = portrait;
         _name = name;
@@ -77,7 +77,7 @@ class Author {
         _salary = Int(_articleRate * 100) + (_quality * 10);
     }
     
-    //Public interface for custom author creation
+    ///Public interface for custom author creation
     init(portrait: UIImage, name: String, topics: [Topic], quality: Int, articleRate: Double) {
         _portrait = portrait;
         _name = name;

@@ -69,7 +69,7 @@ class Simulation {
         
         if isEndOfDay() {
             if !NE_releasedEarly {
-                publishNextEdition(is: false);
+                publishNextEdition(early: false);
             }
             
             NE_releasedEarly = false;
@@ -90,7 +90,7 @@ class Simulation {
         }
     }
     
-    func publishNextEdition(is early: Bool) {
+    func publishNextEdition(early: Bool) {
         POPULATION.tick(published: _nextEditionArticles, is: early);
         NE_releasedEarly = early;
         

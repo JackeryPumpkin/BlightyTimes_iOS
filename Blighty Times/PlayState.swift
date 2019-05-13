@@ -10,9 +10,15 @@ import Foundation
 
 
 class PlayState: State {
+    init() {
+        print("[STATE MACHINE]  º PlayState")
+    }
+    
     func handle(input: Input) -> State? {
         if input == .pause {
             return PauseState()
+        } else if input == .publish {
+            return PublishingState()
         } else if input == .weekend {
             return InfographicState()
         } else if input == .tutorial {
