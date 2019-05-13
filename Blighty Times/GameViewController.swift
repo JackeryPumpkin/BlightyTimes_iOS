@@ -47,6 +47,7 @@ class GameViewController: UIViewController {
     //Data Tracking Outlets
     @IBOutlet weak var companyFunds: UILabel!
     @IBOutlet weak var yesterdaysProfit: UILabel!
+    @IBOutlet weak var hiredAuthors: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
     @IBOutlet var regionTopicsLabels: [UILabel]!
@@ -539,6 +540,7 @@ class GameViewController: UIViewController {
         yesterdaysProfit.textColor = sim.COMPANY.getYesterdaysProfit() < 0 ? .red : .black;
         totalSubscribers.text = sim.POPULATION.getTotalSubscriberCount().commaFormat();
         newSubscribers.text = sim.POPULATION.getNewSubscriberCount().commaFormat();
+        hiredAuthors.text = "\(sim.employedAuthors.count)";
         
         //Update Region Bars and Topics
         for i in 0 ..< self.regionBars.count {
