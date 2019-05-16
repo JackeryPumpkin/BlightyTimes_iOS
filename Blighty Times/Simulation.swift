@@ -9,26 +9,31 @@
 import UIKit
 
 class Simulation {
-    let COMPANY: Company = Company();
-    let POPULATION: Population = Population();
+    private var _company: Company = Company();
+    var company: Company { return _company }
+    
+    private var _population: Population = Population();
+    var population: Population { return _population }
+    
     var eventList: [Event] = [];
     
     //Author properties
     private var _employedAuthors: [Author] = [];
-            var employedAuthors: [Author] { return _employedAuthors; }
+    var employedAuthors: [Author] { return _employedAuthors; }
+    
     private var _applicantAuthors: [Author] = [];
-            var applicantAuthors: [Author] { return _applicantAuthors; }
+    var applicantAuthors: [Author] { return _applicantAuthors; }
     
     //Article Properties
     private var NE_releasedEarly: Bool = false;
-            var newArticles: [Article] = [];
-            //var newArticles: [Article] { return newArticles; }
+    var newArticles: [Article] = [];
+    //var newArticles: [Article] { return newArticles; }
     private var _writtenArticles: [Article] = [];
-            var writtenArticles: [Article] { return _writtenArticles; }
-            var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
+    var writtenArticles: [Article] { return _writtenArticles; }
+    var _nextEditionArticles: [Article] = Array(repeating: ArticleLibrary.blank, count: 6);
     //var nextEditionArticles: [Article] { return _nextEditionArticles; }
     private var _publishedTopicHistory: [Topic] = [];
-            var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
+    var publishedTopicHistory: [Topic] { return _publishedTopicHistory; }
     
     //Time properties
     private var _ticksElapsed: Int = 60;
@@ -38,7 +43,6 @@ class Simulation {
     private let _TICKS_PER_HOUR: Int = Simulation.TICKS_PER_DAY / 24;
     //private var _gameDayMinutesElapsed: Int = 60;
     private var _gameDayHoursElapsed: Int = 1;
-    private var _gameIsPaused: Bool = false;
     
     //Weekly Properties
     private var _employeesHiredThisWeek: Int = 0;
@@ -75,7 +79,7 @@ class Simulation {
             NE_releasedEarly = false;
             nextDay();
             chanceToSpawnNewsEvent();
-            POPULATION.spreadNews(getCurrentNewsEventTopic());
+            population.spreadNews(getCurrentNewsEventTopic());
         }
     }
     
@@ -91,14 +95,14 @@ class Simulation {
     }
     
     func publishNextEdition(early: Bool) {
-        POPULATION.tick(published: _nextEditionArticles, is: early);
+        population.tick(published: _nextEditionArticles, is: early);
         NE_releasedEarly = early;
         
         for i in 0 ..< _nextEditionArticles.count {
             if _nextEditionArticles[i] !== ArticleLibrary.blank {
                 //Adjusts author stats and company funds
                 _nextEditionArticles[i].publish();
-                COMPANY.payCommission(to: _nextEditionArticles[i].getAuthor());
+                company.payCommission(to: _nextEditionArticles[i].getAuthor());
                 
                 //Tracks stats for end-of-week score card
                 _articlesPublishedThisWeek += 1;
@@ -472,7 +476,7 @@ class Simulation {
             _gameDayOfTheWeek += 1;
         }
         
-        COMPANY.tick(subscribers: POPULATION.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
+        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
     }
     
     func getDayOfTheWeek() -> String {
@@ -541,23 +545,8 @@ class Simulation {
         return _gameDaysElapsed > 0 ? _gameDaysElapsed / 7 : 0;
     }
     
-    func isPaused() -> Bool {
-        return _gameIsPaused;
-    }
-    
-    func pauseplayButtonPressed() {
-        if _playerPausesLeft == 0 {
-            if _gameIsPaused {
-                _gameIsPaused = false;
-            }
-        } else if _playerPausesLeft > 0 {
-            if _gameIsPaused {
-                _gameIsPaused = false;
-            } else {
-                _gameIsPaused = true;
-                _playerPausesLeft -= 1;
-            }
-        }
+    func pause() {
+        _playerPausesLeft -= 1
     }
     
     func getPausesLeft() -> Int {
@@ -569,7 +558,7 @@ class Simulation {
     func getRegionGraphLengths(with barLength: CGFloat) -> [CGFloat] {
         var lengths: [CGFloat] = []
         
-        for region in POPULATION.regions {
+        for region in population.regions {
             if region.getTotalSubscriberCount() == 0 {
                 lengths.append(CGFloat(0));
             } else {

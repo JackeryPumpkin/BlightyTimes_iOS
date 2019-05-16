@@ -14,17 +14,31 @@ class PlayState: State {
         print("[STATE MACHINE]  º PlayState")
     }
     
-    func handle(input: Input) -> State? {
-        if input == .pause {
-            return PauseState()
+    func handle(input: Input, stateObject: StateObject) -> State? {
+        if input == .pause || input == .pauseButton {
+            if stateObject.sim.getPausesLeft() > 0 {
+                return PauseState()
+            }
         } else if input == .publish {
             return PublishingState()
         } else if input == .weekend {
-            return InfographicState()
+            return WeekendState()
         } else if input == .tutorial {
             return TutorialState()
         }
         
         return nil
+    }
+    
+    func enter(_ stateObject: StateObject) {
+        stateObject.startGameTime()
+    }
+    
+    func render(_ stateObject: StateObject) {
+        //
+    }
+    
+    func exit(_ stateObject: StateObject) {
+        //
     }
 }

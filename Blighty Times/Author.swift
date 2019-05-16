@@ -271,7 +271,7 @@ class Author {
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
         _daysSinceLastPublication = 0;
-        increaseExperience(Double(_quality) * 5);
+        increaseExperience(Double(_quality + 5) * 5);
         _paycheckCooldown = Simulation.TICKS_PER_DAY / 12;
     }
     

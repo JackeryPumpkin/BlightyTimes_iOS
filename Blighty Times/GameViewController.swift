@@ -8,7 +8,9 @@
 
 import UIKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, StateObject {
+    var delegate: MainMenu?
+    
     //Article Outlets & Properties
     @IBOutlet weak var publishButton: UIButton!
     
@@ -71,11 +73,13 @@ class GameViewController: UIViewController {
     //Game Properties
     var sim = Simulation();
     private var gameTimer: Timer!;
-    var stateMachine = StateMachine(state: PlayState())
+    var stateMachine: StateMachine!
     
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        stateMachine = StateMachine(state: PlayState(), stateObject: self)
         
         sim.start();
         createTiles();
@@ -193,26 +197,38 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func pauseButton(_ sender: Any) {
-        stateMachine.handleInput(input: .pause)
+        stateMachine.handle(input: .pauseButton)
         
-        if stateMachine.state is PlayState || stateMachine.state is PauseState {
-            sim.pauseplayButtonPressed();
-            
-            if sim.isPaused() {
-                pauseButton.setTitle("▶︎", for: .normal);
-                pausesLeft.text = "\(sim.getPausesLeft())";
-                stopGameTime();
+        if stateMachine.state is PauseState {
+            pauseButton.setTitle("▶︎", for: .normal);
+        } else if stateMachine.state is PlayState {
+            if sim.getPausesLeft() == 0 {
+                pauseButton.setTitle("᰽", for: .normal);
             } else {
-                if sim.getPausesLeft() == 0 {
-                    pauseButton.setTitle("᰽", for: .normal);
-                    startGameTime();
-                    pauseButton.isEnabled = false;
-                } else {
-                    pauseButton.setTitle("||", for: .normal);
-                    startGameTime();
-                }
+                pauseButton.setTitle("||", for: .normal);
             }
+
         }
+        
+        pausesLeft.text = "\(sim.getPausesLeft())";
+//        if stateMachine.state is PlayState || stateMachine.state is PauseState {
+//            sim.pauseplayButtonPressed();
+//
+//            if sim.isPaused() {
+//                pauseButton.setTitle("▶︎", for: .normal);
+//                pausesLeft.text = "\(sim.getPausesLeft())";
+//                stopGameTime();
+//            } else {
+//                if sim.getPausesLeft() == 0 {
+//                    pauseButton.setTitle("᰽", for: .normal);
+//                    startGameTime();
+//                    pauseButton.isEnabled = false;
+//                } else {
+//                    pauseButton.setTitle("||", for: .normal);
+//                    startGameTime();
+//                }
+//            }
+//        }
     }
     
     func startGameTime() {
@@ -228,9 +244,9 @@ class GameViewController: UIViewController {
             if let scoreVC = segue.destination as? ScoreCardViewController {
                 scoreVC.iweekNumber = sim.getWeekNumber();
                 
-                scoreVC.ipaidToEmployees = sim.COMPANY.getPaidToEmployeesThisWeek();
-                scoreVC.iearnedRevenue = sim.COMPANY.getEarnedRevenueThisWeek();
-                scoreVC.isubscriberFluxuation = sim.POPULATION.getSubscriberFluxuationThisWeek();
+                scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek();
+                scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek();
+                scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek();
                 
                 scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
                 scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
@@ -238,16 +254,21 @@ class GameViewController: UIViewController {
                 scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek();
                 scoreVC.iaverageQuality = sim.getAverageQualityThisWeek();
                 
-                sim.COMPANY.weeklyReset();
-                sim.POPULATION.weeklyReset();
+                sim.company.weeklyReset();
+                sim.population.weeklyReset();
                 sim.weeklyReset();
+            }
+        } else if segue.identifier == "inGameMenuSegue" {
+            if let menu = segue.destination as? InGameMenu {
+                stateMachine.handle(input: .pause)
+                menu.delegate = self
             }
         }
     }
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
-        startGameTime();
-        
+        //startGameTime();
+        stateMachine.handle(input: .play)
         //Explicit repainting of pauses label. The sim resets the number every week.
         pausesLeft.text = "\(sim.getPausesLeft())";
     }
@@ -306,6 +327,8 @@ class GameViewController: UIViewController {
         
         setRegionTopics();
         updateDataPanels();
+        
+        stateMachine.force(PlayState())
     }
     
     func setRegionTopicsUI() {
@@ -331,10 +354,10 @@ class GameViewController: UIViewController {
     }
     
     func setRegionTopics() {
-        for i in 0 ..< sim.POPULATION.regions.count {
+        for i in 0 ..< sim.population.regions.count {
             var topicText = "";
-            for j in 0 ..< sim.POPULATION.regions[i].getTopics().count {
-                topicText += sim.POPULATION.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.POPULATION.regions[i].getTopics()[j].getName();
+            for j in 0 ..< sim.population.regions[i].getTopics().count {
+                topicText += sim.population.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.population.regions[i].getTopics()[j].getName();
                 if j < 3 { topicText += "\n"; }
             }
             regionTopicsLabels[i].text = topicText;
@@ -534,20 +557,20 @@ class GameViewController: UIViewController {
         stopGameTime();
         
         //Update Company statistics
-        companyFunds.text = sim.COMPANY.getFunds().dollarFormat();
-        companyFunds.textColor = sim.COMPANY.getFunds() < 0 ? .red : .black;
-        yesterdaysProfit.text = sim.COMPANY.getYesterdaysProfit().dollarFormat();
-        yesterdaysProfit.textColor = sim.COMPANY.getYesterdaysProfit() < 0 ? .red : .black;
-        totalSubscribers.text = sim.POPULATION.getTotalSubscriberCount().commaFormat();
-        newSubscribers.text = sim.POPULATION.getNewSubscriberCount().commaFormat();
+        companyFunds.text = sim.company.getFunds().dollarFormat();
+        companyFunds.textColor = sim.company.getFunds() < 0 ? .red : .black;
+        yesterdaysProfit.text = sim.company.getYesterdaysProfit().dollarFormat();
+        yesterdaysProfit.textColor = sim.company.getYesterdaysProfit() < 0 ? .red : .black;
+        totalSubscribers.text = sim.population.getTotalSubscriberCount().commaFormat();
+        newSubscribers.text = sim.population.getNewSubscriberCount().commaFormat();
         hiredAuthors.text = "\(sim.employedAuthors.count)";
         
         //Update Region Bars and Topics
         for i in 0 ..< self.regionBars.count {
-            if self.sim.POPULATION.regions[i].getNewSubscriberCount() > 0 {
+            if self.sim.population.regions[i].getNewSubscriberCount() > 0 {
                 self.regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1);
                 self.regionBarProgressSymbols[i].text = "▲";
-            } else if self.sim.POPULATION.regions[i].getNewSubscriberCount() < 0 {
+            } else if self.sim.population.regions[i].getNewSubscriberCount() < 0 {
                 self.regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1);
                 self.regionBarProgressSymbols[i].text = "▼";
             } else {
@@ -555,27 +578,23 @@ class GameViewController: UIViewController {
                 self.regionBarProgressSymbols[i].text = "⏤";
             }
             
-            if self.sim.POPULATION.regions[i].getTotalSubscriberCount() == 0 {
+            if self.sim.population.regions[i].getTotalSubscriberCount() == 0 {
                 self.regionBarConstraints[i].constant = 0;
             } else {
-                self.regionBarConstraints[i].constant = self.regionBarsMaxConstraint.constant * (CGFloat(self.sim.POPULATION.regions[i].getTotalSubscriberCount()) / CGFloat(self.sim.POPULATION.regions[i].getSize()));
+                self.regionBarConstraints[i].constant = self.regionBarsMaxConstraint.constant * (CGFloat(self.sim.population.regions[i].getTotalSubscriberCount()) / CGFloat(self.sim.population.regions[i].getSize()));
             }
         }
+        
+        setRegionTopics()
         
         UIView.animate(withDuration: 0.2, animations: {
             self.view.layoutIfNeeded();
         }) { (finished) in
-            self.stateMachine.handleInput(input: .publishComplete)
+            self.stateMachine.handle(input: .publishComplete)
             
             if self.sim.isEndOfWeek() {
-                self.stateMachine.handleInput(input: .weekend)
-                if self.stateMachine.state is InfographicState {
-                    self.performSegue(withIdentifier: "scoreSegue", sender: nil);
-                }
-            } else {
-                if self.stateMachine.state is PlayState {
-                    self.startGameTime();
-                }
+                self.stateMachine.handle(input: .weekend)
+                self.performSegue(withIdentifier: "scoreSegue", sender: nil)
             }
             
             self.publishButton.isEnabled = true;
@@ -605,11 +624,10 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func publishButton(_ sender: Any) {
-        stateMachine.handleInput(input: .publish)
+        stateMachine.handle(input: .publish)
         
         if stateMachine.state is PublishingState {
             publishButton.isEnabled = false;
-            stopGameTime();
             
             UIView.animate(withDuration: 1, animations: {
                 self.timePlayHeadConstraint.constant = self.timelineWidth.constant;
