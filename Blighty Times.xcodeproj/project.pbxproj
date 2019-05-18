@@ -29,6 +29,7 @@
 		C317831821ADC78700347CB9 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C317831721ADC78700347CB9 /* StateMachine.swift */; };
 		C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31530F1215846D50054684F /* Assets.xcassets */; };
 		C3647846228CE50000E8C50A /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3647845228CE50000E8C50A /* MainMenu.swift */; };
+		C36478492290435200E8C50A /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478482290435200E8C50A /* UIColorExt.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
 		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
@@ -61,6 +62,7 @@
 		C31531122159485C0054684F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C317831721ADC78700347CB9 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		C3647845228CE50000E8C50A /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		C36478482290435200E8C50A /* UIColorExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
 		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
@@ -102,7 +104,7 @@
 				C3FE7BD12190CC31003720C5 /* Model */,
 				C3FE7BD22190CC8C003720C5 /* Types */,
 				C3FE7BD32190CCA0003720C5 /* Views */,
-				C31531122159485C0054684F /* Utilities.swift */,
+				C36478472290433E00E8C50A /* Extensions */,
 				C31530EA215846D40054684F /* AppDelegate.swift */,
 				C31530F6215846D50054684F /* Info.plist */,
 			);
@@ -122,9 +124,19 @@
 			name = States;
 			sourceTree = "<group>";
 		};
+		C36478472290433E00E8C50A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C31531122159485C0054684F /* Utilities.swift */,
+				C36478482290435200E8C50A /* UIColorExt.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		C3FE7BD02190CBEB003720C5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C3647845228CE50000E8C50A /* MainMenu.swift */,
 				C3153104215848790054684F /* GameViewController.swift */,
 				C3117869228A536100083BE1 /* InGameMenu.swift */,
 				C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */,
@@ -132,7 +144,6 @@
 				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
 				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
 				C31530FC215848790054684F /* ArticleTile.swift */,
-				C3647845228CE50000E8C50A /* MainMenu.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -243,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C315310F215848790054684F /* Topic.swift in Sources */,
+				C36478492290435200E8C50A /* UIColorExt.swift in Sources */,
 				C3153106215848790054684F /* ArticleTile.swift in Sources */,
 				C3153111215916040054684F /* Company.swift in Sources */,
 				C31530EB215846D40054684F /* AppDelegate.swift in Sources */,

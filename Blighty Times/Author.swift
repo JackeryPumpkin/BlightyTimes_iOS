@@ -156,6 +156,10 @@ class Author {
         return _articleRate;
     }
     
+    func hasMaxRate() -> Bool {
+        return _articleRate == Author.ARTICLE_RATE_MAX
+    }
+    
     func setIncreasedRate() {
         //Increases rate by a 10th of the difference between the min and max rates
         let rateIncrease: Double = (Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN) / 10.0;
@@ -171,8 +175,10 @@ class Author {
             return "Slow";
         } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
             return "Fast";
-        } else {
+        } else if _articleRate < Author.ARTICLE_RATE_MAX {
             return "Very Fast";
+        } else {
+            return "Maximum"
         }
     }
     

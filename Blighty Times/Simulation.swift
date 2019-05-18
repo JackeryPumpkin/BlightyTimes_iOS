@@ -234,7 +234,7 @@ class Simulation {
         //Checks to see if there is already news in the eventList
         //Right now, I only want one NewsEvent at a time
         if let event = eventList.first {
-            if !(event is NewsEvent) {//.debugDescription != "Optional(Blighty_Times.NewsEvent)" {
+            if !(event is NewsEvent) {
                 if Random(int: 0 ... 5) == 3 {
                     add(NewsEvent());
                 }

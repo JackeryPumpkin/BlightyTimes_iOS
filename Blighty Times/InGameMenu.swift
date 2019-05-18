@@ -28,7 +28,7 @@ class InGameMenu: UIViewController {
     @IBAction func mainMenu(_ sender: Any) {
         dismiss(animated: true) {
             if let delegate = self.delegate {
-                delegate.dismiss(animated: true, completion: nil)
+                delegate.dismiss(animated: false, completion: nil)
             }
         }
     }
