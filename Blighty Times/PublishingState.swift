@@ -14,11 +14,23 @@ class PublishingState: State {
         print("[STATE MACHINE]  º PublishingState")
     }
     
-    func handle(input: Input) -> State? {
+    func handle(input: Input, stateObject: StateObject) -> State? {
         if input == .publishComplete {
             return PlayState()
         }
         
         return nil
+    }
+    
+    func enter(_ stateObject: StateObject) {
+        stateObject.stopGameTime()
+    }
+    
+    func render(_ stateObject: StateObject) {
+        //
+    }
+    
+    func exit(_ stateObject: StateObject) {
+        //
     }
 }
