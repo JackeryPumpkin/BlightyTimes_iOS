@@ -26,6 +26,8 @@ class StateMachine {
         let newState = state.handle(input: input, stateObject: stateObject)
         
         if let newState = newState {
+            print("[STATE MACHINE]  ⦿ State: " + newState.string)
+            
             setLastState(state)
             state.exit(stateObject)
             state = newState
@@ -36,6 +38,8 @@ class StateMachine {
     }
     
     func toLastState() {
+        print("[STATE MACHINE]  > toLastState  ⦿ State: " + lastState.string)
+        
         state.exit(stateObject)
         state = lastState
         state.enter(stateObject)
@@ -43,7 +47,7 @@ class StateMachine {
     }
     
     func force(_ newState: State) {
-        print("[STATE MACHINE]  > force(\(type(of: state)))")
+        print("[STATE MACHINE]  > force  ⦿ State: " + newState.string)
         
         setLastState(state)
         state.exit(stateObject)
@@ -64,10 +68,12 @@ protocol State {
     func enter(_ stateObject: StateObject)
     func render(_ stateObject: StateObject)
     func exit(_ stateObject: StateObject)
+    
+    var string: String { get }
 }
 
 enum Input: String {
-    case pauseButton = "Pause Button"
+    case invertPlayPause = "Invert Play/Pause"
     
     case pause = "Pause"
     case play = "Play"

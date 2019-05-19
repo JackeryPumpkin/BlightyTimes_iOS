@@ -10,9 +10,7 @@ import Foundation
 
 
 class PublishingState: State {
-    init() {
-        print("[STATE MACHINE]  º PublishingState")
-    }
+    let string = "PublishingState"
     
     func handle(input: Input, stateObject: StateObject) -> State? {
         if input == .publishComplete {

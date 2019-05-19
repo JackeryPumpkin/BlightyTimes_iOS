@@ -10,12 +10,10 @@ import Foundation
 
 
 class PlayState: State {
-    init() {
-        print("[STATE MACHINE]  º PlayState")
-    }
+    let string = "PlayState"
     
     func handle(input: Input, stateObject: StateObject) -> State? {
-        if input == .pause || input == .pauseButton {
+        if input == .pause || input == .invertPlayPause {
             if stateObject.sim.getPausesLeft() > 0 {
                 return PauseState()
             }
