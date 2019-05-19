@@ -30,6 +30,13 @@
 		C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31530F1215846D50054684F /* Assets.xcassets */; };
 		C3647846228CE50000E8C50A /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3647845228CE50000E8C50A /* MainMenu.swift */; };
 		C36478492290435200E8C50A /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478482290435200E8C50A /* UIColorExt.swift */; };
+		C364784B22908EB400E8C50A /* BaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364784A22908EB400E8C50A /* BaseButton.swift */; };
+		C364785122908F9000E8C50A /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364785022908F9000E8C50A /* UIViewExt.swift */; };
+		C36478562290A1A600E8C50A /* RedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478552290A1A600E8C50A /* RedButton.swift */; };
+		C36478582290AD3800E8C50A /* SkillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478572290AD3800E8C50A /* SkillButton.swift */; };
+		C364785C22910C6700E8C50A /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364785B22910C6700E8C50A /* MenuButton.swift */; };
+		C364785F22910F0500E8C50A /* InGameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364785E22910F0500E8C50A /* InGameButton.swift */; };
+		C364786122912C9D00E8C50A /* DataTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364786022912C9D00E8C50A /* DataTabButton.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
 		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
@@ -63,6 +70,13 @@
 		C317831721ADC78700347CB9 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		C3647845228CE50000E8C50A /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		C36478482290435200E8C50A /* UIColorExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
+		C364784A22908EB400E8C50A /* BaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseButton.swift; sourceTree = "<group>"; };
+		C364785022908F9000E8C50A /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
+		C36478552290A1A600E8C50A /* RedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedButton.swift; sourceTree = "<group>"; };
+		C36478572290AD3800E8C50A /* SkillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillButton.swift; sourceTree = "<group>"; };
+		C364785B22910C6700E8C50A /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
+		C364785E22910F0500E8C50A /* InGameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InGameButton.swift; sourceTree = "<group>"; };
+		C364786022912C9D00E8C50A /* DataTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTabButton.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
 		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
@@ -102,9 +116,8 @@
 			children = (
 				C3FE7BD02190CBEB003720C5 /* Controllers */,
 				C3FE7BD12190CC31003720C5 /* Model */,
-				C3FE7BD22190CC8C003720C5 /* Types */,
+				C3FE7BD22190CC8C003720C5 /* Game Elements */,
 				C3FE7BD32190CCA0003720C5 /* Views */,
-				C36478472290433E00E8C50A /* Extensions */,
 				C31530EA215846D40054684F /* AppDelegate.swift */,
 				C31530F6215846D50054684F /* Info.plist */,
 			);
@@ -129,8 +142,22 @@
 			children = (
 				C31531122159485C0054684F /* Utilities.swift */,
 				C36478482290435200E8C50A /* UIColorExt.swift */,
+				C364785022908F9000E8C50A /* UIViewExt.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		C36478522290904200E8C50A /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C364784A22908EB400E8C50A /* BaseButton.swift */,
+				C36478552290A1A600E8C50A /* RedButton.swift */,
+				C364785B22910C6700E8C50A /* MenuButton.swift */,
+				C364785E22910F0500E8C50A /* InGameButton.swift */,
+				C36478572290AD3800E8C50A /* SkillButton.swift */,
+				C364786022912C9D00E8C50A /* DataTabButton.swift */,
+			);
+			name = Buttons;
 			sourceTree = "<group>";
 		};
 		C3FE7BD02190CBEB003720C5 /* Controllers */ = {
@@ -152,12 +179,14 @@
 			isa = PBXGroup;
 			children = (
 				C3153102215848790054684F /* Simulation.swift */,
+				C36478472290433E00E8C50A /* Extensions */,
 				C316A4F62235985A003CA883 /* States */,
+				C36478522290904200E8C50A /* Buttons */,
 			);
 			name = Model;
 			sourceTree = "<group>";
 		};
-		C3FE7BD22190CC8C003720C5 /* Types */ = {
+		C3FE7BD22190CC8C003720C5 /* Game Elements */ = {
 			isa = PBXGroup;
 			children = (
 				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
@@ -167,7 +196,7 @@
 				C31530FE215848790054684F /* Article.swift */,
 				C3153105215848790054684F /* Topic.swift */,
 			);
-			name = Types;
+			name = "Game Elements";
 			sourceTree = "<group>";
 		};
 		C3FE7BD32190CCA0003720C5 /* Views */ = {
@@ -253,19 +282,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C364785122908F9000E8C50A /* UIViewExt.swift in Sources */,
 				C315310F215848790054684F /* Topic.swift in Sources */,
 				C36478492290435200E8C50A /* UIColorExt.swift in Sources */,
 				C3153106215848790054684F /* ArticleTile.swift in Sources */,
 				C3153111215916040054684F /* Company.swift in Sources */,
 				C31530EB215846D40054684F /* AppDelegate.swift in Sources */,
+				C364786122912C9D00E8C50A /* DataTabButton.swift in Sources */,
 				C3133E34227DFE1800905F00 /* WeekendState.swift in Sources */,
 				C315310D215848790054684F /* EmployedAuthorCell.swift in Sources */,
 				C317831821ADC78700347CB9 /* StateMachine.swift in Sources */,
 				C3153108215848790054684F /* Article.swift in Sources */,
+				C364785F22910F0500E8C50A /* InGameButton.swift in Sources */,
 				C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */,
 				C3133E2E227DFD6D00905F00 /* PlayState.swift in Sources */,
 				C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
+				C36478562290A1A600E8C50A /* RedButton.swift in Sources */,
 				C3647846228CE50000E8C50A /* MainMenu.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
 				C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */,
@@ -273,10 +306,13 @@
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
 				C3133E30227DFD8300905F00 /* PausedState.swift in Sources */,
 				C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */,
+				C364785C22910C6700E8C50A /* MenuButton.swift in Sources */,
 				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
 				C311786A228A536100083BE1 /* InGameMenu.swift in Sources */,
+				C364784B22908EB400E8C50A /* BaseButton.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 				C3133E32227DFDB600905F00 /* TutorialState.swift in Sources */,
+				C36478582290AD3800E8C50A /* SkillButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

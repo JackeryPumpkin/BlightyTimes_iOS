@@ -10,12 +10,9 @@ import Foundation
 
 
 class TutorialState: State {
+    let string = "TutorialState"
     var pageCount: Int?
     private var currentPage: Int = 1
-    
-    init() {
-        print("[STATE MACHINE]  º TutorialState")
-    }
     
     func handle(input: Input, stateObject: StateObject) -> State? {
         if input == .next {

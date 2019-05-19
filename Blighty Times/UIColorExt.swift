@@ -102,6 +102,14 @@ extension UIColor {
         return lTotal == rTotal
     }
     
+    func image() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), true, 0.0)
+        self.setFill()
+        UIRectFill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        return image
+    }
+    
     //
     //Objective-C method variants
     //

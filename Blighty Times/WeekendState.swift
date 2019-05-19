@@ -10,9 +10,7 @@ import Foundation
 
 
 class WeekendState: State {
-    init() {
-        print("[STATE MACHINE]  º WeekendState")
-    }
+    let string = "WeekendState"
     
     func handle(input: Input, stateObject: StateObject) -> State? {
         if input == .play {

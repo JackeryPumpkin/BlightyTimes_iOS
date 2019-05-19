@@ -61,6 +61,10 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet weak var noEventsSymbol: UILabel!
     @IBOutlet weak var newsBonusTopicOverlay: UIView!
     @IBOutlet weak var newsBonusTopic: UILabel!
+    @IBOutlet weak var statsTabButton: DataTabButton!
+    @IBOutlet weak var statsTab: UIView!
+    @IBOutlet weak var officeTabButton: DataTabButton!
+    @IBOutlet weak var officeTab: UIView!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -198,7 +202,7 @@ class GameViewController: UIViewController, StateObject {
     }
     
     @IBAction func pauseButton(_ sender: Any) {
-        stateMachine.handle(input: .pauseButton)
+        stateMachine.handle(input: .invertPlayPause)
         
         if state is PauseState {
             pauseButton.setTitle("▶︎", for: .normal);
@@ -212,24 +216,20 @@ class GameViewController: UIViewController, StateObject {
         }
         
         pausesLeft.text = "\(sim.getPausesLeft())";
-//        if state is PlayState || state is PauseState {
-//            sim.pauseplayButtonPressed();
-//
-//            if sim.isPaused() {
-//                pauseButton.setTitle("▶︎", for: .normal);
-//                pausesLeft.text = "\(sim.getPausesLeft())";
-//                stopGameTime();
-//            } else {
-//                if sim.getPausesLeft() == 0 {
-//                    pauseButton.setTitle("᰽", for: .normal);
-//                    startGameTime();
-//                    pauseButton.isEnabled = false;
-//                } else {
-//                    pauseButton.setTitle("||", for: .normal);
-//                    startGameTime();
-//                }
-//            }
-//        }
+    }
+    
+    @IBAction func statsTab(_ sender: Any) {
+        officeTab.isHidden = true
+        statsTab.isHidden = false
+        officeTabButton.isInUse = false
+        statsTabButton.isInUse = true
+    }
+    
+    @IBAction func officeTab(_ sender: Any) {
+        officeTab.isHidden = false
+        statsTab.isHidden = true
+        officeTabButton.isInUse = true
+        statsTabButton.isInUse = false
     }
     
     func startGameTime() {
