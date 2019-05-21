@@ -15,6 +15,11 @@ class Simulation {
     private var _population: Population = Population();
     var population: Population { return _population }
     
+    private var _office: Office = Office.small()
+    var office: Office { return _office }
+    private var _officeList: [Office] = [.small(), .medium(), .large(), .huge()]
+    var officeList: [Office] { return _officeList }
+    
     var eventList: [Event] = [];
     
     //Author properties
@@ -83,7 +88,8 @@ class Simulation {
         }
     }
     
-    func start() {
+    func randomStart() {
+        purchaseOffice(.small)
         spawnFirstAuthor();
         spawnFirstAuthor();
         spawnApplicant();
@@ -156,7 +162,7 @@ class Simulation {
         //Checks the employed authors backwards so that low-morale authors
         //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
-            _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed);
+            _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed, moraleModifier: _office.moraleModifier);
             
             //This chunk checks for various author
             if _employedAuthors[i].hasInfrequentPublished {
@@ -164,7 +170,7 @@ class Simulation {
                 _employedAuthors[i].hasInfrequentPublished = false;
             }
             if _employedAuthors[i].hasPromotionAnxiety {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is getting promotion anxiety."));
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is upset that they haven't been promoted."));
                 _employedAuthors[i].hasPromotionAnxiety = false;
             }
             if _employedAuthors[i].hasPendingPromotion {
@@ -258,18 +264,28 @@ class Simulation {
     
     //Author Methods
     func hire(_ author: Author) {
-        author.becomeHired();
-        _employedAuthors.append(author);
-        
-        hireLoop: for i in 0 ..< _applicantAuthors.count {
-            if _applicantAuthors[i].getName() == author.getName() {
-                _applicantAuthors.remove(at: i);
-                break hireLoop;
+        if _employedAuthors.count < _office.capacity {
+            author.becomeHired();
+            _employedAuthors.append(author);
+            
+            hireLoop: for i in 0 ..< _applicantAuthors.count {
+                if _applicantAuthors[i].getName() == author.getName() {
+                    _applicantAuthors.remove(at: i);
+                    break hireLoop;
+                }
             }
+            
+            _employeesHiredThisWeek += 1;
+            add(CompanyEvent(message: "You hired " + author.getName() + "."));
+        } else {
+            for event in eventList {
+                if event is OfficeEvent {
+                    return
+                }
+            }
+                
+            add(CompanyEvent(message: "Cannot hire anyone right now. Your office is too full!"))
         }
-        
-        _employeesHiredThisWeek += 1;
-        add(CompanyEvent(message: "You hired " + author.getName() + "."));
     }
     
     func fire(authorAt index: Int) {
@@ -476,7 +492,7 @@ class Simulation {
             _gameDayOfTheWeek += 1;
         }
         
-        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
+        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors, officeDailyCosts: _office.dailyCosts);
     }
     
     func getDayOfTheWeek() -> String {
@@ -567,5 +583,18 @@ class Simulation {
         }
         
         return lengths;
+    }
+    
+    //Office methods
+    func purchaseOffice(_ size: OfficeSize, new: Bool = true) {
+        _officeList[size.rawValue].purchased = true
+        
+        if new {
+            _office = _officeList[size.rawValue]
+        }
+        
+        if size.rawValue > 0 {
+            purchaseOffice(OfficeSize(rawValue: size.rawValue - 1)!, new: false)
+        }
     }
 }

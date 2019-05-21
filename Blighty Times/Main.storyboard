@@ -306,7 +306,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rFs-13-fRQ">
                                                                 <rect key="frame" x="10" y="10" width="75" height="97"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D3r-FK-hLN" customClass="BaseButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D3r-FK-hLN" customClass="OfficeButton" customModule="Blighty_Times" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="75" id="7en-DY-ZSF"/>
@@ -324,6 +324,9 @@
                                                                                 <real key="value" value="37.5"/>
                                                                             </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="officePortrait:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EwD-hC-XWy"/>
+                                                                        </connections>
                                                                     </button>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medium" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="nFx-ZG-ud4">
                                                                         <rect key="frame" x="9" y="80" width="57.5" height="17"/>
@@ -342,6 +345,9 @@
                                                                     <constraint firstAttribute="height" constant="30" id="ojo-Ip-xhy"/>
                                                                 </constraints>
                                                                 <state key="normal" title="NEW OFFICE"/>
+                                                                <connections>
+                                                                    <action selector="purchaseOffice:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Iz-vl-HdN"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -467,7 +473,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="eOx-sd-Kus">
                                                 <rect key="frame" x="336.5" y="0.0" width="321" height="200"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blighty Regions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzr-eo-X7g">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriber Regions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzr-eo-X7g">
                                                         <rect key="frame" x="0.0" y="0.0" width="321" height="24"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -797,10 +803,10 @@
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pYP-BA-XUR">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="301.5" height="25.5"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="301.5" height="26"/>
                                                                                     <subviews>
                                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ywO-1m-0qg">
-                                                                                            <rect key="frame" x="5" y="0.0" width="296.5" height="25.5"/>
+                                                                                            <rect key="frame" x="5" y="0.0" width="296.5" height="26"/>
                                                                                             <subviews>
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🗞" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz3-vl-qj4">
                                                                                                     <rect key="frame" x="2" y="5.5" width="17" height="15"/>
@@ -2108,11 +2114,13 @@
                         <outlet property="articleTileHight" destination="B09-1E-wbN" id="fh7-nz-IWl"/>
                         <outlet property="articleTileWidth" destination="3SL-LC-xjw" id="Jjy-lE-UcU"/>
                         <outlet property="companyFunds" destination="rGk-pt-g48" id="LQs-Ey-jbJ"/>
+                        <outlet property="dailyCostLabel" destination="212-hl-a4u" id="dSZ-xr-Tr7"/>
                         <outlet property="dayOfTheWeek" destination="Xok-To-Woo" id="sOy-ix-v5J"/>
                         <outlet property="employedAuthorsTable" destination="aid-f0-ge8" id="A0Z-Vq-bor"/>
                         <outlet property="eventsTable" destination="fNs-oI-hE5" id="V4P-SD-hek"/>
                         <outlet property="hiredAuthors" destination="xz0-vB-p2o" id="drf-5R-nNe"/>
                         <outlet property="journalistsButton" destination="yIP-dE-Zmr" id="kcw-rc-Xpi"/>
+                        <outlet property="moraleModifierLabel" destination="C2Y-jQ-RDf" id="EOR-Qi-8lf"/>
                         <outlet property="movingTileAuthor" destination="Te5-KR-a7T" id="PDd-bB-BbL"/>
                         <outlet property="movingTileReferenceView" destination="C6w-NJ-7hh" id="dgP-iT-Bkw"/>
                         <outlet property="movingTileTitle" destination="b71-Xa-o6C" id="P6t-aB-rT5"/>
@@ -2120,6 +2128,9 @@
                         <outlet property="newsBonusTopic" destination="piW-Jo-RdS" id="Ln6-SK-fR4"/>
                         <outlet property="newsBonusTopicOverlay" destination="18f-xy-dTX" id="V1S-6m-QfM"/>
                         <outlet property="noEventsSymbol" destination="12e-K5-1T0" id="ZKm-3f-pIQ"/>
+                        <outlet property="officeCapacityLabel" destination="nFN-Wa-T4D" id="Nqd-bJ-e06"/>
+                        <outlet property="officeNameLabel" destination="nFx-ZG-ud4" id="wFi-ey-AYz"/>
+                        <outlet property="officePortraitButton" destination="D3r-FK-hLN" id="sgZ-AN-N0l"/>
                         <outlet property="officeTab" destination="mWs-1Q-FYx" id="hwd-tq-LxR"/>
                         <outlet property="officeTabButton" destination="fN3-AT-X0g" id="kK9-ZN-8Xp"/>
                         <outlet property="pauseButton" destination="etW-BA-Nbm" id="SmU-16-3LA"/>
@@ -2127,6 +2138,7 @@
                         <outlet property="pendingSlotsFullWarning" destination="wKA-Ut-n98" id="bl2-vR-W1b"/>
                         <outlet property="publishButton" destination="FBb-Bk-APV" id="O8u-lo-1Ju"/>
                         <outlet property="regionBarsMaxConstraint" destination="LpO-UL-7zr" id="j4y-OV-qXO"/>
+                        <outlet property="regionsReachedLabel" destination="OBM-xY-Srm" id="FV3-Yh-0fm"/>
                         <outlet property="statsTab" destination="87i-WM-L19" id="h2O-Lu-yox"/>
                         <outlet property="statsTabButton" destination="lcK-eS-6yx" id="qk3-pa-Wng"/>
                         <outlet property="timeOfDay" destination="Grq-oO-LfU" id="ceR-xg-jyw"/>
@@ -2157,11 +2169,264 @@
                         <outletCollection property="regionBarConstraints" destination="chF-aR-STY" collectionClass="NSMutableArray" id="2E9-8L-JRY"/>
                         <outletCollection property="regionBarConstraints" destination="dCm-SX-dez" collectionClass="NSMutableArray" id="Nla-mi-hwj"/>
                         <segue destination="rdL-SE-LdO" kind="show" identifier="scoreSegue" animates="NO" id="A27-bl-SoD"/>
+                        <segue destination="cPm-Tw-Thx" kind="presentation" identifier="officePurchaseSegue" modalPresentationStyle="formSheet" id="Sq3-2h-lAU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-79.6875" y="130.46875"/>
+        </scene>
+        <!--Office Purchase Menu-->
+        <scene sceneID="Om3-KK-t2R">
+            <objects>
+                <viewController id="cPm-Tw-Thx" customClass="OfficePurchaseMenu" customModule="Blighty_Times" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bkf-Yf-RL0">
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="IMg-xK-Yi2">
+                                <rect key="frame" x="10" y="168" width="520" height="153"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="p4U-yu-Vd6">
+                                        <rect key="frame" x="0.0" y="0.0" width="520" height="122.5"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jc8-b4-yxV" customClass="OfficeButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="122.5" height="122.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Jc8-b4-yxV" secondAttribute="height" multiplier="1:1" id="4E1-Wq-jb6"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="office1"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
+                                                        <real key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.20392156862745098" green="0.74509803921568629" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="smallOffice:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="ph3-mb-YnJ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y5X-i8-eRg" customClass="OfficeButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="132.5" y="0.0" width="122.5" height="122.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Y5X-i8-eRg" secondAttribute="height" multiplier="1:1" id="lOb-6m-VT6"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="office2"/>
+                                                <connections>
+                                                    <action selector="mediumOffice:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="YtN-Mv-zzL"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXv-9H-NmZ" customClass="OfficeButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="265" y="0.0" width="122.5" height="122.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="HXv-9H-NmZ" secondAttribute="height" multiplier="1:1" id="Uhz-sK-e52"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="office3"/>
+                                                <connections>
+                                                    <action selector="largeOffice:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="wuE-YE-Obu"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U78-8e-95N" customClass="OfficeButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="397.5" y="0.0" width="122.5" height="122.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="U78-8e-95N" secondAttribute="height" multiplier="1:1" id="wUV-Xg-Ced"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="office4"/>
+                                                <connections>
+                                                    <action selector="hugeOffice:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="N9P-sC-OcX"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gK2-zw-ySc">
+                                        <rect key="frame" x="0.0" y="132.5" width="520" height="20.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Small" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nfe-XY-QFo">
+                                                <rect key="frame" x="0.0" y="0.0" width="122.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medium" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rOV-Q2-rIJ">
+                                                <rect key="frame" x="132.5" y="0.0" width="122.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Large" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ru-0Y-cac">
+                                                <rect key="frame" x="265" y="0.0" width="122.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Huge" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ly9-ok-QPS">
+                                                <rect key="frame" x="397.5" y="0.0" width="122.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="gK2-zw-ySc" secondAttribute="trailing" id="A4t-iu-km2"/>
+                                    <constraint firstItem="gK2-zw-ySc" firstAttribute="leading" secondItem="IMg-xK-Yi2" secondAttribute="leading" id="uof-Eh-JH9"/>
+                                </constraints>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL ESTATE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kRc-04-6hf">
+                                <rect key="frame" x="139" y="60" width="262" height="48"/>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acf-u4-8Lb" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
+                                <rect key="frame" x="25" y="500" width="490" height="60"/>
+                                <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="USh-pj-3qo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                <state key="normal" title="BACK">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="back:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="5gz-6U-afL"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AVAILABLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9SF-8b-542">
+                                <rect key="frame" x="25" y="366" width="70" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="12"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6x2-5i-qyi" customClass="SkillButton" customModule="Blighty_Times" customModuleProvider="target">
+                                <rect key="frame" x="25" y="385.5" width="90" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="tip-nE-UPP"/>
+                                </constraints>
+                                <state key="normal" title="BUY"/>
+                                <connections>
+                                    <action selector="buyOffice:" destination="cPm-Tw-Thx" eventType="touchUpInside" id="NPs-vQ-3Vt"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="SJO-9x-wvv">
+                                <rect key="frame" x="140" y="366" width="375" height="46"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EqS-zi-l0S">
+                                        <rect key="frame" x="0.0" y="0.0" width="162.5" height="46"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Qag-u6-bih">
+                                                <rect key="frame" x="0.0" y="0.0" width="162.5" height="18"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Costs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mFc-On-6bO">
+                                                        <rect key="frame" x="0.0" y="0.0" width="80.5" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$300" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Szz-4U-3bl">
+                                                        <rect key="frame" x="123.5" y="0.0" width="39" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1sw-cu-ILY">
+                                                <rect key="frame" x="0.0" y="28" width="162.5" height="18"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Desk Count" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xSW-YT-5MJ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="83" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juu-Fo-ZWV">
+                                                        <rect key="frame" x="153" y="0.0" width="9.5" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="NAs-Vr-YNW">
+                                        <rect key="frame" x="212.5" y="0.0" width="162.5" height="46"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="TPG-Lv-D2P">
+                                                <rect key="frame" x="0.0" y="0.0" width="162.5" height="18"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Morale Effect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ird-pC-Iai">
+                                                        <rect key="frame" x="0.0" y="0.0" width="96" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="++" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4fo-vh-mpi">
+                                                        <rect key="frame" x="142.5" y="0.0" width="20" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9TO-bk-VWp">
+                                                <rect key="frame" x="0.0" y="28" width="162.5" height="18"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sub Regions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bPg-qU-e9I">
+                                                        <rect key="frame" x="0.0" y="0.0" width="89.5" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQK-Ue-SLZ">
+                                                        <rect key="frame" x="152.5" y="0.0" width="10" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.96190068493150682" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="bvO-gI-qkQ" firstAttribute="trailing" secondItem="SJO-9x-wvv" secondAttribute="trailing" constant="25" id="2Gc-wf-1HT"/>
+                            <constraint firstItem="9SF-8b-542" firstAttribute="leading" secondItem="bvO-gI-qkQ" secondAttribute="leading" constant="25" id="3Wa-c0-3Tr"/>
+                            <constraint firstItem="9SF-8b-542" firstAttribute="top" secondItem="IMg-xK-Yi2" secondAttribute="bottom" constant="45" id="3aY-eB-W5i"/>
+                            <constraint firstItem="kRc-04-6hf" firstAttribute="top" secondItem="bvO-gI-qkQ" secondAttribute="top" constant="60" id="GsV-vh-2vE"/>
+                            <constraint firstItem="bvO-gI-qkQ" firstAttribute="bottom" secondItem="acf-u4-8Lb" secondAttribute="bottom" constant="60" id="Pqi-gd-1Cz"/>
+                            <constraint firstItem="6x2-5i-qyi" firstAttribute="leading" secondItem="bvO-gI-qkQ" secondAttribute="leading" constant="25" id="RYz-VJ-OY6"/>
+                            <constraint firstItem="IMg-xK-Yi2" firstAttribute="leading" secondItem="bvO-gI-qkQ" secondAttribute="leading" constant="10" id="ThF-sz-O8m"/>
+                            <constraint firstItem="SJO-9x-wvv" firstAttribute="leading" secondItem="6x2-5i-qyi" secondAttribute="trailing" constant="25" id="UbP-Ks-O5c"/>
+                            <constraint firstItem="bvO-gI-qkQ" firstAttribute="trailing" secondItem="acf-u4-8Lb" secondAttribute="trailing" constant="25" id="VrY-y2-Ypg"/>
+                            <constraint firstItem="SJO-9x-wvv" firstAttribute="top" secondItem="IMg-xK-Yi2" secondAttribute="bottom" constant="45" id="XOE-tS-Xr9"/>
+                            <constraint firstItem="kRc-04-6hf" firstAttribute="centerX" secondItem="bkf-Yf-RL0" secondAttribute="centerX" id="YZ4-J4-oWh"/>
+                            <constraint firstItem="acf-u4-8Lb" firstAttribute="leading" secondItem="bvO-gI-qkQ" secondAttribute="leading" constant="25" id="dId-kt-elb"/>
+                            <constraint firstAttribute="trailing" secondItem="IMg-xK-Yi2" secondAttribute="trailing" constant="10" id="eV9-oR-xpA"/>
+                            <constraint firstItem="6x2-5i-qyi" firstAttribute="top" secondItem="9SF-8b-542" secondAttribute="bottom" constant="5" id="hsm-Xi-8ec"/>
+                            <constraint firstItem="IMg-xK-Yi2" firstAttribute="top" secondItem="kRc-04-6hf" secondAttribute="bottom" constant="60" id="qUz-Ss-esk"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="bvO-gI-qkQ"/>
+                    </view>
+                    <connections>
+                        <outlet property="available" destination="9SF-8b-542" id="WAb-DD-0eq"/>
+                        <outlet property="buy" destination="6x2-5i-qyi" id="VKO-Hf-HRL"/>
+                        <outlet property="capacity" destination="juu-Fo-ZWV" id="D89-VA-Bhc"/>
+                        <outlet property="dailyCosts" destination="Szz-4U-3bl" id="3ne-0F-wG8"/>
+                        <outlet property="huge" destination="U78-8e-95N" id="Nc4-WR-rWt"/>
+                        <outlet property="large" destination="HXv-9H-NmZ" id="s4z-I6-Q6I"/>
+                        <outlet property="medium" destination="Y5X-i8-eRg" id="Oay-jh-8Zy"/>
+                        <outlet property="moraleModifier" destination="4fo-vh-mpi" id="Tb8-C2-ddg"/>
+                        <outlet property="regions" destination="PQK-Ue-SLZ" id="pnI-av-ozJ"/>
+                        <outlet property="small" destination="Jc8-b4-yxV" id="NrN-44-hhX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yn6-IX-wiE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-80" y="905"/>
         </scene>
         <!--Score Card View Controller-->
         <scene sceneID="1bm-PK-Ycf">
@@ -2358,6 +2623,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="office1" width="1271" height="1271"/>
         <image name="office2" width="617" height="617"/>
+        <image name="office3" width="657" height="657"/>
+        <image name="office4" width="224" height="224"/>
     </resources>
 </document>

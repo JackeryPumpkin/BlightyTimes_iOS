@@ -25,6 +25,10 @@ class PlayState: State {
             return TutorialState()
         }
         
+        if input == .offices {
+            stateObject.performSegue(withIdentifier: "officePurchaseSegue", sender: nil)
+        }
+        
         return nil
     }
     

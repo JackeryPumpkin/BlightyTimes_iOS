@@ -63,8 +63,16 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet weak var newsBonusTopic: UILabel!
     @IBOutlet weak var statsTabButton: DataTabButton!
     @IBOutlet weak var statsTab: UIView!
+    
+    //Office Tab
     @IBOutlet weak var officeTabButton: DataTabButton!
     @IBOutlet weak var officeTab: UIView!
+    @IBOutlet weak var officePortraitButton: BaseButton!
+    @IBOutlet weak var officeNameLabel: UILabel!
+    @IBOutlet weak var dailyCostLabel: UILabel!
+    @IBOutlet weak var regionsReachedLabel: UILabel!
+    @IBOutlet weak var officeCapacityLabel: UILabel!
+    @IBOutlet weak var moraleModifierLabel: UILabel!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -84,12 +92,12 @@ class GameViewController: UIViewController, StateObject {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        stateMachine = StateMachine(state: PlayState(), stateObject: self)
-        
-        sim.start();
+        sim.randomStart();
         createTiles();
         startGameTime();
         setupAesthetics();
+        
+        stateMachine = StateMachine(state: PlayState(), stateObject: self)
     }
     
     @objc func tick() {
@@ -212,7 +220,6 @@ class GameViewController: UIViewController, StateObject {
             } else {
                 pauseButton.setTitle("||", for: .normal);
             }
-
         }
         
         pausesLeft.text = "\(sim.getPausesLeft())";
@@ -232,7 +239,18 @@ class GameViewController: UIViewController, StateObject {
         statsTabButton.isInUse = false
     }
     
+    @IBAction func purchaseOffice(_ sender: Any) {
+        stateMachine.handle(input: .offices)
+    }
+    @IBAction func officePortrait(_ sender: Any) {
+        stateMachine.handle(input: .offices)
+    }
+    
     func startGameTime() {
+        if let timer = gameTimer {
+            if timer.isValid { return }
+        }
+        
         gameTimer = Timer.scheduledTimer(timeInterval: Simulation.TICK_RATE, target: self, selector: #selector(tick), userInfo: nil, repeats: true);
     }
     
@@ -242,35 +260,37 @@ class GameViewController: UIViewController, StateObject {
     
     override func prepare(for segue: UIStoryboardSegue, sender for: Any?) {
         if segue.identifier == "scoreSegue" {
-            if let scoreVC = segue.destination as? ScoreCardViewController {
-                scoreVC.iweekNumber = sim.getWeekNumber();
-                
-                scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek();
-                scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek();
-                scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek();
-                
-                scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
-                scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
-                scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek();
-                scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek();
-                scoreVC.iaverageQuality = sim.getAverageQualityThisWeek();
-                
-                sim.company.weeklyReset();
-                sim.population.weeklyReset();
-                sim.weeklyReset();
-            }
+            guard let scoreVC = segue.destination as? ScoreCardViewController else { return }
+            
+            scoreVC.iweekNumber = sim.getWeekNumber();
+            
+            scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek();
+            scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek();
+            scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek();
+            
+            scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
+            scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
+            scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek();
+            scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek();
+            scoreVC.iaverageQuality = sim.getAverageQualityThisWeek();
+            
+            sim.company.weeklyReset();
+            sim.population.weeklyReset();
+            sim.weeklyReset();
         } else if segue.identifier == "inGameMenuSegue" {
-            if let menu = segue.destination as? InGameMenu {
-                stateMachine.handle(input: .pause)
-                menu.delegate = self
-            }
+            guard let menu = segue.destination as? InGameMenu else { return }
+            
+            stateMachine.handle(input: .pause)
+            menu.delegate = self
+        } else if segue.identifier == "officePurchaseSegue" {
+            guard let offices = segue.destination as? OfficePurchaseMenu else { return }
+            
+            offices.gameVC = self
         }
     }
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
-        //startGameTime();
         stateMachine.handle(input: .play)
-        //Explicit repainting of pauses label. The sim resets the number every week.
         pausesLeft.text = "\(sim.getPausesLeft())";
     }
     
@@ -317,19 +337,27 @@ class GameViewController: UIViewController, StateObject {
     }
     
     func setupAesthetics() {
-        movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199));
-        applicantsCountBadge.roundCorners(withIntensity: .full);
-        applicantsButton.layer.opacity = 0.3;
-        journalistsButton.isEnabled = false;
+        movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199))
+        applicantsCountBadge.roundCorners(withIntensity: .full)
+        applicantsButton.layer.opacity = 0.3
+        journalistsButton.isEnabled = false
+        officeTabButton.isInUse = false
         
         for node in NE_viewPositions {
             node.addBorders(width: 3.0, color: UIColor.black.cgColor);
         }
         
-        setRegionTopics();
-        updateDataPanels();
-        
-        stateMachine.force(PlayState())
+        setRegionTopics()
+        updateDataPanels()
+        updateOfficeTab()
+    }
+    
+    func updateOfficeTab() {
+        officeNameLabel.text = sim.office.name
+        officePortraitButton.setImage(sim.office.image, for: .normal)
+        officeCapacityLabel.text = "\(sim.office.capacity)"
+        dailyCostLabel.text = sim.office.dailyCosts.dollarFormat()
+        moraleModifierLabel.text = sim.office.moraleModifierSymbol
     }
     
     func setRegionTopicsUI() {
@@ -554,7 +582,7 @@ class GameViewController: UIViewController, StateObject {
     }
     
     func updateDataPanels() {
-        stopGameTime();
+        //stopGameTime();
         
         //Update Company statistics
         companyFunds.text = sim.company.getFunds().dollarFormat();
@@ -563,7 +591,7 @@ class GameViewController: UIViewController, StateObject {
         yesterdaysProfit.textColor = sim.company.getYesterdaysProfit() < 0 ? .red : .black;
         totalSubscribers.text = sim.population.getTotalSubscriberCount().commaFormat();
         newSubscribers.text = sim.population.getNewSubscriberCount().commaFormat();
-        hiredAuthors.text = "\(sim.employedAuthors.count)";
+        hiredAuthors.text = "\(sim.employedAuthors.count) / \(sim.office.capacity)"
         
         //Update Region Bars and Topics
         for i in 0 ..< self.regionBars.count {
@@ -780,6 +808,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             applicantCell.onButtonTapped = {
                 self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
                 tableView.reloadData();
+                self.hiredAuthors.text = "\(self.sim.employedAuthors.count) / \(self.sim.office.capacity)"
             }
             
         } else if tableView == eventsTable {
