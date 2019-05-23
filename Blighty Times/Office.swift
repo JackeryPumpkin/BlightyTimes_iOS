@@ -16,38 +16,60 @@ class Office {
     var moraleModifierSymbol: String
     var regionCount: Int
     var dailyCosts: Int
+    var downPayment: Int
     var purchased: Bool
     
-    init(name: String, capacity: Int, moraleModifier: Double, regionCount: Int, dailyCosts: Int, image: UIImage) {
-        self.name = name
-        self.capacity = capacity
-        self.moraleModifier = moraleModifier
-        self.regionCount = regionCount
-        self.dailyCosts = dailyCosts
-        self.image = image
-        purchased = false
+    init(size: OfficeSize) {
+        switch size {
+        case .small:
+            name = "Small"
+            capacity = 2
+            moraleModifier = 0.9
+            moraleModifierSymbol = "-"
+            regionCount = 2
+            image = #imageLiteral(resourceName: "office1")
+        case .medium:
+            name = "Medium"
+            capacity = 4
+            moraleModifier = 1.2
+            moraleModifierSymbol = "+"
+            regionCount = 3
+            image = #imageLiteral(resourceName: "office2")
+        case .large:
+            name = "Large"
+            capacity = 6
+            moraleModifier = 1.6
+            moraleModifierSymbol = "++"
+            regionCount = 4
+            image = #imageLiteral(resourceName: "office3")
+        case .huge:
+            name = "Huge"
+            capacity = 10
+            moraleModifier = 2.0
+            moraleModifierSymbol = "++++"
+            regionCount = 4
+            image = #imageLiteral(resourceName: "office4")
+        }
         
-        if name == "Small" { moraleModifierSymbol = "-" }
-        else if name == "Medium" { moraleModifierSymbol = "+" }
-        else if name == "Large" { moraleModifierSymbol = "++" }
-        else if name == "Huge" { moraleModifierSymbol = "++++" }
-        else { moraleModifierSymbol = "?" }
+        downPayment = 10000 * (size.rawValue * 2)
+        dailyCosts = 500 * Int(pow(Float(size.rawValue + 1), 3))
+        purchased = false
     }
     
     static func small() -> Office {
-        return Office(name: "Small", capacity: 2, moraleModifier: 0.9, regionCount: 2, dailyCosts: 500, image: #imageLiteral(resourceName: "office1"))
+        return Office(size: .small)
     }
     
     static func medium() -> Office {
-        return Office(name: "Medium", capacity: 4, moraleModifier: 1.2, regionCount: 3, dailyCosts: 2000, image: #imageLiteral(resourceName: "office2"))
+        return Office(size: .medium)
     }
     
     static func large() -> Office {
-        return Office(name: "Large", capacity: 6, moraleModifier: 1.6, regionCount: 4, dailyCosts: 5000, image: #imageLiteral(resourceName: "office3"))
+        return Office(size: .large)
     }
     
     static func huge() -> Office {
-        return Office(name: "Huge", capacity: 10, moraleModifier: 2.0, regionCount: 4, dailyCosts: 20000, image: #imageLiteral(resourceName: "office4"))
+        return Office(size: .huge)
     }
 }
 

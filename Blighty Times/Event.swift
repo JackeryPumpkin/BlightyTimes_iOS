@@ -232,7 +232,7 @@ class CompanyEvent: Event {
 
 class OfficeEvent: Event {
     init(message: String) {
-        super.init(message: message, color: #colorLiteral(red: 0.9059416652, green: 0.9005564451, blue: 0.910081327, alpha: 1), symbol: "🔔", lifetime: Simulation.TICKS_PER_DAY / 6)
+        super.init(message: message, color: #colorLiteral(red: 0.9059416652, green: 0.9005564451, blue: 0.910081327, alpha: 1), symbol: "🔔", lifetime: Simulation.TICKS_PER_DAY / 8)
     }
 }
 

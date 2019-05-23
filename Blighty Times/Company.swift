@@ -12,9 +12,11 @@ class Company {
     private var _funds: Int = 50000;
     private var _yesterdaysProfit: Int = 0;
     private var _commissionsPaid: Int = 0;
+    private var _officeCostsToday: Int = 0;
     
     private var _paidToEmployeesThisWeek: Int = 0;
     private var _earnedRevenueThisWeek: Int = 0;
+    private var _officeCostsThisWeek: Int = 0;
     private var _operationalCosts: Int = 1500;
     
     //Constants
@@ -33,9 +35,12 @@ class Company {
         _yesterdaysProfit -= _commissionsPaid;
         _yesterdaysProfit -= _operationalCosts;
         _yesterdaysProfit -= officeDailyCosts
+        _yesterdaysProfit -= _officeCostsToday
         _funds += _yesterdaysProfit;
         _earnedRevenueThisWeek += _yesterdaysProfit;
+        _officeCostsThisWeek += officeDailyCosts + _operationalCosts
         
+        _officeCostsToday = 0
         _commissionsPaid = 0;
         _operationalCosts = employedAuthors.count * 1500
     }
@@ -64,13 +69,26 @@ class Company {
         return _earnedRevenueThisWeek;
     }
     
+    func getOfficeCostsThisWeek() -> Int {
+        return _officeCostsThisWeek
+    }
+    
     func weeklyReset() {
-        _paidToEmployeesThisWeek = 0;
-        _earnedRevenueThisWeek = 0;
+        _paidToEmployeesThisWeek = 0
+        _earnedRevenueThisWeek = 0
+        _officeCostsThisWeek = 0
     }
     
     func payCommission(to author: Author) {
         _commissionsPaid += author.getCommission();
         _paidToEmployeesThisWeek += author.getCommission();
+    }
+    
+    func payOfficeDownPayment(size: OfficeSize) {
+        let costs = Office(size: size).downPayment
+        
+        _funds -= costs
+        _officeCostsThisWeek += costs
+        _officeCostsToday += costs
     }
 }

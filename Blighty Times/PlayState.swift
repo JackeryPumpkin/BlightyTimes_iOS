@@ -13,7 +13,9 @@ class PlayState: State {
     let string = "PlayState"
     
     func handle(input: Input, stateObject: StateObject) -> State? {
-        if input == .pause || input == .invertPlayPause {
+        if input == .pause {
+            return PauseState()
+        } else if input == .invertPlayPause {
             if stateObject.sim.getPausesLeft() > 0 {
                 return PauseState()
             }

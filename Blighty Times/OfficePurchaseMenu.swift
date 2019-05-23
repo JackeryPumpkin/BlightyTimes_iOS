@@ -54,9 +54,13 @@ class OfficePurchaseMenu: UIViewController {
     @IBAction func buyOffice(_ sender: Any) {
         guard let game = gameVC else { print("BUY OFFICE FAILED - COULD NOT LOCATE GAMEVC"); return }
         
-        game.sim.purchaseOffice(currentOfficeSize)
+        if !game.sim.purchaseOffice(currentOfficeSize) {
+            dismiss(animated: true, completion: nil)
+        }
+        
         updateView(with: currentOfficeSize)
         game.updateOfficeTab()
+        game.companyFunds.text = game.sim.company.getFunds().dollarFormat()
     }
     
     @IBAction func back(_ sender: Any) {
@@ -89,12 +93,21 @@ class OfficePurchaseMenu: UIViewController {
             huge.isInUse = true
         }
         
+        buy.isEnabled = false
+        
         if game.sim.officeList[officeSize.rawValue].purchased {
-            available.text = "UNAVAILABLE"
-            buy.isEnabled = false
+            available.text = " "
+            buy.setTitle("PURCHASED", for: .disabled)
         } else {
-            available.text = "AVAILABLE"
-            buy.isEnabled = true
+            if game.sim.officeList.indices.contains(officeSize.rawValue - 1) {
+                if game.sim.officeList[officeSize.rawValue - 1].purchased {
+                    available.text = office.downPayment.dollarFormat()
+                    buy.isEnabled = true
+                } else {
+                    available.text = "UNAVAILABLE"
+                    buy.setTitle("BUY", for: .disabled)
+                }
+            }
         }
         
         dailyCosts.text = office.dailyCosts.dollarFormat()

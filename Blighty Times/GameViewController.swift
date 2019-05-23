@@ -262,29 +262,26 @@ class GameViewController: UIViewController, StateObject {
         if segue.identifier == "scoreSegue" {
             guard let scoreVC = segue.destination as? ScoreCardViewController else { return }
             
-            scoreVC.iweekNumber = sim.getWeekNumber();
+            scoreVC.iweekNumber = sim.getWeekNumber()
             
-            scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek();
-            scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek();
-            scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek();
+            scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek()
+            scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek()
+            scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek()
             
-            scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek();
-            scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek();
-            scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek();
-            scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek();
-            scoreVC.iaverageQuality = sim.getAverageQualityThisWeek();
+            scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek()
+            scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek()
+            scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek()
+            scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek()
+            scoreVC.iaverageQuality = sim.getAverageQualityThisWeek()
             
-            sim.company.weeklyReset();
-            sim.population.weeklyReset();
-            sim.weeklyReset();
+            sim.company.weeklyReset()
+            sim.population.weeklyReset()
+            sim.weeklyReset()
         } else if segue.identifier == "inGameMenuSegue" {
             guard let menu = segue.destination as? InGameMenu else { return }
-            
-            stateMachine.handle(input: .pause)
-            menu.delegate = self
+            menu.gameVC = self
         } else if segue.identifier == "officePurchaseSegue" {
             guard let offices = segue.destination as? OfficePurchaseMenu else { return }
-            
             offices.gameVC = self
         }
     }

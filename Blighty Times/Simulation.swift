@@ -89,7 +89,7 @@ class Simulation {
     }
     
     func randomStart() {
-        purchaseOffice(.small)
+        _ = purchaseOffice(.small)
         spawnFirstAuthor();
         spawnFirstAuthor();
         spawnApplicant();
@@ -284,7 +284,7 @@ class Simulation {
                 }
             }
                 
-            add(CompanyEvent(message: "Cannot hire anyone right now. Your office is too full!"))
+            add(OfficeEvent(message: "Cannot hire anyone right now. Your office is too full!"))
         }
     }
     
@@ -586,15 +586,16 @@ class Simulation {
     }
     
     //Office methods
-    func purchaseOffice(_ size: OfficeSize, new: Bool = true) {
+    func purchaseOffice(_ size: OfficeSize) -> Bool {
+        if _company.getFunds() < _officeList[size.rawValue].downPayment {
+            add(OfficeEvent(message: "Cannot buy that shiny new office. You're too poor!"))
+            return false
+        }
+        
         _officeList[size.rawValue].purchased = true
+        _office = _officeList[size.rawValue]
+        add(CompanyEvent(message: "You moved into a new office!"))
         
-        if new {
-            _office = _officeList[size.rawValue]
-        }
-        
-        if size.rawValue > 0 {
-            purchaseOffice(OfficeSize(rawValue: size.rawValue - 1)!, new: false)
-        }
+        return true
     }
 }
