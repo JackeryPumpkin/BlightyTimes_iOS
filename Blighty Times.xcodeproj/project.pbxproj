@@ -198,9 +198,9 @@
 			isa = PBXGroup;
 			children = (
 				C3153102215848790054684F /* Simulation.swift */,
-				C36478472290433E00E8C50A /* Extensions */,
 				C316A4F62235985A003CA883 /* States */,
 				C36478522290904200E8C50A /* Buttons */,
+				C36478472290433E00E8C50A /* Extensions */,
 			);
 			name = Model;
 			sourceTree = "<group>";

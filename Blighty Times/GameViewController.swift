@@ -261,22 +261,7 @@ class GameViewController: UIViewController, StateObject {
     override func prepare(for segue: UIStoryboardSegue, sender for: Any?) {
         if segue.identifier == "scoreSegue" {
             guard let scoreVC = segue.destination as? ScoreCardViewController else { return }
-            
-            scoreVC.iweekNumber = sim.getWeekNumber()
-            
-            scoreVC.ipaidToEmployees = sim.company.getPaidToEmployeesThisWeek()
-            scoreVC.iearnedRevenue = sim.company.getEarnedRevenueThisWeek()
-            scoreVC.isubscriberFluxuation = sim.population.getSubscriberFluxuationThisWeek()
-            
-            scoreVC.iemployeesHired = sim.getEmployeesHiredThisWeek()
-            scoreVC.iemployeesFired = sim.getEmployeesFiredThisWeek()
-            scoreVC.ipromotionsGiven = sim.getPromotionsGivenThisWeek()
-            scoreVC.iarticlesPublished = sim.getArticlesPublishedThisWeek()
-            scoreVC.iaverageQuality = sim.getAverageQualityThisWeek()
-            
-            sim.company.weeklyReset()
-            sim.population.weeklyReset()
-            sim.weeklyReset()
+            scoreVC.sim = sim
         } else if segue.identifier == "inGameMenuSegue" {
             guard let menu = segue.destination as? InGameMenu else { return }
             menu.gameVC = self
@@ -289,6 +274,12 @@ class GameViewController: UIViewController, StateObject {
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
         stateMachine.handle(input: .play)
         pausesLeft.text = "\(sim.getPausesLeft())";
+        
+        if segue.identifier == "unwindScore" {
+            sim.company.weeklyReset()
+            sim.population.weeklyReset()
+            sim.weeklyReset()
+        }
     }
     
     func createTiles() {
@@ -768,24 +759,28 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             }
         
             employedCell.fire = {
-                self.sim.fire(authorAt: indexPath.row);
-                employedCell.hideOverlay();
-                self.lastSelectedIndexPath.row = 0;
-                tableView.reloadData();
+                if self.state is PlayState {
+                    self.sim.fire(authorAt: indexPath.row)
+                    employedCell.hideOverlay()
+                    self.lastSelectedIndexPath.row = 0
+                    tableView.reloadData()
+                }
             }
             
             employedCell.promoteQuality = {
-                self.sim.employedAuthors[indexPath.row].promoteQuality();
-                employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
-                
-                employedCell.showSkillButtons();
+                if self.state is PlayState {
+                    self.sim.employedAuthors[indexPath.row].promoteQuality()
+                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedCell.showSkillButtons()
+                }
             }
             
             employedCell.promoteSpeed = {
-                self.sim.employedAuthors[indexPath.row].promoteSpeed();
-                employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
-                
-                employedCell.showSkillButtons();
+                if self.state is PlayState {
+                    self.sim.employedAuthors[indexPath.row].promoteSpeed()
+                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedCell.showSkillButtons()
+                }
             }
             
         } else if tableView == applicantAuthorsTable {

@@ -595,7 +595,6 @@ class Simulation {
         _officeList[size.rawValue].purchased = true
         _office = _officeList[size.rawValue]
         add(CompanyEvent(message: "You moved into a new office!"))
-        
         return true
     }
 }
