@@ -384,7 +384,7 @@ class GameViewController: UIViewController, StateObject {
     func pan() -> UIPanGestureRecognizer {
         var panRecognizer = UIPanGestureRecognizer()
 
-        panRecognizer = UIPanGestureRecognizer (target: self, action: #selector(handlePan(recognizer: )));
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(recognizer:)));
         panRecognizer.minimumNumberOfTouches = 1;
         panRecognizer.maximumNumberOfTouches = 1;
         panRecognizer.cancelsTouchesInView = false;

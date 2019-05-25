@@ -206,10 +206,10 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="321.5" height="200"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="11P-Ej-mC7">
-                                                        <rect key="frame" x="0.0" y="0.0" width="321.5" height="36"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="321.5" height="24"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcK-eS-6yx" customClass="DataTabButton" customModule="Blighty_Times" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="65" height="36"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="65" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="65" id="rcy-V1-eMe"/>
                                                                 </constraints>
@@ -219,16 +219,19 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fN3-AT-X0g" customClass="DataTabButton" customModule="Blighty_Times" customModuleProvider="target">
-                                                                <rect key="frame" x="70" y="0.0" width="251.5" height="36"/>
+                                                                <rect key="frame" x="70" y="0.0" width="251.5" height="24"/>
                                                                 <state key="normal" title="Office"/>
                                                                 <connections>
                                                                     <action selector="officeTab:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z4J-7A-LjV"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="24" id="RD2-ch-Pvp"/>
+                                                        </constraints>
                                                     </stackView>
                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mWs-1Q-FYx" userLabel="OfficeTab">
-                                                        <rect key="frame" x="0.0" y="38.5" width="321.5" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="26.5" width="321.5" height="0.0"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rMr-wt-FyN">
                                                                 <rect key="frame" x="95" y="10" width="216.5" height="97"/>
@@ -363,7 +366,7 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="87i-WM-L19" userLabel="StatsTab">
-                                                        <rect key="frame" x="0.0" y="41" width="321.5" height="159"/>
+                                                        <rect key="frame" x="0.0" y="29" width="321.5" height="171"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="A74-hR-iZo">
                                                                 <rect key="frame" x="10" y="10" width="301.5" height="20.5"/>
@@ -475,6 +478,9 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriber Regions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zzr-eo-X7g">
                                                         <rect key="frame" x="0.0" y="0.0" width="321" height="24"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="24" id="Kqx-Ea-rKW"/>
+                                                        </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -784,6 +790,9 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvQ-0z-elY">
                                                         <rect key="frame" x="0.0" y="0.0" width="321.5" height="24"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="24" id="zoQ-gv-3TD"/>
+                                                        </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>

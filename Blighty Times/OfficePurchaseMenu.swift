@@ -56,6 +56,17 @@ class OfficePurchaseMenu: UIViewController {
         
         if !game.sim.purchaseOffice(currentOfficeSize) {
             dismiss(animated: true, completion: nil)
+        } else {
+            switch currentOfficeSize {
+            case .small:
+                small.purchased = true
+            case .medium:
+                medium.purchased = true
+            case .large:
+                large.purchased = true
+            case .huge:
+                huge.purchased = true
+            }
         }
         
         updateView(with: currentOfficeSize)
