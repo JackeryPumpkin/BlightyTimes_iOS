@@ -105,17 +105,19 @@ class OfficePurchaseMenu: UIViewController {
         }
         
         buy.isEnabled = false
+        UIView.setAnimationsEnabled(false)
         
         if game.sim.officeList[officeSize.rawValue].purchased {
             available.text = " "
             buy.setTitle("PURCHASED", for: .disabled)
+            
         } else {
             if game.sim.officeList.indices.contains(officeSize.rawValue - 1) {
                 if game.sim.officeList[officeSize.rawValue - 1].purchased {
                     available.text = office.downPayment.dollarFormat()
                     buy.isEnabled = true
                 } else {
-                    available.text = "UNAVAILABLE"
+                    available.text = "LOCKED"
                     buy.setTitle("BUY", for: .disabled)
                 }
             }
@@ -125,5 +127,8 @@ class OfficePurchaseMenu: UIViewController {
         capacity.text = "\(office.capacity)"
         regions.text = "\(office.regionCount)"
         moraleModifier.text = office.moraleModifierSymbol
+        
+        view.layoutIfNeeded()
+        UIView.setAnimationsEnabled(true)
     }
 }
