@@ -13,16 +13,20 @@ class PlayState: State {
     let string = "PlayState"
     
     func handle(input: Input, stateObject: StateObject) -> State? {
-        if input == .pause || input == .invertPlayPause {
+        if input == .pause {
+            return PauseState()
+        } else if input == .invertPlayPause {
             if stateObject.sim.getPausesLeft() > 0 {
                 return PauseState()
             }
         } else if input == .publish {
             return PublishingState()
-        } else if input == .weekend {
-            return WeekendState()
         } else if input == .tutorial {
             return TutorialState()
+        }
+        
+        if input == .offices {
+            stateObject.performSegue(withIdentifier: "officePurchaseSegue", sender: nil)
         }
         
         return nil

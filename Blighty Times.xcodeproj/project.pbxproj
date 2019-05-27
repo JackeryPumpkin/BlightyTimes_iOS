@@ -37,8 +37,13 @@
 		C364785C22910C6700E8C50A /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364785B22910C6700E8C50A /* MenuButton.swift */; };
 		C364785F22910F0500E8C50A /* InGameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364785E22910F0500E8C50A /* InGameButton.swift */; };
 		C364786122912C9D00E8C50A /* DataTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364786022912C9D00E8C50A /* DataTabButton.swift */; };
+		C36478632291D09B00E8C50A /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478622291D09B00E8C50A /* Office.swift */; };
+		C36478652291F1D400E8C50A /* OfficePurchaseMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478642291F1D400E8C50A /* OfficePurchaseMenu.swift */; };
+		C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478662291F5F400E8C50A /* OfficeButton.swift */; };
+		C364786A2293842A00E8C50A /* IntExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478692293842A00E8C50A /* IntExt.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
 		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
+		C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D3FF229B6D7E00BA86A6 /* Region.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
 		C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D7218F7A6100A91E6E /* Event.swift */; };
 		C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D9218FDA9500A91E6E /* EventCell.swift */; };
@@ -77,8 +82,13 @@
 		C364785B22910C6700E8C50A /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		C364785E22910F0500E8C50A /* InGameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InGameButton.swift; sourceTree = "<group>"; };
 		C364786022912C9D00E8C50A /* DataTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTabButton.swift; sourceTree = "<group>"; };
+		C36478622291D09B00E8C50A /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
+		C36478642291F1D400E8C50A /* OfficePurchaseMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficePurchaseMenu.swift; sourceTree = "<group>"; };
+		C36478662291F5F400E8C50A /* OfficeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeButton.swift; sourceTree = "<group>"; };
+		C36478692293842A00E8C50A /* IntExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExt.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
 		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
+		C3C3D3FF229B6D7E00BA86A6 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
 		C3E3B5D7218F7A6100A91E6E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C3E3B5D9218FDA9500A91E6E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -116,7 +126,6 @@
 			children = (
 				C3FE7BD02190CBEB003720C5 /* Controllers */,
 				C3FE7BD12190CC31003720C5 /* Model */,
-				C3FE7BD22190CC8C003720C5 /* Game Elements */,
 				C3FE7BD32190CCA0003720C5 /* Views */,
 				C31530EA215846D40054684F /* AppDelegate.swift */,
 				C31530F6215846D50054684F /* Info.plist */,
@@ -128,11 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				C317831721ADC78700347CB9 /* StateMachine.swift */,
-				C3133E2D227DFD6D00905F00 /* PlayState.swift */,
-				C3133E2F227DFD8300905F00 /* PausedState.swift */,
-				C3133E35227F658200905F00 /* PublishingState.swift */,
-				C3133E33227DFE1800905F00 /* WeekendState.swift */,
-				C3133E31227DFDB600905F00 /* TutorialState.swift */,
+				C364786822937D5200E8C50A /* Game States */,
 			);
 			name = States;
 			sourceTree = "<group>";
@@ -141,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				C31531122159485C0054684F /* Utilities.swift */,
+				C36478692293842A00E8C50A /* IntExt.swift */,
 				C36478482290435200E8C50A /* UIColorExt.swift */,
 				C364785022908F9000E8C50A /* UIViewExt.swift */,
 			);
@@ -156,16 +162,30 @@
 				C364785E22910F0500E8C50A /* InGameButton.swift */,
 				C36478572290AD3800E8C50A /* SkillButton.swift */,
 				C364786022912C9D00E8C50A /* DataTabButton.swift */,
+				C36478662291F5F400E8C50A /* OfficeButton.swift */,
 			);
 			name = Buttons;
+			sourceTree = "<group>";
+		};
+		C364786822937D5200E8C50A /* Game States */ = {
+			isa = PBXGroup;
+			children = (
+				C3133E2D227DFD6D00905F00 /* PlayState.swift */,
+				C3133E2F227DFD8300905F00 /* PausedState.swift */,
+				C3133E35227F658200905F00 /* PublishingState.swift */,
+				C3133E33227DFE1800905F00 /* WeekendState.swift */,
+				C3133E31227DFDB600905F00 /* TutorialState.swift */,
+			);
+			name = "Game States";
 			sourceTree = "<group>";
 		};
 		C3FE7BD02190CBEB003720C5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C3647845228CE50000E8C50A /* MainMenu.swift */,
 				C3153104215848790054684F /* GameViewController.swift */,
+				C3647845228CE50000E8C50A /* MainMenu.swift */,
 				C3117869228A536100083BE1 /* InGameMenu.swift */,
+				C36478642291F1D400E8C50A /* OfficePurchaseMenu.swift */,
 				C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */,
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
 				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
@@ -179,9 +199,10 @@
 			isa = PBXGroup;
 			children = (
 				C3153102215848790054684F /* Simulation.swift */,
-				C36478472290433E00E8C50A /* Extensions */,
+				C3FE7BD22190CC8C003720C5 /* Game Elements */,
 				C316A4F62235985A003CA883 /* States */,
 				C36478522290904200E8C50A /* Buttons */,
+				C36478472290433E00E8C50A /* Extensions */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -189,12 +210,14 @@
 		C3FE7BD22190CC8C003720C5 /* Game Elements */ = {
 			isa = PBXGroup;
 			children = (
-				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
+				C36478622291D09B00E8C50A /* Office.swift */,
 				C3153110215916040054684F /* Company.swift */,
 				C37D81CB216FAE0800CD2E85 /* Population.swift */,
+				C3C3D3FF229B6D7E00BA86A6 /* Region.swift */,
 				C3153101215848790054684F /* Author.swift */,
 				C31530FE215848790054684F /* Article.swift */,
 				C3153105215848790054684F /* Topic.swift */,
+				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
 			);
 			name = "Game Elements";
 			sourceTree = "<group>";
@@ -283,8 +306,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C364785122908F9000E8C50A /* UIViewExt.swift in Sources */,
+				C364786A2293842A00E8C50A /* IntExt.swift in Sources */,
 				C315310F215848790054684F /* Topic.swift in Sources */,
 				C36478492290435200E8C50A /* UIColorExt.swift in Sources */,
+				C36478652291F1D400E8C50A /* OfficePurchaseMenu.swift in Sources */,
 				C3153106215848790054684F /* ArticleTile.swift in Sources */,
 				C3153111215916040054684F /* Company.swift in Sources */,
 				C31530EB215846D40054684F /* AppDelegate.swift in Sources */,
@@ -301,14 +326,17 @@
 				C36478562290A1A600E8C50A /* RedButton.swift in Sources */,
 				C3647846228CE50000E8C50A /* MainMenu.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
+				C36478632291D09B00E8C50A /* Office.swift in Sources */,
 				C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */,
 				C31531132159485C0054684F /* Utilities.swift in Sources */,
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
 				C3133E30227DFD8300905F00 /* PausedState.swift in Sources */,
 				C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */,
+				C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */,
 				C364785C22910C6700E8C50A /* MenuButton.swift in Sources */,
 				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
 				C311786A228A536100083BE1 /* InGameMenu.swift in Sources */,
+				C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */,
 				C364784B22908EB400E8C50A /* BaseButton.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 				C3133E32227DFDB600905F00 /* TutorialState.swift in Sources */,

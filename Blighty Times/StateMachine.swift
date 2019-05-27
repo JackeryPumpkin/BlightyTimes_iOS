@@ -18,6 +18,9 @@ class StateMachine {
         self.state = state
         self.lastState = state
         self.stateObject = stateObject
+        
+        self.state.enter(stateObject)
+        self.state.render(stateObject)
     }
     
     func handle(input: Input) {
@@ -38,7 +41,7 @@ class StateMachine {
     }
     
     func toLastState() {
-        print("[STATE MACHINE]  > toLastState  ⦿ State: " + lastState.string)
+        print("[STATE MACHINE]  > toLast  ⦿ State: " + lastState.string)
         
         state.exit(stateObject)
         state = lastState
@@ -74,7 +77,6 @@ protocol State {
 
 enum Input: String {
     case invertPlayPause = "Invert Play/Pause"
-    
     case pause = "Pause"
     case play = "Play"
     case publish = "Publish"
@@ -83,6 +85,7 @@ enum Input: String {
     
     case publishComplete = "Publish Complete"
     case weekend = "Weekend"
+    case offices = "Offices"
     case tutorial = "Tutorial"
 }
 
@@ -92,4 +95,6 @@ protocol StateObject {
     
     func startGameTime()
     func stopGameTime()
+    
+    func performSegue(withIdentifier: String, sender: Any?)
 }

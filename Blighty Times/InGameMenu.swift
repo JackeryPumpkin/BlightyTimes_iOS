@@ -9,7 +9,7 @@
 import UIKit
 
 class InGameMenu: UIViewController {
-    var delegate: GameViewController?
+    var gameVC: GameViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,7 +17,9 @@ class InGameMenu: UIViewController {
     
     @IBAction func restart(_ sender: Any) {
         dismiss(animated: true) {
-            guard let game = self.delegate else { return }
+            guard let game = self.gameVC else { return }
+            game.stopGameTime()
+            
             game.dismiss(animated: false, completion: {
                 guard let mainMenu = game.delegate else { return }
                 mainMenu.newGame()
@@ -27,18 +29,13 @@ class InGameMenu: UIViewController {
     
     @IBAction func mainMenu(_ sender: Any) {
         dismiss(animated: true) {
-            if let delegate = self.delegate {
-                delegate.dismiss(animated: false, completion: nil)
-            }
+            guard let game = self.gameVC else { return }
+            game.stopGameTime()
+            game.dismiss(animated: false, completion: nil)
         }
     }
     
     @IBAction func back(_ sender: Any) {
-        
-        dismiss(animated: true) {
-            if let delegate = self.delegate {
-                delegate.stateMachine.toLastState()
-            }
-        }
+        dismiss(animated: true, completion: nil)
     }
 }

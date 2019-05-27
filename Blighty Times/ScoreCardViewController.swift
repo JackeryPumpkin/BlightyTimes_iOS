@@ -12,6 +12,7 @@ class ScoreCardViewController: UIViewController {
     @IBOutlet weak var firstStack: UIStackView!
     @IBOutlet weak var weekNumber: UILabel!
     @IBOutlet weak var paidToEmployees: UILabel!
+    @IBOutlet weak var officeCosts: UILabel!
     @IBOutlet weak var earnedRevenue: UILabel!
     @IBOutlet weak var subscriberFluxuation: UILabel!
     
@@ -22,58 +23,50 @@ class ScoreCardViewController: UIViewController {
     @IBOutlet weak var articlesPublished: UILabel!
     @IBOutlet weak var averageQuality: UILabel!
     
-    var iweekNumber: Int = 0;
-    var ipaidToEmployees: Int = 0;
-    var iearnedRevenue: Int = 0;
-    var isubscriberFluxuation: Int = 0;
-    
-    var iemployeesHired: Int = 0;
-    var iemployeesFired: Int = 0;
-    var ipromotionsGiven: Int = 0;
-    var iarticlesPublished: Int = 0;
-    var iaverageQuality: Int = 0;
-    
-    var tapCount: Int = 0;
-    
+    var sim: Simulation?
+    var tapCount: Int = 0
     
     override func viewWillAppear(_ animated: Bool) {
-        weekNumber.text = "\(iweekNumber)";
-        paidToEmployees.text = ipaidToEmployees.dollarFormat();
-        earnedRevenue.text = iearnedRevenue.dollarFormat();
-        subscriberFluxuation.text = isubscriberFluxuation.commaFormat();
+        guard let sim = sim else { return }
         
-        employeesHired.text = "\(iemployeesHired)";
-        employeesFired.text = "\(iemployeesFired)";
-        promotionsGiven.text = "\(ipromotionsGiven)";
-        articlesPublished.text = "\(iarticlesPublished)";
-        averageQuality.text = "\(iaverageQuality)";
+        weekNumber.text = "\(sim.getWeekNumber())"
+        paidToEmployees.text = sim.company.getPaidToEmployeesThisWeek().dollarFormat()
+        officeCosts.text = sim.company.getOfficeCostsThisWeek().dollarFormat()
+        earnedRevenue.text = sim.company.getEarnedRevenueThisWeek().dollarFormat()
+        subscriberFluxuation.text = sim.population.getSubscriberFluxuationThisWeek().commaFormat()
+        
+        employeesHired.text = "\(sim.getEmployeesHiredThisWeek())"
+        employeesFired.text = "\(sim.getEmployeesFiredThisWeek())"
+        promotionsGiven.text = "\(sim.getPromotionsGivenThisWeek())"
+        articlesPublished.text = "\(sim.getArticlesPublishedThisWeek())"
+        averageQuality.text = "\(sim.getAverageQualityThisWeek())"
         
         view.backgroundColor = .white;
         
         UIView.animate(withDuration: 0.2) {
-            self.view.backgroundColor = #colorLiteral(red: 0.2615382373, green: 0.2616910338, blue: 0.315728873, alpha: 1);
-            self.firstStack.alpha = 1.0;
+            self.view.backgroundColor = #colorLiteral(red: 0.2615382373, green: 0.2616910338, blue: 0.315728873, alpha: 1)
+            self.firstStack.alpha = 1.0
         }
     }
     
     @IBAction func next(_ sender: Any) {
         if tapCount == 0 {
-            tapCount += 1;
+            tapCount += 1
             
             UIView.animate(withDuration: 0.2, animations: {
-                self.firstStack.alpha = 0.0;
+                self.firstStack.alpha = 0.0
             }) { (finished) in
                 UIView.animate(withDuration: 0.2) {
-                    self.secondStack.alpha = 1.0;
+                    self.secondStack.alpha = 1.0
                 }
             }
             
         } else {
             UIView.animate(withDuration: 0.2, animations: {
                 self.secondStack.alpha = 0.0
-                self.view.backgroundColor = .white;
+                self.view.backgroundColor = .white
             }) { (finished) in
-                self.performSegue(withIdentifier: "unwindScore", sender: self);
+                self.performSegue(withIdentifier: "unwindScore", sender: self)
             }
         }
     }

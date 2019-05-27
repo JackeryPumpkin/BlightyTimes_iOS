@@ -89,14 +89,14 @@ class Author {
         _salary = Int(_articleRate * 200);
     }
     
-    func employedTick(elapsed days: Int) {
+    func employedTick(elapsed days: Int, moraleModifier: Double) {
         reduceCooldowns();
         
         if _lastKnownGameDaysElapsed != days {
             _lastKnownGameDaysElapsed = days;
             _daysEmployed += 1;
             _daysSinceLastPublication += 1
-            adjustMorale();
+            reduceMorale(moraleModifier);
             
             if _daysSinceLastPublication > 5
             && _infrequentPublishedColldown == 0 {
@@ -236,18 +236,22 @@ class Author {
         return _morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1);
     }
     
-    private func adjustMorale() {
+    private func reduceMorale(_ moraleModifier: Double) {
+        var moraleDecay = -1
+        
         if _paycheckCooldown == 0 {
             if _daysEmployed > 7 {
-                _morale -= 50;
+                moraleDecay -= 50;
                 
                 if _articlesPublishedThisWeek < 1 {
-                    _morale -= 50;
+                    moraleDecay -= 50;
                 }
             } else if _daysEmployed > 30 {
-                _morale -= 200;
+                moraleDecay -= 200;
             }
         }
+        
+        _morale -= moraleDecay / moraleModifier
         
         if _morale <= 200 && _criticalMoraleCooldown == 0 {
             hasCriticalMorale = true;

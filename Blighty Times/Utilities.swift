@@ -88,25 +88,6 @@ extension NSPointerArray {
 }
 
 
-extension Int {
-    func commaFormat() -> String {
-        let numberFormatter = NumberFormatter();
-        numberFormatter.numberStyle = NumberFormatter.Style.decimal;
-        
-        return numberFormatter.string(from: NSNumber(value: self))!;
-    }
-    
-    func dollarFormat() -> String {
-        let numberFormatter = NumberFormatter();
-        numberFormatter.numberStyle = NumberFormatter.Style.decimal;
-        if self >= 0 {
-            return "$" + numberFormatter.string(from: NSNumber(value: self))!;
-        } else {
-            return "-$" + numberFormatter.string(from: NSNumber(value: self * -1))!;
-        }
-        
-    }
-}
 
 extension UINavigationController {
     func fadeTo(_ viewController: UIViewController) {

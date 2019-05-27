@@ -15,6 +15,11 @@ class Simulation {
     private var _population: Population = Population();
     var population: Population { return _population }
     
+    private var _office: Office = Office.small()
+    var office: Office { return _office }
+    private var _officeList: [Office] = [.small(), .medium(), .large(), .huge()]
+    var officeList: [Office] { return _officeList }
+    
     var eventList: [Event] = [];
     
     //Author properties
@@ -59,7 +64,7 @@ class Simulation {
     static let TICK_RATE: TimeInterval = 0.03;
     static let TICKS_PER_DAY: Int = 1800;
     
-    
+    var gameMode: GameMode!
     
     
     @objc func tick() {
@@ -84,13 +89,100 @@ class Simulation {
     }
     
     func start() {
-        spawnFirstAuthor();
-        spawnFirstAuthor();
-        spawnApplicant();
+        switch gameMode! {
+        case .small:
+            smallStart()
+        case .medium:
+            mediumStart()
+        case .large:
+            largeStart()
+        case .huge:
+            hugeStart()
+        default:
+            randomStart()
+        }
+    }
+    
+    private func smallStart() {
+        _company = Company(startingFunds: 5000)
+        _ = purchaseOffice(.small, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
-            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
-            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func mediumStart() {
+        _company = Company(startingFunds: 10000)
+        _ = purchaseOffice(.medium, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func largeStart() {
+        _company = Company(startingFunds: 20000)
+        _ = purchaseOffice(.large, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func hugeStart() {
+        _company = Company(startingFunds: 50000)
+        _ = purchaseOffice(.huge, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func randomStart() {
+        let randOfficeSize = OfficeSize(rawValue: Int.random(in: 0 ..< OfficeSize.allCases.count)) ?? .small
+        switch randOfficeSize {
+        case .small:
+            smallStart()
+        case .medium:
+            mediumStart()
+        case .large:
+            largeStart()
+        case .huge:
+            hugeStart()
         }
     }
     
@@ -156,7 +248,7 @@ class Simulation {
         //Checks the employed authors backwards so that low-morale authors
         //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
-            _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed);
+            _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed, moraleModifier: _office.moraleModifier);
             
             //This chunk checks for various author
             if _employedAuthors[i].hasInfrequentPublished {
@@ -164,7 +256,7 @@ class Simulation {
                 _employedAuthors[i].hasInfrequentPublished = false;
             }
             if _employedAuthors[i].hasPromotionAnxiety {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is getting promotion anxiety."));
+                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is upset that they haven't been promoted."));
                 _employedAuthors[i].hasPromotionAnxiety = false;
             }
             if _employedAuthors[i].hasPendingPromotion {
@@ -258,18 +350,28 @@ class Simulation {
     
     //Author Methods
     func hire(_ author: Author) {
-        author.becomeHired();
-        _employedAuthors.append(author);
-        
-        hireLoop: for i in 0 ..< _applicantAuthors.count {
-            if _applicantAuthors[i].getName() == author.getName() {
-                _applicantAuthors.remove(at: i);
-                break hireLoop;
+        if _employedAuthors.count < _office.capacity {
+            author.becomeHired();
+            _employedAuthors.append(author);
+            
+            hireLoop: for i in 0 ..< _applicantAuthors.count {
+                if _applicantAuthors[i].getName() == author.getName() {
+                    _applicantAuthors.remove(at: i);
+                    break hireLoop;
+                }
             }
+            
+            _employeesHiredThisWeek += 1;
+            add(CompanyEvent(message: "You hired " + author.getName() + "."));
+        } else {
+            for event in eventList {
+                if event is OfficeEvent {
+                    return
+                }
+            }
+                
+            add(OfficeEvent(message: "Cannot hire anyone right now. Your office is too full!"))
         }
-        
-        _employeesHiredThisWeek += 1;
-        add(CompanyEvent(message: "You hired " + author.getName() + "."));
     }
     
     func fire(authorAt index: Int) {
@@ -300,7 +402,7 @@ class Simulation {
         add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     
-    func spawnFirstAuthor() {
+    func spawnStartingAuthor() {
         spawnApplicant();
         hire(_applicantAuthors[0]);
     }
@@ -476,7 +578,7 @@ class Simulation {
             _gameDayOfTheWeek += 1;
         }
         
-        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors);
+        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors, officeDailyCosts: _office.dailyCosts);
     }
     
     func getDayOfTheWeek() -> String {
@@ -559,13 +661,46 @@ class Simulation {
         var lengths: [CGFloat] = []
         
         for region in population.regions {
-            if region.getTotalSubscriberCount() == 0 {
-                lengths.append(CGFloat(0));
+            if let region = region {
+                if region.getTotalSubscriberCount() == 0 {
+                    lengths.append(CGFloat(0))
+                } else {
+                    lengths.append(barLength * ((CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))))
+                }
             } else {
-                lengths.append(barLength * ((CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))));
+                lengths.append(0)
             }
         }
         
-        return lengths;
+        return lengths
+    }
+    
+    //Office methods
+    func purchaseOffice(_ size: OfficeSize, starting: Bool = false) -> Bool {
+        if !starting && _company.getFunds() < _officeList[size.rawValue].downPayment {
+            add(OfficeEvent(message: "Cannot buy that shiny new office. You're too poor!"))
+            return false
+        }
+        
+        _officeList[size.rawValue].purchased = true
+        _office = _officeList[size.rawValue]
+        
+        if !starting {
+            _company.payOfficeDownPayment(size: size)
+            add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+        }
+        
+        for i in 0 ..< _office.size.rawValue {
+            _officeList[i].purchased = true
+        }
+        
+        for i in 0 ..< _population.regions.count {
+            if _population.regions[i] == nil {
+                _population.overwriteRegion(at: i, with: Region(withSubs: false))
+                return true
+            }
+        }
+        
+        return true
     }
 }
