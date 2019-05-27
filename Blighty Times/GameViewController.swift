@@ -148,7 +148,7 @@ class GameViewController: UIViewController, StateObject {
                 NE_articleTiles.object(at: i)!.setBlank();
             }
             
-            updateDataPanels();
+            updateDataPanelsDaily()
         }
         
         //Adds in new articles
@@ -336,7 +336,7 @@ class GameViewController: UIViewController, StateObject {
         }
         
         setRegionTopics()
-        updateDataPanels()
+        updateDataPanelsDaily()
         updateOfficeTab()
     }
     
@@ -373,11 +373,13 @@ class GameViewController: UIViewController, StateObject {
     func setRegionTopics() {
         for i in 0 ..< sim.population.regions.count {
             var topicText = "";
-            for j in 0 ..< sim.population.regions[i].getTopics().count {
-                topicText += sim.population.regions[i].getTopics()[j].getApprovalSymbol() + " " + sim.population.regions[i].getTopics()[j].getName();
-                if j < 3 { topicText += "\n"; }
+            if let region = sim.population.regions[i] {
+                for j in 0 ..< region.getTopics().count {
+                    topicText += region.getTopics()[j].getApprovalSymbol() + " " + region.getTopics()[j].getName()
+                    if j < 3 { topicText += "\n" }
+                }
             }
-            regionTopicsLabels[i].text = topicText;
+            regionTopicsLabels[i].text = topicText
         }
     }
     
@@ -569,9 +571,7 @@ class GameViewController: UIViewController, StateObject {
         }
     }
     
-    func updateDataPanels() {
-        //stopGameTime();
-        
+    func updateDataPanelsDaily() {
         //Update Company statistics
         companyFunds.text = sim.company.getFunds().dollarFormat();
         companyFunds.textColor = sim.company.getFunds() < 0 ? .red : .black;
@@ -582,39 +582,48 @@ class GameViewController: UIViewController, StateObject {
         hiredAuthors.text = "\(sim.employedAuthors.count) / \(sim.office.capacity)"
         
         //Update Region Bars and Topics
-        for i in 0 ..< self.regionBars.count {
-            if self.sim.population.regions[i].getNewSubscriberCount() > 0 {
-                self.regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1);
-                self.regionBarProgressSymbols[i].text = "▲";
-            } else if self.sim.population.regions[i].getNewSubscriberCount() < 0 {
-                self.regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1);
-                self.regionBarProgressSymbols[i].text = "▼";
+        updateRegions()
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.layoutIfNeeded()
+        }) { (finished) in
+            if self.sim.isEndOfWeek() {
+                self.stateMachine.handle(input: .weekend)
             } else {
-                self.regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1);
-                self.regionBarProgressSymbols[i].text = "⏤";
+                self.stateMachine.handle(input: .publishComplete)
             }
             
-            if self.sim.population.regions[i].getTotalSubscriberCount() == 0 {
-                self.regionBarConstraints[i].constant = 0;
+            self.publishButton.isEnabled = true
+        }
+    }
+    
+    func updateRegions() {
+        for i in 0 ..< self.regionBars.count {
+            if let region = sim.population.regions[i] {
+                if region.getTotalSubscriberCount() == 0 {
+                    regionBarConstraints[i].constant = 0
+                } else {
+                    regionBarConstraints[i].constant = regionBarsMaxConstraint.constant * (CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))
+                }
+                
+                if region.getNewSubscriberCount() > 0 {
+                    regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1)
+                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▲" : ""
+                } else if region.getNewSubscriberCount() < 0 {
+                    regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1)
+                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▼" : ""
+                } else {
+                    regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1)
+                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "⏤" : ""
+                }
             } else {
-                self.regionBarConstraints[i].constant = self.regionBarsMaxConstraint.constant * (CGFloat(self.sim.population.regions[i].getTotalSubscriberCount()) / CGFloat(self.sim.population.regions[i].getSize()));
+                regionBarProgressSymbols[i].text = "🔒"
+                regionBars[i].backgroundColor = #colorLiteral(red: 0.945525825, green: 0.9653859735, blue: 0.9648959041, alpha: 1)
+                regionBarConstraints[i].constant = regionBarsMaxConstraint.constant / 2 + 10
             }
         }
         
         setRegionTopics()
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            self.view.layoutIfNeeded();
-        }) { (finished) in
-            self.stateMachine.handle(input: .publishComplete)
-            
-            if self.sim.isEndOfWeek() {
-                self.stateMachine.handle(input: .weekend)
-                self.performSegue(withIdentifier: "scoreSegue", sender: nil)
-            }
-            
-            self.publishButton.isEnabled = true;
-        }
     }
     
     @IBAction func journalistsButton(_ sender: Any) {
@@ -655,7 +664,7 @@ class GameViewController: UIViewController, StateObject {
                     self.NE_articleTiles.object(at: i)!.setBlank();
                 }
                 
-                self.updateDataPanels();
+                self.updateDataPanelsDaily()
             }
         }
     }

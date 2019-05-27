@@ -21,8 +21,6 @@ class PlayState: State {
             }
         } else if input == .publish {
             return PublishingState()
-        } else if input == .weekend {
-            return WeekendState()
         } else if input == .tutorial {
             return TutorialState()
         }

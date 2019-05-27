@@ -89,14 +89,17 @@ class Simulation {
     }
     
     func randomStart() {
-        _ = purchaseOffice(.small)
-        spawnFirstAuthor();
-        spawnFirstAuthor();
-        spawnApplicant();
+        let randOfficeSize = OfficeSize(rawValue: Int.random(in: 0 ..< OfficeSize.allCases.count)) ?? .small
+        _ = purchaseOffice(randOfficeSize)
+        _population = Population(from: _office.size)
+        
+        spawnFirstAuthor()
+        spawnFirstAuthor()
+        spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
-            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
-            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]));
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
         }
     }
     
@@ -575,14 +578,18 @@ class Simulation {
         var lengths: [CGFloat] = []
         
         for region in population.regions {
-            if region.getTotalSubscriberCount() == 0 {
-                lengths.append(CGFloat(0));
+            if let region = region {
+                if region.getTotalSubscriberCount() == 0 {
+                    lengths.append(CGFloat(0))
+                } else {
+                    lengths.append(barLength * ((CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))))
+                }
             } else {
-                lengths.append(barLength * ((CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))));
+                lengths.append(0)
             }
         }
         
-        return lengths;
+        return lengths
     }
     
     //Office methods
@@ -594,7 +601,15 @@ class Simulation {
         
         _officeList[size.rawValue].purchased = true
         _office = _officeList[size.rawValue]
-        add(CompanyEvent(message: "You moved into a new office!"))
+        add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+        
+        for i in 0 ..< _population.regions.count {
+            if _population.regions[i] == nil {
+                _population.overriteRegion(at: i, with: Region(withSubs: false))
+                return true
+            }
+        }
+        
         return true
     }
 }

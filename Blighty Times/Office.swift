@@ -18,6 +18,7 @@ class Office {
     var dailyCosts: Int
     var downPayment: Int
     var purchased: Bool
+    var size: OfficeSize
     
     init(size: OfficeSize) {
         switch size {
@@ -54,6 +55,7 @@ class Office {
         downPayment = 10000 * (size.rawValue * 2)
         dailyCosts = 500 * Int(pow(Float(size.rawValue + 1), 3))
         purchased = false
+        self.size = size
     }
     
     static func small() -> Office {
@@ -73,7 +75,7 @@ class Office {
     }
 }
 
-enum OfficeSize: Int {
+enum OfficeSize: Int, CaseIterable {
     case small = 0
     case medium = 1
     case large = 2

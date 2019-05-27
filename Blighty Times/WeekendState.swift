@@ -22,6 +22,7 @@ class WeekendState: State {
     
     func enter(_ stateObject: StateObject) {
         stateObject.stopGameTime()
+        stateObject.performSegue(withIdentifier: "scoreSegue", sender: nil)
     }
     
     func render(_ stateObject: StateObject) {

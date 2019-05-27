@@ -71,6 +71,7 @@ class OfficePurchaseMenu: UIViewController {
         
         updateView(with: currentOfficeSize)
         game.updateOfficeTab()
+        game.updateRegions()
         game.companyFunds.text = game.sim.company.getFunds().dollarFormat()
     }
     
@@ -79,7 +80,7 @@ class OfficePurchaseMenu: UIViewController {
     }
     
     func updateView(with officeSize: OfficeSize) {
-        guard let game = gameVC else  { return }
+        guard let game = gameVC else { return }
         let office: Office
         
         currentOfficeSize = officeSize

@@ -43,6 +43,7 @@
 		C364786A2293842A00E8C50A /* IntExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478692293842A00E8C50A /* IntExt.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
 		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
+		C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D3FF229B6D7E00BA86A6 /* Region.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
 		C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D7218F7A6100A91E6E /* Event.swift */; };
 		C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D9218FDA9500A91E6E /* EventCell.swift */; };
@@ -87,6 +88,7 @@
 		C36478692293842A00E8C50A /* IntExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExt.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
 		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
+		C3C3D3FF229B6D7E00BA86A6 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
 		C3E3B5D7218F7A6100A91E6E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C3E3B5D9218FDA9500A91E6E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -208,13 +210,14 @@
 		C3FE7BD22190CC8C003720C5 /* Game Elements */ = {
 			isa = PBXGroup;
 			children = (
-				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
+				C36478622291D09B00E8C50A /* Office.swift */,
 				C3153110215916040054684F /* Company.swift */,
 				C37D81CB216FAE0800CD2E85 /* Population.swift */,
+				C3C3D3FF229B6D7E00BA86A6 /* Region.swift */,
 				C3153101215848790054684F /* Author.swift */,
 				C31530FE215848790054684F /* Article.swift */,
 				C3153105215848790054684F /* Topic.swift */,
-				C36478622291D09B00E8C50A /* Office.swift */,
+				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
 			);
 			name = "Game Elements";
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
 				C3133E30227DFD8300905F00 /* PausedState.swift in Sources */,
 				C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */,
+				C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */,
 				C364785C22910C6700E8C50A /* MenuButton.swift in Sources */,
 				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
 				C311786A228A536100083BE1 /* InGameMenu.swift in Sources */,

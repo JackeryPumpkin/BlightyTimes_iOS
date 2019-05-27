@@ -15,6 +15,8 @@ class PublishingState: State {
     func handle(input: Input, stateObject: StateObject) -> State? {
         if input == .publishComplete {
             return PlayState()
+        } else if input == .weekend {
+            return WeekendState()
         }
         
         return nil
