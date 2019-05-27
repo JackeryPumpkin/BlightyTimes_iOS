@@ -64,7 +64,7 @@ class Simulation {
     static let TICK_RATE: TimeInterval = 0.03;
     static let TICKS_PER_DAY: Int = 1800;
     
-    
+    var gameMode: GameMode!
     
     
     @objc func tick() {
@@ -88,18 +88,97 @@ class Simulation {
         }
     }
     
-    func randomStart() {
-        let randOfficeSize = OfficeSize(rawValue: Int.random(in: 0 ..< OfficeSize.allCases.count)) ?? .small
-        _ = purchaseOffice(randOfficeSize, starting: true)
+    func start() {
+        switch gameMode! {
+        case .small:
+            smallStart()
+        case .medium:
+            mediumStart()
+        case .large:
+            largeStart()
+        case .huge:
+            hugeStart()
+        default:
+            randomStart()
+        }
+    }
+    
+    private func smallStart() {
+        _ = purchaseOffice(.small, starting: true)
         _population = Population(from: _office.size)
         
-        spawnFirstAuthor()
-        spawnFirstAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func mediumStart() {
+        _ = purchaseOffice(.medium, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
         spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
             newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
             newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func largeStart() {
+        _ = purchaseOffice(.large, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func hugeStart() {
+        _ = purchaseOffice(.huge, starting: true)
+        _population = Population(from: _office.size)
+        
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnStartingAuthor()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        spawnApplicant()
+        
+        for i in 0 ..< _employedAuthors.count {
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+            newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
+        }
+    }
+    
+    private func randomStart() {
+        let randOfficeSize = OfficeSize(rawValue: Int.random(in: 0 ..< OfficeSize.allCases.count)) ?? .small
+        switch randOfficeSize {
+        case .small:
+            smallStart()
+        case .medium:
+            mediumStart()
+        case .large:
+            largeStart()
+        case .huge:
+            hugeStart()
         }
     }
     
@@ -319,7 +398,7 @@ class Simulation {
         add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     
-    func spawnFirstAuthor() {
+    func spawnStartingAuthor() {
         spawnApplicant();
         hire(_applicantAuthors[0]);
     }

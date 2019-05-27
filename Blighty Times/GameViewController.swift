@@ -92,7 +92,7 @@ class GameViewController: UIViewController, StateObject {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        sim.randomStart();
+        sim.start()
         createTiles();
         startGameTime();
         setupAesthetics();

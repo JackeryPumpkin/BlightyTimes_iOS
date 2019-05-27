@@ -18,7 +18,7 @@ class Population {
     init(from officeSize: OfficeSize) {
         let office = Office(size: officeSize)
         
-        for _ in 1 ... office.regionCount { _regions.append(Region(withSubs: true)) }
+        for _ in 1 ... office.regionCount { _regions.append(Region(withSubs: officeSize == .small ? false : true)) }
         for _ in office.regionCount ..< 4 { _regions.append(nil) }
     }
     

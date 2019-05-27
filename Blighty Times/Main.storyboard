@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="38" translatesAutoresizingMaskIntoConstraints="NO" id="IW0-PH-VXC">
-                                <rect key="frame" x="262" y="305" width="500" height="158"/>
+                                <rect key="frame" x="262" y="271" width="500" height="326"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbV-dm-2MN" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="500" height="60"/>
@@ -32,11 +32,60 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" identifier="newGameSegue" animates="NO" id="Ag4-XB-4qm"/>
+                                            <action selector="randomStart:" destination="lmt-x0-A4b" eventType="touchUpInside" id="H2a-Oy-3dB"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="apS-wN-ELl">
+                                        <rect key="frame" x="0.0" y="98" width="500" height="130"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="O3S-24-5xG">
+                                                <rect key="frame" x="0.0" y="0.0" width="500" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfM-5m-NaK" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="245" height="60"/>
+                                                        <state key="normal" title="SMALL"/>
+                                                        <connections>
+                                                            <action selector="smallStart:" destination="lmt-x0-A4b" eventType="touchUpInside" id="mRF-Ie-b2F"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="byC-EP-Umg" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                        <rect key="frame" x="255" y="0.0" width="245" height="60"/>
+                                                        <state key="normal" title="MEDIUM"/>
+                                                        <connections>
+                                                            <action selector="mediumStart:" destination="lmt-x0-A4b" eventType="touchUpInside" id="dtI-Yt-8oC"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="Y9v-ym-jsJ"/>
+                                                </constraints>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="7fT-V0-buE">
+                                                <rect key="frame" x="0.0" y="70" width="500" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vdi-2p-1Ku" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="245" height="60"/>
+                                                        <state key="normal" title="LARGE"/>
+                                                        <connections>
+                                                            <action selector="largeStart:" destination="lmt-x0-A4b" eventType="touchUpInside" id="ki1-lA-djY"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Noa-Qh-JJr" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                        <rect key="frame" x="255" y="0.0" width="245" height="60"/>
+                                                        <state key="normal" title="HUGE"/>
+                                                        <connections>
+                                                            <action selector="hugeStart:" destination="lmt-x0-A4b" eventType="touchUpInside" id="KRc-ki-pCD"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="500" id="TVc-wh-wX4"/>
+                                        </constraints>
+                                    </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qGp-7v-zob" customClass="MenuButton" customModule="Blighty_Times" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="98" width="500" height="60"/>
+                                        <rect key="frame" x="0.0" y="266" width="500" height="60"/>
                                         <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="4PV-Sh-O19"/>
@@ -77,13 +126,16 @@
                         </subviews>
                         <color key="backgroundColor" red="0.98046809434890747" green="0.98820751905441284" blue="0.98823672533035278" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="IW0-PH-VXC" firstAttribute="centerY" secondItem="PfY-93-V72" secondAttribute="centerY" id="Phq-Ik-hIX"/>
                             <constraint firstItem="Wub-UD-1NR" firstAttribute="centerX" secondItem="PfY-93-V72" secondAttribute="centerX" id="Vzx-oa-M5A"/>
                             <constraint firstItem="Wub-UD-1NR" firstAttribute="top" secondItem="Vqe-6f-MWs" secondAttribute="top" constant="65" id="bUd-hz-prU"/>
+                            <constraint firstItem="IW0-PH-VXC" firstAttribute="centerY" secondItem="PfY-93-V72" secondAttribute="centerY" constant="50" id="fPA-mo-bhJ"/>
                             <constraint firstItem="IW0-PH-VXC" firstAttribute="centerX" secondItem="PfY-93-V72" secondAttribute="centerX" id="jZd-GG-pgm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vqe-6f-MWs"/>
                     </view>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="newGameSegue" id="8WO-oq-MaK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="maR-zC-sBq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
