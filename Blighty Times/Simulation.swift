@@ -104,6 +104,7 @@ class Simulation {
     }
     
     private func smallStart() {
+        _company = Company(startingFunds: 5000)
         _ = purchaseOffice(.small, starting: true)
         _population = Population(from: _office.size)
         
@@ -116,6 +117,7 @@ class Simulation {
     }
     
     private func mediumStart() {
+        _company = Company(startingFunds: 10000)
         _ = purchaseOffice(.medium, starting: true)
         _population = Population(from: _office.size)
         
@@ -131,6 +133,7 @@ class Simulation {
     }
     
     private func largeStart() {
+        _company = Company(startingFunds: 20000)
         _ = purchaseOffice(.large, starting: true)
         _population = Population(from: _office.size)
         
@@ -149,6 +152,7 @@ class Simulation {
     }
     
     private func hugeStart() {
+        _company = Company(startingFunds: 50000)
         _ = purchaseOffice(.huge, starting: true)
         _population = Population(from: _office.size)
         

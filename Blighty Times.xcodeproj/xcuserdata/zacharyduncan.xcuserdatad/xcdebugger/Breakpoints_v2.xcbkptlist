@@ -159,7 +159,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "447"
             endingLineNumber = "447"
-            landmarkName = "hire(_:)"
+            landmarkName = "addToNextEdition(article:index:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -175,7 +175,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "485"
             endingLineNumber = "485"
-            landmarkName = "spawnTestAuthor()"
+            landmarkName = "removeFromPending(article:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -239,7 +239,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "667"
             endingLineNumber = "667"
-            landmarkName = "getDayOfTheWeek()"
+            landmarkName = "getRegionGraphLengths(with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

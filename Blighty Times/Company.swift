@@ -9,7 +9,7 @@
 import Foundation
 
 class Company {
-    private var _funds: Int = 50000;
+    private var _funds: Int
     private var _yesterdaysProfit: Int = 0;
     private var _commissionsPaid: Int = 0;
     private var _officeCostsToday: Int = 0;
@@ -22,6 +22,13 @@ class Company {
     //Constants
     private let _SUBSCRIPTION_FEE: Double = 0.05;
     
+    convenience init() {
+        self.init(startingFunds: 50000)
+    }
+    
+    init(startingFunds: Int) {
+        _funds = startingFunds
+    }
     
     //Company tick happens once a day
     func tick(subscribers: Int, employedAuthors: [Author], officeDailyCosts: Int) {

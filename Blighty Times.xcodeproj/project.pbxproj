@@ -126,7 +126,6 @@
 			children = (
 				C3FE7BD02190CBEB003720C5 /* Controllers */,
 				C3FE7BD12190CC31003720C5 /* Model */,
-				C3FE7BD22190CC8C003720C5 /* Game Elements */,
 				C3FE7BD32190CCA0003720C5 /* Views */,
 				C31530EA215846D40054684F /* AppDelegate.swift */,
 				C31530F6215846D50054684F /* Info.plist */,
@@ -200,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				C3153102215848790054684F /* Simulation.swift */,
+				C3FE7BD22190CC8C003720C5 /* Game Elements */,
 				C316A4F62235985A003CA883 /* States */,
 				C36478522290904200E8C50A /* Buttons */,
 				C36478472290433E00E8C50A /* Extensions */,
