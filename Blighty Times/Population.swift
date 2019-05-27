@@ -84,7 +84,7 @@ class Population {
         _subscriberFluxuationThisWeek = 0;
     }
     
-    func overriteRegion(at index: Int, with region: Region) {
+    func overwriteRegion(at index: Int, with region: Region) {
         _regions[index] = region
     }
 }

@@ -15,9 +15,10 @@ class Region {
     private var _releventTopics: [Topic] { return _newsTopic != nil ? [_newsTopic!] : _TOPICS }
     private let _MAX_LOYALTY: Double = 1.5
     private let _MIN_LOYALTY: Double = 0.015
-    private let _LOYALTY_INCREMENT: Double = 0.015
+    private let _LOYALTY_INCREMENT: Double = 0.05
     
     private var _loyalty: Double = 0.5
+    var loyalty: Double { return _loyalty }
     private var _subscribers: Int
     private var _newSubscribers: Int = 0
     private var _daysSinceLastApproval: Int = 0
@@ -153,7 +154,7 @@ class Region {
                 : _MAX_LOYALTY
         } else {
             increaseLoyalty(by: 1)
-            print("Invalid fraction given to increaseLoyalty(divide numerator: Int, by denominator: Int)")
+            print("Invalid fraction given to increaseLoyalty(divide: \(numerator), by: \(denominator)")
         }
     }
     
@@ -187,6 +188,10 @@ class Region {
     
     func getTopics() -> [Topic] {
         return _releventTopics
+    }
+    
+    func hasHighLoyalty() -> Bool {
+        return _loyalty >= 1
     }
     
     private func approves(of article: Article) -> Bool {

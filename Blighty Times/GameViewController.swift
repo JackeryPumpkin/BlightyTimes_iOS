@@ -606,15 +606,20 @@ class GameViewController: UIViewController, StateObject {
                     regionBarConstraints[i].constant = regionBarsMaxConstraint.constant * (CGFloat(region.getTotalSubscriberCount()) / CGFloat(region.getSize()))
                 }
                 
-                if region.getNewSubscriberCount() > 0 {
-                    regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1)
-                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▲" : ""
-                } else if region.getNewSubscriberCount() < 0 {
-                    regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1)
-                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▼" : ""
+                if region.hasHighLoyalty() {
+                    regionBars[i].backgroundColor =  #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
+                    regionBarProgressSymbols[i].text = "♥︎"
                 } else {
-                    regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1)
-                    regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "⏤" : ""
+                    if region.getNewSubscriberCount() > 0 {
+                        regionBars[i].backgroundColor =  #colorLiteral(red: 0.4885490545, green: 0.7245667335, blue: 0.9335739213, alpha: 1)
+                        regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▲" : ""
+                    } else if region.getNewSubscriberCount() < 0 {
+                        regionBars[i].backgroundColor = #colorLiteral(red: 0.9179712534, green: 0.522530973, blue: 0.5010649562, alpha: 1)
+                        regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "▼" : ""
+                    } else {
+                        regionBars[i].backgroundColor = #colorLiteral(red: 0.7368394732, green: 0.736964643, blue: 0.7368229032, alpha: 1)
+                        regionBarProgressSymbols[i].text = regionBarConstraints[i].constant > 18 ? "⏤" : ""
+                    }
                 }
             } else {
                 regionBarProgressSymbols[i].text = "🔒"

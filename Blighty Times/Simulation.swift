@@ -90,7 +90,7 @@ class Simulation {
     
     func randomStart() {
         let randOfficeSize = OfficeSize(rawValue: Int.random(in: 0 ..< OfficeSize.allCases.count)) ?? .small
-        _ = purchaseOffice(randOfficeSize)
+        _ = purchaseOffice(randOfficeSize, starting: true)
         _population = Population(from: _office.size)
         
         spawnFirstAuthor()
@@ -593,19 +593,27 @@ class Simulation {
     }
     
     //Office methods
-    func purchaseOffice(_ size: OfficeSize) -> Bool {
-        if _company.getFunds() < _officeList[size.rawValue].downPayment {
+    func purchaseOffice(_ size: OfficeSize, starting: Bool = false) -> Bool {
+        if !starting && _company.getFunds() < _officeList[size.rawValue].downPayment {
             add(OfficeEvent(message: "Cannot buy that shiny new office. You're too poor!"))
             return false
         }
         
         _officeList[size.rawValue].purchased = true
         _office = _officeList[size.rawValue]
-        add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+        
+        if !starting {
+            _company.payOfficeDownPayment(size: size)
+            add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+        }
+        
+        for i in 0 ..< _office.size.rawValue {
+            _officeList[i].purchased = true
+        }
         
         for i in 0 ..< _population.regions.count {
             if _population.regions[i] == nil {
-                _population.overriteRegion(at: i, with: Region(withSubs: false))
+                _population.overwriteRegion(at: i, with: Region(withSubs: false))
                 return true
             }
         }
