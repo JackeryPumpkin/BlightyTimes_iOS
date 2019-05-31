@@ -34,13 +34,13 @@ extension UIView {
         }
     }
     
-    func show() {
+    func animateShow() {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 1
         })
     }
     
-    func hide() {
+    func animateHide() {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
         })
@@ -50,5 +50,12 @@ extension UIView {
         case slight
         case heavy
         case full
+    }
+    
+    func pulseBackground() {
+        backgroundColor! += 0.2
+        UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseIn, .repeat, .allowUserInteraction], animations: {
+            self.backgroundColor! -= 0.2
+        }, completion: nil)
     }
 }

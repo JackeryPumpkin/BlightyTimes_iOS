@@ -27,21 +27,21 @@ class Office {
             capacity = 2
             moraleModifier = 0.9
             moraleModifierSymbol = "-"
-            regionCount = 2
+            regionCount = 1
             image = #imageLiteral(resourceName: "office1")
         case .medium:
             name = "Medium"
             capacity = 4
             moraleModifier = 1.2
             moraleModifierSymbol = "+"
-            regionCount = 3
+            regionCount = 2
             image = #imageLiteral(resourceName: "office2")
         case .large:
             name = "Large"
             capacity = 6
             moraleModifier = 1.6
             moraleModifierSymbol = "++"
-            regionCount = 4
+            regionCount = 3
             image = #imageLiteral(resourceName: "office3")
         case .huge:
             name = "Huge"

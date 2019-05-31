@@ -123,19 +123,23 @@ class GameViewController: UIViewController, StateObject {
             if let tile = articleTiles.object(at: i) {
                 if tile.article.getLifetime() <= 0 {
                     sim.removeFromPending(article: tile.article)
-                    tile.setBlank();
-                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
-                    //Start blinking animation here
+                    tile.setBlank()
+                }
+                else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 2) {
+                    tile.playLowLifeAnimation()
                 }
             }
         }
         
         for i in 0 ..< NE_articleTiles.count {
             if let tile = NE_articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 || tile.article.getTitle().count < 5 {
-                    tile.setBlank();
-                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
-                    //Start blinking animation here
+                if tile.article.getLifetime() <= 0 && tile.article !== ArticleLibrary.blank {
+                    
+                    tile.setBlank()
+                    
+                }
+                else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 2) {
+                    tile.playLowLifeAnimation()
                 }
             }
         }
@@ -331,9 +335,9 @@ class GameViewController: UIViewController, StateObject {
         journalistsButton.isEnabled = false
         officeTabButton.isInUse = false
         
-        for node in NE_viewPositions {
-            node.addBorders(width: 3.0, color: UIColor.black.cgColor);
-        }
+//        for node in NE_viewPositions {
+//            node.addBorders(width: 3.0, color: UIColor.black.cgColor);
+//        }
         
         setRegionTopics()
         updateDataPanelsDaily()

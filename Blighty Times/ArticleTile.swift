@@ -14,6 +14,7 @@ class ArticleTile: UIView {
     
     var article: Article = ArticleLibrary.blank;
     var isTouched: Bool = false;
+    var isBlinking: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame);
@@ -39,10 +40,31 @@ class ArticleTile: UIView {
         authorName.text = "";
         self.backgroundColor = .clear;
         self.isUserInteractionEnabled = false;
+        
+        isBlinking = false
+        layer.removeAllAnimations()
+    }
+    
+    func playLowLifeAnimation() {
+        if isTouched {
+            isBlinking = false
+            layer.removeAllAnimations()
+        } else {
+            if !isBlinking {
+//                layoutIfNeeded()
+//                alpha = 1
+//                backgroundColor = article.getTopic().getColor()
+//                layer.removeAllAnimations()
+//                layoutIfNeeded()
+                
+                pulseBackground()
+                isBlinking = true
+            }
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true;
+        isTouched = true
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         isTouched = false;

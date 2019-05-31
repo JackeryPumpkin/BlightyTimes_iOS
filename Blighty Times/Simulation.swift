@@ -232,10 +232,12 @@ class Simulation {
     private func nextEditionArticleTick() {
         var i = _nextEditionArticles.count - 1;
         for _ in 0 ..< _nextEditionArticles.count {
-            _nextEditionArticles[i].tick();
-            
-            if _nextEditionArticles[i].getLifetime() <= 0 {
-                _nextEditionArticles[i] = ArticleLibrary.blank;
+            if _nextEditionArticles[i] === ArticleLibrary.blank {
+                if _nextEditionArticles[i].getLifetime() <= 0 {
+                    _nextEditionArticles[i] = ArticleLibrary.blank;
+                } else {
+                    _nextEditionArticles[i].tick()
+                }
             }
             
             i -= 1;
@@ -411,8 +413,9 @@ class Simulation {
         _employedAuthors.append(Author(portrait: UIImage(), name: "Test", topics: [TopicLibrary.list[0]], quality: 5, articleRate: ((Double(Simulation.TICKS_PER_DAY) / 60) / 30) * 3))
     }
     
+    ///Checks 10 times per day if there should be a new applicant
     func chanceToSpawnApplicant() {
-        if _ticksElapsed % 200 == 0 {
+        if _ticksElapsed % (Simulation.TICKS_PER_DAY / 10) == 0 {
             if Random(int: 1 ... 5) == 5 {
                 spawnApplicant();
             }
