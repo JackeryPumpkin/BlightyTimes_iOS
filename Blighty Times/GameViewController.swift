@@ -121,25 +121,25 @@ class GameViewController: UIViewController, StateObject {
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
             if let tile = articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 {
-                    sim.removeFromPending(article: tile.article)
-                    tile.setBlank()
-                }
-                else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 2) {
-                    tile.playLowLifeAnimation()
+                if !tile.blank {
+                    if tile.article.getLifetime() <= 0 {
+                        //sim.removeFromPending(article: tile.article)
+                        tile.setBlank()
+                    } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 3) {
+                        tile.playLowLifeAnimation()
+                    }
                 }
             }
         }
         
         for i in 0 ..< NE_articleTiles.count {
             if let tile = NE_articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 && tile.article !== ArticleLibrary.blank {
-                    
-                    tile.setBlank()
-                    
-                }
-                else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 2) {
-                    tile.playLowLifeAnimation()
+                if !tile.blank {
+                    if tile.article.getLifetime() <= 0 {
+                        tile.setBlank()
+                    } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 3) {
+                        tile.playLowLifeAnimation()
+                    }
                 }
             }
         }
@@ -156,11 +156,12 @@ class GameViewController: UIViewController, StateObject {
         }
         
         //Adds in new articles
-        a: for article in 0 ..< sim.newArticles.count {
+        a: for articleIndex in 0 ..< sim.newArticles.count {
             b: for tileIndex in 0 ..< articleTiles.count {
                 if let tile = articleTiles.object(at: tileIndex) {
-                    if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
-                        tile.set(article: &sim.newArticles[article]);
+                    print("New Article(\(tileIndex)): " + tile.article.getTitle() + " is blank: \(tile.blank)")
+                    if tile.blank {//article.getTitle() == ArticleLibrary.blank.getTitle() {
+                        tile.set(article: &sim.newArticles[articleIndex])
                         
                         break b;
                     }
@@ -170,15 +171,11 @@ class GameViewController: UIViewController, StateObject {
         
         sim.syncNewArticles();
         
-        if sim.writtenArticles.count == 12 {
-            pendingSlotsFullWarning.isHidden = false;
-        } else {
-            pendingSlotsFullWarning.isHidden = true;
-        }
+        pendingSlotsFullWarning.isHidden = sim.writtenArticles.count < 12
         
         //Handles the behavior of the moving tile from pending
         for i in 0 ..< articleTiles.count {
-            if articleTiles.object(at: i)!.isTouched && movingTileIndex != i {
+            if articleTiles.object(at: i)!.touched && movingTileIndex != i {
                 movingTileIndex = i;
                 
                 movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
@@ -189,7 +186,7 @@ class GameViewController: UIViewController, StateObject {
         
         //Handles the behavior of the moving tile from NE
         for i in 0 ..< NE_articleTiles.count {
-            if NE_articleTiles.object(at: i)!.isTouched && NE_movingTileIndex != i {
+            if NE_articleTiles.object(at: i)!.touched && NE_movingTileIndex != i {
                 NE_movingTileIndex = i;
                 
                 movingTileTitle.text = NE_articleTiles.object(at: i)!.article.getTitle();

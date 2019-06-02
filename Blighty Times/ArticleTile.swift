@@ -13,8 +13,9 @@ class ArticleTile: UIView {
     @IBOutlet weak var authorName: UILabel!
     
     var article: Article = ArticleLibrary.blank;
-    var isTouched: Bool = false;
-    var isBlinking: Bool = false
+    var touched: Bool = false
+    var blinking: Bool = false
+    var blank: Bool = true
     
     override init(frame: CGRect) {
         super.init(frame: frame);
@@ -30,8 +31,9 @@ class ArticleTile: UIView {
         self.article = article;
         articleTitle.text = article.getTitle();
         authorName.text = article.getAuthor().getName();
-        self.backgroundColor = article.getTopic().getColor();
-        self.isUserInteractionEnabled = true;
+        backgroundColor = article.getTopic().getColor()
+        isUserInteractionEnabled = true
+        blank = article === ArticleLibrary.blank
     }
     
     func setBlank() {
@@ -41,16 +43,17 @@ class ArticleTile: UIView {
         self.backgroundColor = .clear;
         self.isUserInteractionEnabled = false;
         
-        isBlinking = false
+        blinking = false
+        blank = true
         layer.removeAllAnimations()
     }
     
     func playLowLifeAnimation() {
-        if isTouched {
-            isBlinking = false
+        if touched {
+            blinking = false
             layer.removeAllAnimations()
         } else {
-            if !isBlinking {
+            if !blinking && !blank {
 //                layoutIfNeeded()
 //                alpha = 1
 //                backgroundColor = article.getTopic().getColor()
@@ -58,18 +61,18 @@ class ArticleTile: UIView {
 //                layoutIfNeeded()
                 
                 pulseBackground()
-                isBlinking = true
+                blinking = true
             }
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true
+        touched = true
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = false;
+        touched = false;
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = false;
+        touched = false;
     }
 }

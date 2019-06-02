@@ -71,7 +71,6 @@ class TopicLibrary {
     static let blank: Topic = Topic(name: "", approval: false, color:  #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0));
     
     static func getRandomTopics() -> [Topic] {
-//        print("get random topics");
         return getRandomTopics(from: TopicLibrary.list);
     }
     
