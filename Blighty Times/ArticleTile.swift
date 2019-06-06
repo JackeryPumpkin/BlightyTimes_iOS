@@ -11,6 +11,8 @@ import UIKit
 class ArticleTile: UIView {
     @IBOutlet weak var articleTitle: UILabel!
     @IBOutlet weak var authorName: UILabel!
+    @IBOutlet weak var quality: UILabel!
+    @IBOutlet weak var image: UIImageView!
     
     var article: Article = ArticleLibrary.blank;
     var touched: Bool = false
@@ -31,7 +33,9 @@ class ArticleTile: UIView {
         self.article = article;
         articleTitle.text = article.getTitle();
         authorName.text = article.getAuthor().getName();
-        backgroundColor = article.getTopic().getColor()
+        quality.text = "\(article.getQuality())"
+        image.image = article.getTopic().image
+        backgroundColor = article.getTopic().articleColor
         isUserInteractionEnabled = true
         blank = article === ArticleLibrary.blank
     }
@@ -40,6 +44,7 @@ class ArticleTile: UIView {
         self.article = ArticleLibrary.blank;
         articleTitle.text = "";
         authorName.text = "";
+        image.image = UIImage()
         self.backgroundColor = .clear;
         self.isUserInteractionEnabled = false;
         
@@ -54,12 +59,6 @@ class ArticleTile: UIView {
             layer.removeAllAnimations()
         } else {
             if !blinking && !blank {
-//                layoutIfNeeded()
-//                alpha = 1
-//                backgroundColor = article.getTopic().getColor()
-//                layer.removeAllAnimations()
-//                layoutIfNeeded()
-                
                 pulseBackground()
                 blinking = true
             }

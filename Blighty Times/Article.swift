@@ -17,7 +17,7 @@ class Article {
     private var _inNextEdition: Bool = false;
     
     init(topic: Topic, author: inout Author, lifeMultiplier: Double = 1.0) {
-        _title = topic.getApprovalSymbol() + " " + topic.getName();
+        _title = topic.name
         _topic = topic;
         _author = author;
         _quality = author.getQuality();

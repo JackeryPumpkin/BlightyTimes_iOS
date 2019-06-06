@@ -53,9 +53,9 @@ extension UIView {
     }
     
     func pulseBackground() {
-        backgroundColor! -= 0.2
+        backgroundColor! -= 0.1
         UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseInOut, .repeat, .allowUserInteraction], animations: {
-            self.backgroundColor! += 0.2
+            self.backgroundColor! += 0.1
         }, completion: nil)
     }
 }

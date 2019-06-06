@@ -32,7 +32,7 @@ class NewsEvent: Event {
     
     init() {
         _NEWS_TOPIC = TopicLibrary.getRandomTopics()[0];
-        super.init(message: "", color: _NEWS_TOPIC.getColor(), symbol: "📰", lifetime: 0);
+        super.init(message: "", color: _NEWS_TOPIC.color, symbol: "📰", lifetime: 0);
         
         message = message();
         lifetime = lifetime();
@@ -43,7 +43,7 @@ class NewsEvent: Event {
     }
     
     final private func message() -> String {
-        switch _NEWS_TOPIC.getName() {
+        switch _NEWS_TOPIC.name {
         case "Conservatism":
             let options: [String] = [
                 "Conservative politition embroiled in intense scandal.",
@@ -177,7 +177,7 @@ class NewsEvent: Event {
     }
     
     final private func lifetime() -> Int {
-        switch _NEWS_TOPIC.getName() {
+        switch _NEWS_TOPIC.name {
         case "Conservatism":
             return Simulation.TICKS_PER_DAY;
         case "Liberalism":

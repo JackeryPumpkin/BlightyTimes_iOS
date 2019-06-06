@@ -78,6 +78,8 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet weak var movingTileReferenceView: UIView!
     @IBOutlet weak var movingTileTitle: UILabel!
     @IBOutlet weak var movingTileAuthor: UILabel!
+    @IBOutlet weak var movingTileQuality: UILabel!
+    @IBOutlet weak var movingTileImage: UIImageView!
     var movingTileIndex: Int?;
     var NE_movingTileIndex: Int?;
     var lastknownTileLocation: CGPoint?;
@@ -180,7 +182,9 @@ class GameViewController: UIViewController, StateObject {
                 
                 movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
                 movingTileAuthor.text = articleTiles.object(at: i)!.article.getAuthor().getName();
-                movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
+                movingTileQuality.text = "\(articleTiles.object(at: i)!.article.getQuality())"
+                movingTileImage.image = articleTiles.object(at: i)!.article.getTopic().image
+                movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().articleColor
             }
         }
         
@@ -191,7 +195,9 @@ class GameViewController: UIViewController, StateObject {
                 
                 movingTileTitle.text = NE_articleTiles.object(at: i)!.article.getTitle();
                 movingTileAuthor.text = NE_articleTiles.object(at: i)!.article.getAuthor().getName();
-                movingTileReferenceView.backgroundColor = NE_articleTiles.object(at: i)!.article.getTopic().getColor();
+                movingTileQuality.text = "\(NE_articleTiles.object(at: i)!.article.getQuality())"
+                movingTileImage.image = NE_articleTiles.object(at: i)!.article.getTopic().image
+                movingTileReferenceView.backgroundColor = NE_articleTiles.object(at: i)!.article.getTopic().articleColor
             }
         }
         
@@ -353,11 +359,11 @@ class GameViewController: UIViewController, StateObject {
         //Makes sure there is a News Topic to show
         if sim.getCurrentNewsEventTopic() != nil {
             newsBonusTopicOverlay.isHidden = false;
-            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.getColor();
-            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
-            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
-            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.getColor();
-            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.getColor();
+            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.color
+            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.name
+            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.name
+            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.color
+            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.color
         } else {
             //Makes sure its not processing the same UI info repeatedly
             if !newsBonusTopicOverlay.isHidden {
@@ -376,7 +382,7 @@ class GameViewController: UIViewController, StateObject {
             var topicText = "";
             if let region = sim.population.regions[i] {
                 for j in 0 ..< region.getTopics().count {
-                    topicText += region.getTopics()[j].getApprovalSymbol() + " " + region.getTopics()[j].getName()
+                    topicText += region.getTopics()[j].name
                     if j < 3 { topicText += "\n" }
                 }
             }
@@ -742,7 +748,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             
             employedCell.topicList.text = "";
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                employedCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+                employedCell.topicList.text?.append(contentsOf: "\(topic.name)\n");
             }
             
             if employedCell.overlayView.isHidden {
@@ -809,7 +815,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             
             applicantCell.topicList.text = "";
             for topic in sim.applicantAuthors[indexPath.row].getTopics() {
-                applicantCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+                applicantCell.topicList.text?.append(contentsOf: "\(topic.name)\n");
             }
             
             applicantCell.onButtonTapped = {

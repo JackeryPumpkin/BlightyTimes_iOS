@@ -1943,29 +1943,57 @@
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C6w-NJ-7hh">
                                                 <rect key="frame" x="503.5" y="391.5" width="149.5" height="65.5"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="E0w-F8-Q8j">
-                                                        <rect key="frame" x="30" y="14.5" width="90" height="36.5"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="E0w-F8-Q8j">
+                                                        <rect key="frame" x="50.5" y="5" width="89" height="34.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Article Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b71-Xa-o6C">
-                                                                <rect key="frame" x="0.0" y="0.0" width="90" height="20.5"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="89" height="18"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fancy Author" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Te5-KR-a7T">
-                                                                <rect key="frame" x="7.5" y="22.5" width="75" height="14"/>
-                                                                <fontDescription key="fontDescription" name="Baskerville-Bold" family="Baskerville" pointSize="12"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="9H4-kM-T3M">
+                                                                <rect key="frame" x="38.5" y="20" width="50.5" height="14.5"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quality" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aov-fX-TlZ">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="14.5"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXi-kM-n9l">
+                                                                        <rect key="frame" x="42" y="0.0" width="8.5" height="14.5"/>
+                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
                                                         </subviews>
                                                     </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fancy Author" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Te5-KR-a7T">
+                                                        <rect key="frame" x="77" y="48.5" width="62.5" height="12"/>
+                                                        <fontDescription key="fontDescription" name="Baskerville-Bold" family="Baskerville" pointSize="10"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d5K-5u-EJK">
+                                                        <rect key="frame" x="10" y="5" width="55.5" height="55.5"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="d5K-5u-EJK" secondAttribute="height" multiplier="1:1" id="FU3-WW-duH"/>
+                                                        </constraints>
+                                                    </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" red="0.20392156859999999" green="0.47450980390000003" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
-                                                    <constraint firstItem="E0w-F8-Q8j" firstAttribute="centerY" secondItem="C6w-NJ-7hh" secondAttribute="centerY" id="mzq-6q-l4P"/>
-                                                    <constraint firstItem="E0w-F8-Q8j" firstAttribute="centerX" secondItem="C6w-NJ-7hh" secondAttribute="centerX" id="sNN-Wb-9D0"/>
+                                                    <constraint firstAttribute="bottom" secondItem="d5K-5u-EJK" secondAttribute="bottom" constant="5" id="7fQ-Nj-JxE"/>
+                                                    <constraint firstItem="d5K-5u-EJK" firstAttribute="top" secondItem="C6w-NJ-7hh" secondAttribute="top" constant="5" id="MMN-5F-Ql0"/>
+                                                    <constraint firstItem="d5K-5u-EJK" firstAttribute="leading" secondItem="C6w-NJ-7hh" secondAttribute="leading" constant="10" id="P3c-Xg-bDF"/>
+                                                    <constraint firstAttribute="trailing" secondItem="E0w-F8-Q8j" secondAttribute="trailing" constant="10" id="QWx-VJ-HOT"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Te5-KR-a7T" secondAttribute="bottom" constant="5" id="eeS-Cw-Dhj"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Te5-KR-a7T" secondAttribute="trailing" constant="10" id="ltk-dk-z5Z"/>
+                                                    <constraint firstItem="E0w-F8-Q8j" firstAttribute="top" secondItem="C6w-NJ-7hh" secondAttribute="top" constant="5" id="yXX-W7-pvk"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -2183,6 +2211,8 @@
                         <outlet property="journalistsButton" destination="yIP-dE-Zmr" id="kcw-rc-Xpi"/>
                         <outlet property="moraleModifierLabel" destination="C2Y-jQ-RDf" id="EOR-Qi-8lf"/>
                         <outlet property="movingTileAuthor" destination="Te5-KR-a7T" id="PDd-bB-BbL"/>
+                        <outlet property="movingTileImage" destination="d5K-5u-EJK" id="VS6-eR-iqd"/>
+                        <outlet property="movingTileQuality" destination="cXi-kM-n9l" id="n4U-bq-TyY"/>
                         <outlet property="movingTileReferenceView" destination="C6w-NJ-7hh" id="dgP-iT-Bkw"/>
                         <outlet property="movingTileTitle" destination="b71-Xa-o6C" id="P6t-aB-rT5"/>
                         <outlet property="newSubscribers" destination="0hj-K6-4fp" id="yei-go-soV"/>

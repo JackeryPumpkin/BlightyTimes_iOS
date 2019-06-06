@@ -196,8 +196,7 @@ class Region {
     
     private func approves(of article: Article) -> Bool {
         for t in _releventTopics {
-            if t.getApproval() == article.getTopic().getApproval() &&
-                t.getName() == article.getTopic().getName() {
+            if t.name == article.getTopic().name {
                 return true
             }
         }
