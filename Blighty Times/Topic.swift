@@ -24,10 +24,10 @@ class Topic {
 
 class TopicLibrary {
     static let list: [Topic] = [
-        Topic(name: "Conservatism", color: #colorLiteral(red: 0.9279299378, green: 0.2826544046, blue: 0.3732864261, alpha: 1), image: #imageLiteral(resourceName: "LizzyFrankly")),
-        Topic(name: "Liberalism", color: #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1), image: #imageLiteral(resourceName: "JackieWesterpile")),
-        Topic(name: "Children", color: #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), image: #imageLiteral(resourceName: "NicholeTremble")),
-        Topic(name: "Violence", color: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), image: #imageLiteral(resourceName: "RichardFeak")),
+        Topic(name: "Conservatism", color: #colorLiteral(red: 0.9294117647, green: 0.2823529412, blue: 0.3725490196, alpha: 1), image: #imageLiteral(resourceName: "Conservatism")),
+        Topic(name: "Liberalism", color: #colorLiteral(red: 0.392133534, green: 0.3922289014, blue: 1, alpha: 1), image: #imageLiteral(resourceName: "Liberalism")),
+        Topic(name: "Children", color: #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1), image: #imageLiteral(resourceName: "Children")),
+        Topic(name: "Violence", color: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), image: #imageLiteral(resourceName: "Violence")),
         Topic(name: "Education", color: #colorLiteral(red: 0.3254901961, green: 0.8470588235, blue: 0.6901960784, alpha: 1), image: #imageLiteral(resourceName: "Education")),
         Topic(name: "Theatre", color: #colorLiteral(red: 0.768627451, green: 0.5490196078, blue: 0.4235294118, alpha: 1), image: #imageLiteral(resourceName: "Theatre")),
         Topic(name: "Literature", color: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1), image: #imageLiteral(resourceName: "Literature")),
