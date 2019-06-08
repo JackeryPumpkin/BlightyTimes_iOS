@@ -172,19 +172,6 @@ class Author {
     
     func getRateSymbol() -> String {
         return statString(from: Author.ARTICLE_RATE_MIN, with: _articleRate, to: Author.ARTICLE_RATE_MAX)
-//        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
-//
-//        if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
-//            return "Very Slow";
-//        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
-//            return "Slow";
-//        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
-//            return "Fast";
-//        } else if _articleRate < Author.ARTICLE_RATE_MAX {
-//            return "Very Fast";
-//        } else {
-//            return "Maximum"
-//        }
     }
     
     func getTopics() -> [Topic] {
@@ -215,18 +202,6 @@ class Author {
     
     func getMoraleSymbol() -> String {
         return statString(from: 0, with: _morale, to: 1000)
-//        if _morale == 0 {
-//            return ""
-//        } else {
-//            var moraleText = "|"
-//
-//            for i in 1 ..< _morale / 100 {
-//                moraleText += "|"
-//                if i == 9 { break }
-//            }
-//
-//            return moraleText
-//        }
     }
     
     func getMoraleColor() -> UIColor {
@@ -239,37 +214,19 @@ class Author {
     
     private func statString(from min: Int, with actual:Int, to max: Int) -> String {
         return statString(from: Double(min), with: Double(actual), to: Double(max))
-//        if max == 0 ||
-//           min > max ||
-//           actual <= min { return "" }
-//
-//        var statString = "|"
-//        let difference = max - min
-//        let increment = Double(difference) / 10
-//
-//        for i in 1 ..< 10 {
-//            if Double(actual) >= Double(min) + increment * Double(i) {
-//                statString += "|"
-//            } else {
-//                break
-//            }
-//        }
-//
-//        return statString
     }
     
     private func statString(from min: Double, with actual: Double, to max: Double) -> String {
-//        return statString(from: Int(min), with: Int(actual), to: Int(max))
-        if max == 0 ||
-            min > max ||
-            actual <= min { return "" }
+        if max == 0  ||
+           min > max ||
+           actual < min { return "" }
         
         var statString = "|"
         let difference = max - min
         let increment = difference / 10
         
         for i in 1 ..< 10 {
-            if actual >= min + increment * Double(i) {
+            if actual > min + increment * Double(i) {
                 statString += "|"
             } else {
                 break
