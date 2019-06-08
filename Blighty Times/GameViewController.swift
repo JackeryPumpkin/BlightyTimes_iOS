@@ -738,17 +738,17 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
             employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
             employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
-            employedCell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
+            employedCell.publications.text = sim.employedAuthors[indexPath.row].getQualitySymbol()
             employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary() * 365).dollarFormat();
+            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary()/* * 365*/).dollarFormat();
             employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
             employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
             employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
             employedCell.showSkillButtons();
             
-            employedCell.topicList.text = "";
+            employedCell.clearTopicImages()
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                employedCell.topicList.text?.append(contentsOf: "\(topic.name)\n");
+                employedCell.setTopicImage(topic.image)
             }
             
             if employedCell.overlayView.isHidden {

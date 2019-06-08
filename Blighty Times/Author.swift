@@ -152,6 +152,10 @@ class Author {
         _quality += 1;
     }
     
+    func getQualitySymbol() -> String {
+        return statString(from: 1, with: _quality, to: 10)
+    }
+    
     func getRate() -> Double {
         return _articleRate;
     }
@@ -167,19 +171,20 @@ class Author {
     }
     
     func getRateSymbol() -> String {
-        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
-        
-        if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
-            return "Very Slow";
-        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
-            return "Slow";
-        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
-            return "Fast";
-        } else if _articleRate < Author.ARTICLE_RATE_MAX {
-            return "Very Fast";
-        } else {
-            return "Maximum"
-        }
+        return statString(from: Author.ARTICLE_RATE_MIN, with: _articleRate, to: Author.ARTICLE_RATE_MAX)
+//        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
+//
+//        if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
+//            return "Very Slow";
+//        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
+//            return "Slow";
+//        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
+//            return "Fast";
+//        } else if _articleRate < Author.ARTICLE_RATE_MAX {
+//            return "Very Fast";
+//        } else {
+//            return "Maximum"
+//        }
     }
     
     func getTopics() -> [Topic] {
@@ -209,31 +214,79 @@ class Author {
     }
     
     func getMoraleSymbol() -> String {
-        if _paycheckCooldown > 0 {
-            return "$";
-        } else if _promotionCooldown > 0 {
-            return "♔";
-        } else {
-            if _morale < 80 {
-                return "☠︎";
-            } else if _morale <= 200 {
-                return "☹︎-";
-            } else if _morale <= 300 {
-                return "☹︎";
-            } else if _morale <= 500 {
-                return "☺︎";
-            } else if _morale <= 600 {
-                return "☺︎+";
-            } else if _morale <= 800 {
-                return "☺︎++";
-            } else {
-                return "✪";
-            }
-        }
+        return statString(from: 0, with: _morale, to: 1000)
+//        if _morale == 0 {
+//            return ""
+//        } else {
+//            var moraleText = "|"
+//
+//            for i in 1 ..< _morale / 100 {
+//                moraleText += "|"
+//                if i == 9 { break }
+//            }
+//
+//            return moraleText
+//        }
     }
     
     func getMoraleColor() -> UIColor {
-        return _morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1);
+        if _promotionCooldown > 0 || _paycheckCooldown > 0 {
+            return statColor(from: 0, with: 1, to: 1)
+        } else {
+            return statColor(from: 200, with: _morale, to: 1000)
+        }
+    }
+    
+    private func statString(from min: Int, with actual:Int, to max: Int) -> String {
+        return statString(from: Double(min), with: Double(actual), to: Double(max))
+//        if max == 0 ||
+//           min > max ||
+//           actual <= min { return "" }
+//
+//        var statString = "|"
+//        let difference = max - min
+//        let increment = Double(difference) / 10
+//
+//        for i in 1 ..< 10 {
+//            if Double(actual) >= Double(min) + increment * Double(i) {
+//                statString += "|"
+//            } else {
+//                break
+//            }
+//        }
+//
+//        return statString
+    }
+    
+    private func statString(from min: Double, with actual: Double, to max: Double) -> String {
+//        return statString(from: Int(min), with: Int(actual), to: Int(max))
+        if max == 0 ||
+            min > max ||
+            actual <= min { return "" }
+        
+        var statString = "|"
+        let difference = max - min
+        let increment = difference / 10
+        
+        for i in 1 ..< 10 {
+            if actual >= min + increment * Double(i) {
+                statString += "|"
+            } else {
+                break
+            }
+        }
+        
+        return statString
+    }
+    
+    private func statColor(from low: Int, with actual:Int, to high: Int) -> UIColor {
+        if actual >= high {
+            return #colorLiteral(red: 0.3169804215, green: 0.9253683686, blue: 0, alpha: 1)
+        } else if actual <= low {
+            return #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1)
+        } else {
+            return  #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1)
+        }
     }
     
     private func reduceMorale(_ moraleModifier: Double) {
