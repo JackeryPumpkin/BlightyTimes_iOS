@@ -38,6 +38,7 @@ import UIKit
             if backgroundColor != nil {
                 if isHighlighted {
                     backgroundColor! = color - 0.15
+                    layoutIfNeeded()
                 } else {
                     backgroundColor! = color
                 }
