@@ -160,6 +160,22 @@ class Author {
         return _articleRate;
     }
     
+    func getRateOutOfTen() -> Int {
+        var rate = 1
+        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN
+        let increment = difference / 10
+        
+        for i in 1 ..< 10 {
+            if _articleRate > Author.ARTICLE_RATE_MIN + increment * Double(i) {
+                rate += 1
+            } else {
+                break
+            }
+        }
+        
+        return rate
+    }
+    
     func hasMaxRate() -> Bool {
         return _articleRate == Author.ARTICLE_RATE_MAX
     }

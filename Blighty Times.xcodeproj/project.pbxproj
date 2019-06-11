@@ -28,6 +28,7 @@
 		C31531132159485C0054684F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31531122159485C0054684F /* Utilities.swift */; };
 		C317831821ADC78700347CB9 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C317831721ADC78700347CB9 /* StateMachine.swift */; };
 		C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31530F1215846D50054684F /* Assets.xcassets */; };
+		C334A65522AF1D2F00988837 /* DoubleExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334A65422AF1D2F00988837 /* DoubleExt.swift */; };
 		C3647846228CE50000E8C50A /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3647845228CE50000E8C50A /* MainMenu.swift */; };
 		C36478492290435200E8C50A /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478482290435200E8C50A /* UIColorExt.swift */; };
 		C364784B22908EB400E8C50A /* BaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364784A22908EB400E8C50A /* BaseButton.swift */; };
@@ -74,6 +75,7 @@
 		C3153110215916040054684F /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		C31531122159485C0054684F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C317831721ADC78700347CB9 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
+		C334A65422AF1D2F00988837 /* DoubleExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExt.swift; sourceTree = "<group>"; };
 		C3647845228CE50000E8C50A /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		C36478482290435200E8C50A /* UIColorExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
 		C364784A22908EB400E8C50A /* BaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseButton.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				C31531122159485C0054684F /* Utilities.swift */,
 				C36478692293842A00E8C50A /* IntExt.swift */,
+				C334A65422AF1D2F00988837 /* DoubleExt.swift */,
 				C36478482290435200E8C50A /* UIColorExt.swift */,
 				C364785022908F9000E8C50A /* UIViewExt.swift */,
 				C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */,
@@ -338,6 +341,7 @@
 				C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */,
 				C364785C22910C6700E8C50A /* MenuButton.swift in Sources */,
 				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
+				C334A65522AF1D2F00988837 /* DoubleExt.swift in Sources */,
 				C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */,
 				C311786A228A536100083BE1 /* InGameMenu.swift in Sources */,
 				C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */,

@@ -783,7 +783,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 applicantCell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait()
                 applicantCell.authorName.text = sim.applicantAuthors[indexPath.row].getName()
                 applicantCell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())"
-                applicantCell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol()
+                applicantCell.speed.text = "\(sim.applicantAuthors[indexPath.row].getRateOutOfTen())"
                 
 //                for topic in sim.applicantAuthors[indexPath.row].getTopics() {
 //                    applicantCell.topicList.text?.append(contentsOf: "\(topic.name)\n")
@@ -815,9 +815,10 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView == employedAuthorsTable {
             if section == 0 {
                 headerLabel.text = " Journalists"
+                
             } else if section == 1 {
-                headerLabel.text = " "
-                headerView.backgroundColor = .clear
+                headerLabel.text = " Applicants"
+//                headerView.backgroundColor = .clear
             }
             
         } else if tableView == eventsTable {
@@ -831,6 +832,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView == employedAuthorsTable {
             if section == 0 {
                 return 60
+                
             } else if section == 1 {
                 return 0
             }
@@ -843,6 +845,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView == employedAuthorsTable {
             if indexPath.section == 0 {
                 return 100
+                
             } else if indexPath.section == 1 {
                 return 45
             }
