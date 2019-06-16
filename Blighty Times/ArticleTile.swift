@@ -44,6 +44,7 @@ class ArticleTile: UIView {
         self.article = ArticleLibrary.blank;
         articleTitle.text = "";
         authorName.text = "";
+        quality.text = ""
         image.image = UIImage()
         self.backgroundColor = .clear;
         self.isUserInteractionEnabled = false;

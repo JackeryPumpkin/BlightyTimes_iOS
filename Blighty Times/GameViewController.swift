@@ -79,6 +79,15 @@ class GameViewController: UIViewController, StateObject {
     var NE_movingTileIndex: Int?;
     var lastknownTileLocation: CGPoint?;
     
+    @IBOutlet weak var applicantAuthorView: UIView!
+    @IBOutlet weak var applicantAuthorPortrait: UIImageView!
+    @IBOutlet weak var applicantAuthorName: UILabel!
+    @IBOutlet weak var applicantAuthorQualityMeter: UILabel!
+    @IBOutlet weak var applicantAuthorSpeedMeter: UILabel!
+    @IBOutlet var applicantAuthorTopics: [UIImageView]!
+    @IBOutlet weak var applicantAuthorHireButton: RedButton!
+    @IBOutlet weak var applicantAuthorViewConstraint: NSLayoutConstraint!
+    
     //Game Properties
     var sim = Simulation();
     private var gameTimer: Timer!;
@@ -107,6 +116,26 @@ class GameViewController: UIViewController, StateObject {
         if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count {
             noEventsSymbol.isHidden = sim.eventList.count == 0 ? false : true;
             eventsTable.reloadSections(IndexSet(integersIn: 0...0), with: .fade);
+        }
+        
+        if let applicant = sim.applicantAuthors.first {
+            applicantAuthorPortrait.image = applicant.getPortrait()
+            applicantAuthorName.text = applicant.getName()
+            applicantAuthorQualityMeter.text = applicant.getQualitySymbol()
+            applicantAuthorSpeedMeter.text = applicant.getRateSymbol()
+            
+            for i in 0 ... 2 {
+                if i < applicant.getTopics().count {
+                    applicantAuthorTopics[i].image = applicant.getTopics()[i].image
+                    applicantAuthorTopics[i].isHidden = false
+                } else {
+                    applicantAuthorTopics[i].isHidden = true
+                }
+            }
+            
+            showApplicantAlert()
+        } else {
+            hideApplicantAlert()
         }
         
         dayOfTheWeek.text = sim.getDayOfTheWeek();
@@ -193,6 +222,30 @@ class GameViewController: UIViewController, StateObject {
                 movingTileQuality.text = "\(NE_articleTiles.object(at: i)!.article.getQuality())"
                 movingTileImage.image = NE_articleTiles.object(at: i)!.article.getTopic().image
                 movingTileReferenceView.backgroundColor = NE_articleTiles.object(at: i)!.article.getTopic().articleColor
+            }
+        }
+    }
+    
+    func showApplicantAlert() {
+        if applicantAuthorViewConstraint.constant == -45 {
+            applicantAuthorViewConstraint.constant = 10
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 1
+                self.view.layoutIfNeeded()
+            }) { (completed) in
+                
+            }
+        }
+    }
+    
+    func hideApplicantAlert() {
+        if applicantAuthorViewConstraint.constant == 10 {
+            applicantAuthorViewConstraint.constant = -45
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (completed) in
+                
             }
         }
     }
@@ -316,13 +369,19 @@ class GameViewController: UIViewController, StateObject {
         movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199))
         officeTabButton.isInUse = false
         
-//        for node in NE_viewPositions {
-//            node.addBorders(width: 3.0, color: UIColor.black.cgColor);
-//        }
+        applicantAuthorView.roundCorners(withIntensity: .full)
+        applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.1359404378, green: 0.1359404378, blue: 0.3137254902, alpha: 1).cgColor)
+        applicantAuthorView.addShadow(radius: 10, height: 3)
+        applicantAuthorView.alpha = 0
+        applicantAuthorViewConstraint.constant = -45
+        applicantAuthorHireButton.roundCorners(withIntensity: .full)
+        applicantAuthorPortrait.roundCorners(withIntensity: .full)
         
         setRegionTopics()
         updateDataPanelsDaily()
         updateOfficeTab()
+        
+        view.layoutIfNeeded()
     }
     
     func updateOfficeTab() {
@@ -636,6 +695,42 @@ class GameViewController: UIViewController, StateObject {
             }
         }
     }
+    
+    @IBAction func hireApplicant(_ sender: Any) {
+        if state is PlayState {
+            stateMachine.handle(input: .pause)
+            applicantAuthorViewConstraint.constant = 50
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (finished) in
+                if let applicant = self.sim.applicantAuthors.first {
+                    self.sim.hire(applicant)
+                }
+                self.applicantAuthorViewConstraint.constant = -45
+                self.view.layoutIfNeeded()
+                
+                self.stateMachine.handle(input: .play)
+            }
+        }
+    }
+    
+    @IBAction func rejectApplicant(_ sender: Any) {
+        if state is PlayState {
+            stateMachine.handle(input: .pause)
+            applicantAuthorViewConstraint.constant = -45
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (finished) in
+                if self.sim.applicantAuthors.count > 0 {
+                    self.sim.withdraw(applicantAt: 0)
+                }
+                self.stateMachine.handle(input: .play)
+            }
+        }
+    }
 }
 
 
@@ -650,25 +745,9 @@ class GameViewController: UIViewController, StateObject {
 ///////////////////        Table Methods        ///////////////////////
 ///////////////////////////////////////////////////////////////////////
 extension GameViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if tableView == employedAuthorsTable {
-            return sim.applicantAuthors.count > 0 ? 2 : 1
-            
-        } else if tableView == eventsTable {
-            return 1
-        }
-        
-        return 0
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == employedAuthorsTable {
-            if section == 0 {
-                return sim.employedAuthors.count
-                
-            } else if section == 1 {
-                return sim.applicantAuthors.count
-            }
+            return sim.employedAuthors.count
         } else if tableView == eventsTable {
             return sim.eventList.count
         }
@@ -678,18 +757,10 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == employedAuthorsTable {
-            if indexPath.section == 0 {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-                    fatalError("Employed Author cell downcasting didn't work")
-                }
-                return cell
-                
-            } else if indexPath.section == 1 {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "applicantAuthorCell", for: indexPath) as? ApplicantAuthorCell else {
-                    fatalError("Applicant Author cell downcasting didn't work")
-                }
-                return cell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+                fatalError("Employed Author cell downcasting didn't work")
             }
+            return cell
         } else if tableView == eventsTable {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
                 fatalError("Event cell downcasting didn't work");
@@ -702,97 +773,76 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
-            if indexPath.section == 0 {
-                guard let employedCell = cell as? EmployedAuthorCell else { return }
-                
-                employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait()
-                employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName()
-                employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())"
-                employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol()
-                employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor()
-                employedCell.publications.text = sim.employedAuthors[indexPath.row].getQualitySymbol()
-                employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol()
-                employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary()/* * 365*/).dollarFormat()
-                employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress())
-                employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat()
-                employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
-                employedCell.showSkillButtons()
-                
-                employedCell.clearTopicImages()
-                for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                    employedCell.setTopicImage(topic.image)
-                }
-                
-                if employedCell.overlayView.isHidden {
-                    if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
-                        employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
-                        employedCell.overlayButton.setTitle("↑", for: .normal)
-                        employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
-                    } else {
-                        employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
-                        employedCell.overlayButton.setTitle("⚙︎", for: .normal)
-                        employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
-                    }
-                } else {
-                    if sim.employedAuthors[indexPath.row].hasMaxRate() {
-                        employedCell.speedButton.isEnabled = false
-                    }
-                }
-                
-                employedCell.toggleOverlay = {
-                    //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
-                    if self.lastSelectedIndexPath.row != indexPath.row
-                    && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
-                        //Returns nil when referenced while scrolled out of sight
-                        guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return }
-                        pCell.hideOverlay()
-                    }
-                    
-                    self.lastSelectedIndexPath = indexPath;
-                }
+            guard let employedCell = cell as? EmployedAuthorCell else { return }
             
-                employedCell.fire = {
-                    if self.state is PlayState {
-                        self.sim.fire(authorAt: indexPath.row)
-                        employedCell.hideOverlay()
-                        self.lastSelectedIndexPath.row = 0
-                        tableView.reloadData()
-                    }
+            employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait()
+            employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName()
+            employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())"
+            employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol()
+            employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor()
+            employedCell.publications.text = sim.employedAuthors[indexPath.row].getQualitySymbol()
+            employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol()
+            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary()/* * 365*/).dollarFormat()
+            employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress())
+            employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat()
+            employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+            employedCell.showSkillButtons()
+            
+            employedCell.clearTopicImages()
+            for topic in sim.employedAuthors[indexPath.row].getTopics() {
+                employedCell.setTopicImage(topic.image)
+            }
+            
+            if employedCell.overlayView.isHidden {
+                if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
+                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitle("↑", for: .normal)
+                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
+                } else {
+                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
+                    employedCell.overlayButton.setTitle("⚙︎", for: .normal)
+                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
+                }
+            } else {
+                if sim.employedAuthors[indexPath.row].hasMaxRate() {
+                    employedCell.speedButton.isEnabled = false
+                }
+            }
+            
+            employedCell.toggleOverlay = {
+                //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
+                if self.lastSelectedIndexPath.row != indexPath.row
+                && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
+                    //Returns nil when referenced while scrolled out of sight
+                    guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return }
+                    pCell.hideOverlay()
                 }
                 
-                employedCell.promoteQuality = {
-                    if self.state is PlayState {
-                        self.sim.employedAuthors[indexPath.row].promoteQuality()
-                        employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
-                        employedCell.showSkillButtons()
-                    }
-                }
-                
-                employedCell.promoteSpeed = {
-                    if self.state is PlayState {
-                        self.sim.employedAuthors[indexPath.row].promoteSpeed()
-                        employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
-                        employedCell.showSkillButtons()
-                    }
-                }
-                
-                
-            } else if indexPath.section == 1 {
-                guard let applicantCell = cell as? ApplicantAuthorCell else { return }
-                
-                applicantCell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait()
-                applicantCell.authorName.text = sim.applicantAuthors[indexPath.row].getName()
-                applicantCell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())"
-                applicantCell.speed.text = "\(sim.applicantAuthors[indexPath.row].getRateOutOfTen())"
-                
-//                for topic in sim.applicantAuthors[indexPath.row].getTopics() {
-//                    applicantCell.topicList.text?.append(contentsOf: "\(topic.name)\n")
-//                }
-                
-                applicantCell.onButtonTapped = {
-                    self.sim.hire(self.sim.applicantAuthors[indexPath.row])
+                self.lastSelectedIndexPath = indexPath;
+            }
+        
+            employedCell.fire = {
+                if self.state is PlayState {
+                    self.sim.fire(authorAt: indexPath.row)
+                    employedCell.hideOverlay()
+                    self.lastSelectedIndexPath.row = 0
                     tableView.reloadData()
-                    self.hiredAuthors.text = "\(self.sim.employedAuthors.count) / \(self.sim.office.capacity)"
+                }
+            }
+            
+            employedCell.promoteQuality = {
+                if self.state is PlayState {
+                    self.sim.employedAuthors[indexPath.row].promoteQuality()
+                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedCell.showSkillButtons()
+                }
+            }
+            
+            employedCell.promoteSpeed = {
+                if self.state is PlayState {
+                    self.sim.employedAuthors[indexPath.row].promoteSpeed()
+                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedCell.showSkillButtons()
                 }
             }
         } else if tableView == eventsTable {
@@ -804,53 +854,29 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
-        let headerLabel = UILabel(frame: CGRect(x: 20, y: 0, width: tableView.frame.width, height: 60))
-        
-        headerView.addSubview(headerLabel)
-        headerView.backgroundColor = .white
-        headerLabel.font = UIFont.init(name: "Baskerville-SemiboldItalic", size: 27)
-        
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == employedAuthorsTable {
-            if section == 0 {
-                headerLabel.text = " Journalists"
-                
-            } else if section == 1 {
-                headerLabel.text = " Applicants"
-//                headerView.backgroundColor = .clear
-            }
-            
+            return 100
         } else if tableView == eventsTable {
-            return nil
-        }
-        
-        return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView == employedAuthorsTable {
-            if section == 0 {
-                return 60
-                
-            } else if section == 1 {
-                return 0
-            }
+            return 31
         }
         
         return 0
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if tableView == employedAuthorsTable {
-            if indexPath.section == 0 {
-                return 100
-                
-            } else if indexPath.section == 1 {
-                return 45
-            }
-        } else if tableView == eventsTable {
-            return 31
+            let footer = UIView()
+            footer.backgroundColor = .clear
+            return footer
+        }
+        
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if tableView == employedAuthorsTable {
+            return 55
         }
         
         return 0

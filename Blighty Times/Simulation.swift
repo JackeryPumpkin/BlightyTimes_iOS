@@ -124,7 +124,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnApplicant()
-        spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
             newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
@@ -140,8 +139,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnStartingAuthor()
-        spawnApplicant()
-        spawnApplicant()
         spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
@@ -160,9 +157,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnStartingAuthor()
-        spawnApplicant()
-        spawnApplicant()
-        spawnApplicant()
         spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
@@ -380,6 +374,10 @@ class Simulation {
         add(CompanyEvent(message: "You fired " + _employedAuthors[index].getName() + "."));
         employeeLeaves(index);
         _employeesFiredThisWeek += 1;
+        
+        for author in employedAuthors {
+            author.companyFiringMoraleReduction()
+        }
     }
     
     func quit(authorAt index: Int) {
@@ -415,9 +413,11 @@ class Simulation {
     
     ///Checks 10 times per day if there should be a new applicant
     func chanceToSpawnApplicant() {
-        if _ticksElapsed % (Simulation.TICKS_PER_DAY / 10) == 0 {
-            if Random(int: 1 ... 5) == 5 {
-                spawnApplicant();
+        if applicantAuthors.count == 0 {
+            if _ticksElapsed % (Simulation.TICKS_PER_DAY / 10) == 0 {
+                if Random(int: 1 ... 5) == 5 {
+                    spawnApplicant()
+                }
             }
         }
     }
