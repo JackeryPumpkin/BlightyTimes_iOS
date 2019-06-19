@@ -245,25 +245,48 @@ class Simulation {
         //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed, moraleModifier: _office.moraleModifier);
+            let event: Event
             
-            //This chunk checks for various author
-            if _employedAuthors[i].hasInfrequentPublished {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is annoyed that their articles aren't published."));
-                _employedAuthors[i].hasInfrequentPublished = false;
-            }
-            if _employedAuthors[i].hasPromotionAnxiety {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is upset that they haven't been promoted."));
-                _employedAuthors[i].hasPromotionAnxiety = false;
-            }
-            if _employedAuthors[i].hasPendingPromotion {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is up for a promotion."));
-                _employedAuthors[i].hasPendingPromotion = false;
-            }
+            //This chunk checks for various author events
             if _employedAuthors[i].hasCriticalMorale {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + "'s morale is getting very low."));
+                event = EmployeeEvent(title: "Low Morale",
+                                      message: _employedAuthors[i].getName() + "'s morale is getting critically low.",
+                                      color: Event.veryBadColor,
+                                      image: _employedAuthors[i].getPortrait())
+                add(event)
                 _employedAuthors[i].hasCriticalMorale = false;
             }
+            else if _employedAuthors[i].hasInfrequentPublished {
+                event = EmployeeEvent(title: "Feeling Aimless",
+                                      message: _employedAuthors[i].getName() + " is annoyed that their articles haven't been published recently.",
+                                      color: Event.badColor,
+                                      image: _employedAuthors[i].getPortrait())
+                add(event)
+                _employedAuthors[i].hasInfrequentPublished = false;
+            }
+            else if _employedAuthors[i].hasPromotionAnxiety {
+                event = EmployeeEvent(title: "Feeling Underappreciated",
+                                      message: _employedAuthors[i].getName() + " is upset that they haven't gotten a promotion for their hard work.",
+                                      color: Event.badColor,
+                                      image: _employedAuthors[i].getPortrait())
+                add(event)
+                _employedAuthors[i].hasPromotionAnxiety = false;
+            }
+            else if _employedAuthors[i].hasPendingPromotion {
+                event = EmployeeEvent(title: "Level Up!",
+                                      message: _employedAuthors[i].getName() + " has been grinding long hours and is now up for a promotion.",
+                                      color: Event.goodColor,
+                                      image: _employedAuthors[i].getPortrait())
+                add(event)
+                _employedAuthors[i].hasPendingPromotion = false;
+            }
             
+//            if !(eventList.contains { (event) -> Bool in return event.message.contains(_employedAuthors[i].getName()) }) {
+//                if event.message != "" {
+//                    print("Adding event ID: \(event.id)")
+//                    add(event)
+//                }
+//            }
             
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
@@ -358,7 +381,7 @@ class Simulation {
             }
             
             _employeesHiredThisWeek += 1;
-            add(CompanyEvent(message: "You hired " + author.getName() + "."));
+//            add(CompanyEvent(message: "You hired " + author.getName() + "."));
         } else {
             for event in eventList {
                 if event is OfficeEvent {
@@ -366,12 +389,21 @@ class Simulation {
                 }
             }
                 
-            add(OfficeEvent(message: "Cannot hire anyone right now. Your office is too full!"))
+            add(OfficeEvent(title: "Not Enough Room", message: "You cannot hire anyone right now. Your office is too full!", color: Event.badColor, image: _office.image))
         }
     }
     
+    func fireEvent(forAuthorAt index: Int) {
+        let name = _employedAuthors[index].getName()
+        add(FiringEvent(title: "Fire " + name + "?",
+                        message: "Firing " + name + " will lower the morale of the rest of the office",
+                        color: Event.veryBadColor,
+                        image: _employedAuthors[index].getPortrait()) {
+            self.fire(authorAt: index)
+        })
+    }
+    
     func fire(authorAt index: Int) {
-        add(CompanyEvent(message: "You fired " + _employedAuthors[index].getName() + "."));
         employeeLeaves(index);
         _employeesFiredThisWeek += 1;
         
@@ -381,8 +413,13 @@ class Simulation {
     }
     
     func quit(authorAt index: Int) {
-        add(EmployeeEvent(message: _employedAuthors[index].getName() + " has left the company in disgust."));
-        employeeLeaves(index);
+        let name = _employedAuthors[index].getName()
+        add(EmployeeEvent(title: name + " Quit!",
+                          message: name + " has left the company in disgust.",
+                          color: Event.veryBadColor,
+                          image: _employedAuthors[index].getPortrait()))
+        
+        employeeLeaves(index)
     }
     
     func employeeLeaves(_ index: Int) {
@@ -399,7 +436,7 @@ class Simulation {
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
         _applicantAuthors.append(Author(exluding: &auths));
-        add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
+        //add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     
     func spawnStartingAuthor() {
@@ -506,8 +543,8 @@ class Simulation {
     }
     
     func getCurrentNewsEventTopic() -> Topic? {
-        if eventList.first.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
-            return (eventList[0] as! NewsEvent).getTopic();
+        if eventList.first is NewsEvent {
+            return (eventList[0] as! NewsEvent).topic
         } else {
             return nil;
         }
@@ -681,7 +718,11 @@ class Simulation {
     //Office methods
     func purchaseOffice(_ size: OfficeSize, starting: Bool = false) -> Bool {
         if !starting && _company.getFunds() < _officeList[size.rawValue].downPayment {
-            add(OfficeEvent(message: "Cannot buy that shiny new office. You're too poor!"))
+            add(OfficeEvent(title: "Insufficient Funds",
+                            message: "Cannot buy that shiny new office. You're too poor!",
+                            color: Event.neutralColor,
+                            image: _officeList[size.rawValue].image))
+            
             return false
         }
         
@@ -690,7 +731,9 @@ class Simulation {
         
         if !starting {
             _company.payOfficeDownPayment(size: size)
-            add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+            add(CompanyEvent(title: "New Digs!",
+                             message: "You moved into a new, larger office! This will give you access to more regions, increasing your potential subscriber base. You will also now be able to hire up to \(_office.capacity) journalists at a time.",
+                             color: Event.goodColor))
         }
         
         for i in 0 ..< _office.size.rawValue {

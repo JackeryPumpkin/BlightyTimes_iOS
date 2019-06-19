@@ -21,7 +21,7 @@ class Author {
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
     private var _daysSinceLastPublication: Int = 0;
-    private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
+    private var _daysEmployed: Int = 0
     private var _morale: Int;
     private var _lastKnownGameDaysElapsed: Int = 0;
     private var _salary: Int { return Int(pow(Double(_quality + 5), 3)) }
@@ -346,7 +346,7 @@ class Author {
             _skillPoints += 1;
             _currentLevel = getSeniorityLevel();
             
-            if _skillPoints > 2 && _promotionAnxiety == 0 {
+            if _skillPoints > 1 && _promotionAnxiety == 0 {
                 hasPromotionAnxiety = true;
             } else if _skillPoints == 1 && _pendingPromotionCooldown == 0 {
                 hasPendingPromotion = true;

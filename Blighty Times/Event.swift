@@ -9,16 +9,28 @@
 import UIKit
 
 class Event {
-    var message: String;
-    let color: UIColor;
-    let symbol: String;
-    var lifetime: Int;
+    let title: String
+    var message: String
+    let color: UIColor
+    let image: UIImage
+    var lifetime: Int
+    var hasBeenShown: Bool = false
+    var okayAction: (()->Void)?
+    //let id: Int
     
-    init(message: String, color: UIColor, symbol: String, lifetime: Int) {
-        self.message = message;
-        self.color = color;
-        self.symbol = symbol;
-        self.lifetime = lifetime;
+    static let badColor: UIColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
+    static let veryBadColor: UIColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+    static let goodColor: UIColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+    static let neutralColor: UIColor = #colorLiteral(red: 0.8451363548, green: 0.8862745166, blue: 0.8128135135, alpha: 1)
+    
+    init(title: String, message: String, color: UIColor, image: UIImage, lifetime: Int) {
+        self.title = title
+        self.message = message
+        self.color = color
+        self.image = image
+        self.lifetime = lifetime
+        
+        //id = Int.random(in: 1 ... 10000)
     }
     
     final func tick() {
@@ -28,50 +40,42 @@ class Event {
 
 
 class NewsEvent: Event {
-    private let _NEWS_TOPIC: Topic;
+    let topic: Topic
     
     init() {
-        _NEWS_TOPIC = TopicLibrary.getRandomTopics()[0];
-        super.init(message: "", color: _NEWS_TOPIC.color, symbol: "📰", lifetime: 0);
+        topic = TopicLibrary.getRandomTopics()[0]
+        super.init(title: topic.name + " News", message: "", color: topic.color, image: topic.image, lifetime: 0)
         
-        message = message();
-        lifetime = lifetime();
-    }
-    
-    func getTopic() -> Topic {
-        return _NEWS_TOPIC;
+        lifetime = lifetime()
+        message = message()
     }
     
     final private func message() -> String {
-        switch _NEWS_TOPIC.name {
+        let options: [String]
+        
+        switch topic.name {
         case "Conservatism":
-            let options: [String] = [
+            options = [
                 "Conservative politition embroiled in intense scandal.",
                 "Conservative politition being celebrated for recent accomplishment."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Liberalism":
-            let options: [String] = [
+            options = [
                 "Liberal politition embroiled in intense scandal.",
                 "Liberal politition being celebrated for recent accomplishment."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Children":
-            let options: [String] = [
+            options = [
                 "Nuclear \"incident\" near primary school.",
                 "Blighty citizens are being harassed by an growing gang of children.",
                 "Child prodigy starts at new position at NASA.",
                 "Child prodigy plays violin with Tim Minchin in front of 10,000 people."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Violence":
-            let options: [String] = [
+            options = [
                 "Chuck Norris just gave an NRA talk at a local park.",
                 "Martial arts classes are half off city-wide.",
                 "Theft is becoming more and more common in Central Blighty.",
@@ -80,36 +84,28 @@ class NewsEvent: Event {
                 "Everyone is talking about a viral video of two geese fighting over bread."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Education":
-            let options: [String] = [
+            options = [
                 "Standardized test scores are at an all-time low.",
                 "Graduation rate is an all-time high at local schools."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Theatre":
-            let options: [String] = [
+            options = [
                 "Local theatre shutters its door front lack of attendance.",
                 "New satirical musical is a masterpiece, breaking sales records."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Travel":
-            let options: [String] = [
+            options = [
                 "The mayor of Blighty has put a travel ban on all flights to Babylon.",
                 "A wild fire has sprung up preventing commuters traveling to the west.",
                 "An upscale resort in the Caribbean is 50% off to all Blighty residents.",
                 "Blighty's Got Talent is filming its finale in Springfield next week."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Sports":
-            let options: [String] = [
+            options = [
                 "Blighty City Stadium will be hosting an American \"football\" game today.",
                 "Blighty won 2 medals at the Olympics and they were bronze.",
                 "Tickets to the West Blight vs Blighty United game have sold out.",
@@ -117,28 +113,22 @@ class NewsEvent: Event {
                 "Longest cricket match in Blighty history continues into its fifth day."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Film":
-            let options: [String] = [
+            options = [
                 "Stephen Fry is premiering a documentary on ravens and writing desks.",
                 "New film by Quentin Tarantino is sparking an intense dialogue among viewers.",
                 "Fawlty Towers is being made into a Hollywood film staring Tom Cruise.",
                 "Lock, Stock and Three Smoking Barrels script details were leaked online."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Science":
-            let options: [String] = [
+            options = [
                 "Elon Musk showed a personal size rocket car that's powered by time.",
                 "Richard Dawkins to give three live zoology presentations for kids."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Religion":
-            let options: [String] = [
+            options = [
                 "Religious conflict intensifies.",
                 "Local church raises money for medical aid.",
                 "Tis the season. Christmas decorations are going up all over town.",
@@ -146,38 +136,32 @@ class NewsEvent: Event {
                 "People going door singing Festivus songs."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Video Games":
-            let options: [String] = [
+            options = [
                 "Journalist uncovers lengthy \"death march\" practice at local video game studio.",
                 "Yet again violence in video games is at the fore of the public's conversation.",
                 "New mobile game topping the charts."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Technology":
-            let options: [String] = [
+            options = [
                 "Fancy gizmos are being invented around the world."
             ]
             
-            return options[Random(index: options.count)];
-            
         case "Music":
-            let options: [String] = [
+            options = [
                 "Groovy tunes are making the world's booty shake."
             ]
-            
-            return options[Random(index: options.count)];
             
         default:
             return "Ain't nothing going on out there.";
         }
+        
+        return options[Random(index: options.count)]
     }
     
     final private func lifetime() -> Int {
-        switch _NEWS_TOPIC.name {
+        switch topic.name {
         case "Conservatism":
             return Simulation.TICKS_PER_DAY;
         case "Liberalism":
@@ -213,31 +197,32 @@ class NewsEvent: Event {
 }
 
 class EmployeeEvent: Event {
-    init(message: String) {
-        super.init(message: message, color:#colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1), symbol: "👤", lifetime: Simulation.TICKS_PER_DAY / 3);
-    }
-}
-
-class ApplicantEvent: Event {
-    init(message: String) {
-        super.init(message: message, color: #colorLiteral(red: 0.5624527335, green: 0.9134209752, blue: 0.9260821939, alpha: 1), symbol: "📥", lifetime: Simulation.TICKS_PER_DAY / 3);
+    init(title: String, message: String, color: UIColor, image: UIImage) {
+        super.init(title: title, message: message, color: color, image: image, lifetime: Simulation.TICKS_PER_DAY * 2)
     }
 }
 
 class CompanyEvent: Event {
-    init(message: String) {
-        super.init(message: message, color: #colorLiteral(red: 0.9059416652, green: 0.9005564451, blue: 0.910081327, alpha: 1), symbol: "🏛", lifetime: Simulation.TICKS_PER_DAY / 4);
+    init(title: String, message: String, color: UIColor) {
+        super.init(title: title, message: message, color: color, image: UIImage(), lifetime: Simulation.TICKS_PER_DAY)
     }
 }
 
 class OfficeEvent: Event {
-    init(message: String) {
-        super.init(message: message, color: #colorLiteral(red: 0.9059416652, green: 0.9005564451, blue: 0.910081327, alpha: 1), symbol: "🔔", lifetime: Simulation.TICKS_PER_DAY / 8)
+    init(title: String, message: String, color: UIColor, image: UIImage) {
+        super.init(title: title, message: message, color: color, image: image, lifetime: Simulation.TICKS_PER_DAY / 4)
     }
 }
 
 class RegionEvent: Event {
-    init(message: String) {
-        super.init(message: message, color: #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1), symbol: "📢", lifetime: Simulation.TICKS_PER_DAY / 3);
+    init(title: String, message: String, color: UIColor) {
+        super.init(title: title, message: message, color: color, image: UIImage(), lifetime: Simulation.TICKS_PER_DAY / 4)
+    }
+}
+
+class FiringEvent: Event {
+    init(title: String, message: String, color: UIColor, image: UIImage, action: @escaping (()->Void)) {
+        super.init(title: title, message: message, color: color, image: UIImage(), lifetime: Simulation.TICKS_PER_DAY / 4)
+        okayAction = action
     }
 }

@@ -238,7 +238,138 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DJL-uL-UP7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="pza-M6-X2E" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-79" y="-585"/>
+            <point key="canvasLocation" x="-373" y="880"/>
+        </scene>
+        <!--Event Controller-->
+        <scene sceneID="N2u-HQ-UKT">
+            <objects>
+                <viewController id="k9Y-RF-vIy" customClass="EventController" customModule="Blighty_Times" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Qau-gK-6uw">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r66-3e-uqO" userLabel="Background">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <color key="backgroundColor" red="0.2627450980392157" green="0.2627450980392157" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N21-iQ-KGM">
+                                <rect key="frame" x="312" y="109" width="400" height="550"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title=" "/>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a91-Eg-McK" customClass="UIButton">
+                                <rect key="frame" x="312" y="109" width="400" height="550"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z5e-Nc-qD6">
+                                        <rect key="frame" x="100" y="50" width="200" height="200"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="UHn-68-R2k"/>
+                                            <constraint firstAttribute="width" constant="200" id="c9O-dO-jxH"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fancy Event Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CHS-SS-aBp">
+                                        <rect key="frame" x="30" y="280" width="340" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The body of the event view controller will look like this and be formatted thusly. The " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="SFa-LF-eYU">
+                                        <rect key="frame" x="30" y="336" width="340" height="97"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="97" id="eLu-1R-XeH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rZk-ad-F7g">
+                                        <rect key="frame" x="30" y="460" width="340" height="60"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4gm-CS-i7z" customClass="BaseButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="165" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="cmM-LN-Zap"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                                <state key="normal" title="OKAY">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="okay:" destination="k9Y-RF-vIy" eventType="touchUpInside" id="Oq4-CT-mMu"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ugv-fe-yC0" customClass="BaseButton" customModule="Blighty_Times" customModuleProvider="target">
+                                                <rect key="frame" x="175" y="0.0" width="165" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="BIR-Yt-P0p"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
+                                                <state key="normal" title="CANCEL">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="cancel:" destination="k9Y-RF-vIy" eventType="touchUpInside" id="guF-8N-0oj"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="rZk-ad-F7g" secondAttribute="bottom" constant="30" id="3GZ-yN-2sa"/>
+                                    <constraint firstItem="Z5e-Nc-qD6" firstAttribute="top" secondItem="a91-Eg-McK" secondAttribute="top" constant="50" id="5yF-nS-tba"/>
+                                    <constraint firstItem="CHS-SS-aBp" firstAttribute="top" secondItem="Z5e-Nc-qD6" secondAttribute="bottom" constant="30" id="70B-7u-xpV"/>
+                                    <constraint firstItem="rZk-ad-F7g" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="DxI-da-doc"/>
+                                    <constraint firstItem="rZk-ad-F7g" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="K48-E9-NN4"/>
+                                    <constraint firstItem="rZk-ad-F7g" firstAttribute="leading" secondItem="CHS-SS-aBp" secondAttribute="leading" id="Ndd-jk-u6U"/>
+                                    <constraint firstAttribute="width" constant="400" id="Qly-kt-fyz"/>
+                                    <constraint firstItem="CHS-SS-aBp" firstAttribute="leading" secondItem="a91-Eg-McK" secondAttribute="leading" constant="30" id="S5V-Wf-ulV"/>
+                                    <constraint firstAttribute="height" constant="550" id="Wol-Gv-J42"/>
+                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="leading" secondItem="CHS-SS-aBp" secondAttribute="leading" id="Xep-1R-ldF"/>
+                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="top" secondItem="CHS-SS-aBp" secondAttribute="bottom" constant="20" id="c7J-Hw-kAU"/>
+                                    <constraint firstItem="Z5e-Nc-qD6" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="iTg-JR-oud"/>
+                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="nbX-pd-sNw"/>
+                                    <constraint firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" constant="30" id="oPg-VH-6fV"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="r66-3e-uqO" firstAttribute="top" secondItem="Qau-gK-6uw" secondAttribute="top" id="6o7-wW-mhV"/>
+                            <constraint firstItem="a91-Eg-McK" firstAttribute="centerY" secondItem="Qau-gK-6uw" secondAttribute="centerY" id="AQG-H8-fI3"/>
+                            <constraint firstAttribute="bottom" secondItem="r66-3e-uqO" secondAttribute="bottom" id="MFX-Dw-3zY"/>
+                            <constraint firstItem="dkq-ay-AgH" firstAttribute="trailing" secondItem="r66-3e-uqO" secondAttribute="trailing" id="VE7-45-CZY"/>
+                            <constraint firstItem="N21-iQ-KGM" firstAttribute="leading" secondItem="a91-Eg-McK" secondAttribute="leading" id="aUB-hO-8Eh"/>
+                            <constraint firstItem="N21-iQ-KGM" firstAttribute="top" secondItem="a91-Eg-McK" secondAttribute="top" id="b7n-Yx-jsF"/>
+                            <constraint firstItem="N21-iQ-KGM" firstAttribute="bottom" secondItem="a91-Eg-McK" secondAttribute="bottom" id="e52-fa-FC2"/>
+                            <constraint firstItem="N21-iQ-KGM" firstAttribute="trailing" secondItem="a91-Eg-McK" secondAttribute="trailing" id="nHu-Nl-qxu"/>
+                            <constraint firstItem="r66-3e-uqO" firstAttribute="leading" secondItem="dkq-ay-AgH" secondAttribute="leading" id="sUZ-1D-TIh"/>
+                            <constraint firstItem="a91-Eg-McK" firstAttribute="centerX" secondItem="Qau-gK-6uw" secondAttribute="centerX" id="xzM-29-LgA"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="dkq-ay-AgH"/>
+                    </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="ugv-fe-yC0" id="7dr-ox-zSw"/>
+                        <outlet property="container" destination="a91-Eg-McK" id="7mP-kH-ujc"/>
+                        <outlet property="containerCenterY" destination="AQG-H8-fI3" id="gng-z4-xGw"/>
+                        <outlet property="containerShadow" destination="N21-iQ-KGM" id="LLU-u3-d9v"/>
+                        <outlet property="eventDetail" destination="SFa-LF-eYU" id="NrN-nb-E90"/>
+                        <outlet property="eventImage" destination="Z5e-Nc-qD6" id="4Gc-fM-p5b"/>
+                        <outlet property="eventTitle" destination="CHS-SS-aBp" id="w14-tt-6sg"/>
+                        <outlet property="okayButton" destination="4gm-CS-i7z" id="5Kb-ls-6iP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Umd-rS-JEO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-83.203125" y="-602.34375"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -1461,7 +1592,7 @@
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9qp-n6-oWQ" customClass="BaseButton" customModule="Blighty_Times" customModuleProvider="target">
                                                         <rect key="frame" x="330" y="12.5" width="20" height="20"/>
-                                                        <color key="backgroundColor" red="0.80927413699999995" green="0.25005674360000002" blue="0.31763532760000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <color key="backgroundColor" red="0.5725490196078431" green="0.5725490196078431" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="20" id="V06-pz-WNi"/>
                                                             <constraint firstAttribute="height" constant="20" id="tkR-w4-Dn6"/>
@@ -1472,7 +1603,7 @@
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="color">
-                                                                <color key="value" white="0.57203374714611865" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="value" red="0.5725490196078431" green="0.5725490196078431" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="10"/>
@@ -2285,6 +2416,7 @@
                         <outletCollection property="applicantAuthorTopics" destination="W6w-7A-zrl" collectionClass="NSMutableArray" id="zmb-N0-j1A"/>
                         <segue destination="rdL-SE-LdO" kind="show" identifier="scoreSegue" animates="NO" id="A27-bl-SoD"/>
                         <segue destination="cPm-Tw-Thx" kind="presentation" identifier="officePurchaseSegue" modalPresentationStyle="formSheet" id="Sq3-2h-lAU"/>
+                        <segue destination="k9Y-RF-vIy" kind="presentation" identifier="eventSegue" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="9R3-ef-cgS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -2542,7 +2674,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yn6-IX-wiE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-80" y="905"/>
+            <point key="canvasLocation" x="246" y="880"/>
         </scene>
         <!--Score Card View Controller-->
         <scene sceneID="1bm-PK-Ycf">

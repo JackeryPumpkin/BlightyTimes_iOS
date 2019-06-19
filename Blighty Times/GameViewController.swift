@@ -113,9 +113,14 @@ class GameViewController: UIViewController, StateObject {
         //Animate UI changes
         employedAuthorsTable.reloadData();
         
-        if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count {
-            noEventsSymbol.isHidden = sim.eventList.count == 0 ? false : true;
-            eventsTable.reloadSections(IndexSet(integersIn: 0...0), with: .fade);
+        if sim.eventList.count > 0 && presentedViewController == nil {
+            for event in sim.eventList {
+                print("Event: \(event.id) has been shown: \(event.hasBeenShown)")
+                if !event.hasBeenShown {
+                    performSegue(withIdentifier: "eventSegue", sender: nil)
+                    break
+                }
+            }
         }
         
         if let applicant = sim.applicantAuthors.first {
@@ -309,6 +314,19 @@ class GameViewController: UIViewController, StateObject {
         } else if segue.identifier == "officePurchaseSegue" {
             guard let offices = segue.destination as? OfficePurchaseMenu else { return }
             offices.gameVC = self
+        } else if segue.identifier == "eventSegue" {
+            guard let eventPopup = segue.destination as? EventController else { return }
+            guard let event = sim.eventList.first(where: { (event) -> Bool in return !event.hasBeenShown }) else {
+                eventPopup.event = Event(title: "Oh My",
+                                         message: "It seems something has gone wrong! How embarrassing..",
+                                         color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                         image: #imageLiteral(resourceName: "Violence"),
+                                         lifetime: 1)
+                return
+            }
+            
+            event.hasBeenShown = true
+            eventPopup.event = event
         }
     }
     
@@ -370,7 +388,7 @@ class GameViewController: UIViewController, StateObject {
         officeTabButton.isInUse = false
         
         applicantAuthorView.roundCorners(withIntensity: .full)
-        applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.1359404378, green: 0.1359404378, blue: 0.3137254902, alpha: 1).cgColor)
+        applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.137254902, green: 0.137254902, blue: 0.3137254902, alpha: 1).cgColor)
         applicantAuthorView.addShadow(radius: 10, height: 3)
         applicantAuthorView.alpha = 0
         applicantAuthorViewConstraint.constant = -45
@@ -748,9 +766,10 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == employedAuthorsTable {
             return sim.employedAuthors.count
-        } else if tableView == eventsTable {
-            return sim.eventList.count
         }
+//        else if tableView == eventsTable {
+//            return sim.eventList.count
+//        }
         
         return 0
     }
@@ -761,12 +780,13 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("Employed Author cell downcasting didn't work")
             }
             return cell
-        } else if tableView == eventsTable {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
-                fatalError("Event cell downcasting didn't work");
-            }
-            return cell;
         }
+//        else if tableView == eventsTable {
+//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
+//                fatalError("Event cell downcasting didn't work");
+//            }
+//            return cell;
+//        }
         
         return UITableViewCell();
     }
@@ -823,7 +843,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         
             employedCell.fire = {
                 if self.state is PlayState {
-                    self.sim.fire(authorAt: indexPath.row)
+                    self.sim.fireEvent(forAuthorAt: indexPath.row)
                     employedCell.hideOverlay()
                     self.lastSelectedIndexPath.row = 0
                     tableView.reloadData()
@@ -845,21 +865,23 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                     employedCell.showSkillButtons()
                 }
             }
-        } else if tableView == eventsTable {
-            let eventCell = cell as! EventCell;
-            
-            eventCell.view.backgroundColor = sim.eventList[indexPath.row].color;
-            eventCell.message.text = sim.eventList[indexPath.row].message;
-            eventCell.symbol.text = sim.eventList[indexPath.row].symbol;
         }
+//        else if tableView == eventsTable {
+//            let eventCell = cell as! EventCell;
+//
+//            eventCell.view.backgroundColor = sim.eventList[indexPath.row].color;
+//            eventCell.message.text = sim.eventList[indexPath.row].message;
+//            eventCell.symbol.text = sim.eventList[indexPath.row].symbol;
+//        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == employedAuthorsTable {
             return 100
-        } else if tableView == eventsTable {
-            return 31
         }
+//        else if tableView == eventsTable {
+//            return 31
+//        }
         
         return 0
     }

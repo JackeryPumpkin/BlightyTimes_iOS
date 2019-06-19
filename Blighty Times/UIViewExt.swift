@@ -22,7 +22,9 @@ extension UIView {
     }
     
     func roundCorners(withIntensity level: Roundness) {
-        self.clipsToBounds = true;
+        if self is UIImageView {
+            self.clipsToBounds = true;
+        }
         
         switch level {
         case .slight:
