@@ -33,11 +33,6 @@ class GameViewController: UIViewController, StateObject {
     
     var lastSelectedIndexPath: IndexPath = IndexPath(row: 0, section: 0);
     @IBOutlet weak var employedAuthorsTable: UITableView!;
-    @IBOutlet weak var applicantAuthorsTable: UITableView!
-    @IBOutlet weak var applicantsButton: UIButton!
-    @IBOutlet weak var applicantsCountBadge: UILabel!
-    @IBOutlet weak var journalistsButton: UIButton!
-    var applicantBadgeCooldown: Int = 0;
     
     @IBOutlet weak var dayOfTheWeek: UILabel!
     @IBOutlet weak var timeOfDay: UILabel!
@@ -57,30 +52,31 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
     @IBOutlet var regionBarProgressSymbols: [UILabel]!
-    @IBOutlet weak var eventsTable: UITableView!
-    @IBOutlet weak var noEventsSymbol: UILabel!
     @IBOutlet weak var newsBonusTopicOverlay: UIView!
     @IBOutlet weak var newsBonusTopic: UILabel!
-    @IBOutlet weak var statsTabButton: DataTabButton!
     @IBOutlet weak var statsTab: UIView!
     
     //Office Tab
-    @IBOutlet weak var officeTabButton: DataTabButton!
-    @IBOutlet weak var officeTab: UIView!
     @IBOutlet weak var officePortraitButton: BaseButton!
-    @IBOutlet weak var officeNameLabel: UILabel!
-    @IBOutlet weak var dailyCostLabel: UILabel!
-    @IBOutlet weak var regionsReachedLabel: UILabel!
-    @IBOutlet weak var officeCapacityLabel: UILabel!
-    @IBOutlet weak var moraleModifierLabel: UILabel!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
     @IBOutlet weak var movingTileTitle: UILabel!
     @IBOutlet weak var movingTileAuthor: UILabel!
+    @IBOutlet weak var movingTileQuality: UILabel!
+    @IBOutlet weak var movingTileImage: UIImageView!
     var movingTileIndex: Int?;
     var NE_movingTileIndex: Int?;
     var lastknownTileLocation: CGPoint?;
+    
+    @IBOutlet weak var applicantAuthorView: UIView!
+    @IBOutlet weak var applicantAuthorPortrait: UIImageView!
+    @IBOutlet weak var applicantAuthorName: UILabel!
+    @IBOutlet weak var applicantAuthorQualityMeter: UILabel!
+    @IBOutlet weak var applicantAuthorSpeedMeter: UILabel!
+    @IBOutlet var applicantAuthorTopics: [UIImageView]!
+    @IBOutlet weak var applicantAuthorHireButton: RedButton!
+    @IBOutlet weak var applicantAuthorViewConstraint: NSLayoutConstraint!
     
     //Game Properties
     var sim = Simulation();
@@ -107,9 +103,33 @@ class GameViewController: UIViewController, StateObject {
         //Animate UI changes
         employedAuthorsTable.reloadData();
         
-        if eventsTable.numberOfRows(inSection: 0) != sim.eventList.count {
-            noEventsSymbol.isHidden = sim.eventList.count == 0 ? false : true;
-            eventsTable.reloadSections(IndexSet(integersIn: 0...0), with: .fade);
+        if sim.eventList.count > 0 && presentedViewController == nil {
+            for event in sim.eventList {
+                if !event.hasBeenShown {
+                    performSegue(withIdentifier: "eventSegue", sender: nil)
+                    break
+                }
+            }
+        }
+        
+        if let applicant = sim.applicantAuthors.first {
+            applicantAuthorPortrait.image = applicant.getPortrait()
+            applicantAuthorName.text = applicant.getName()
+            applicantAuthorQualityMeter.text = applicant.getQualitySymbol()
+            applicantAuthorSpeedMeter.text = applicant.getRateSymbol()
+            
+            for i in 0 ... 2 {
+                if i < applicant.getTopics().count {
+                    applicantAuthorTopics[i].image = applicant.getTopics()[i].image
+                    applicantAuthorTopics[i].isHidden = false
+                } else {
+                    applicantAuthorTopics[i].isHidden = true
+                }
+            }
+            
+            showApplicantAlert()
+        } else {
+            hideApplicantAlert()
         }
         
         dayOfTheWeek.text = sim.getDayOfTheWeek();
@@ -121,21 +141,25 @@ class GameViewController: UIViewController, StateObject {
         //Cleans up dead articles
         for i in 0 ..< articleTiles.count {
             if let tile = articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 {
-                    sim.removeFromPending(article: tile.article)
-                    tile.setBlank();
-                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
-                    //Start blinking animation here
+                if !tile.blank {
+                    if tile.article.getLifetime() <= 0 {
+                        //sim.removeFromPending(article: tile.article)
+                        tile.setBlank()
+                    } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 3) {
+                        tile.playLowLifeAnimation()
+                    }
                 }
             }
         }
         
         for i in 0 ..< NE_articleTiles.count {
             if let tile = NE_articleTiles.object(at: i) {
-                if tile.article.getLifetime() <= 0 || tile.article.getTitle().count < 5 {
-                    tile.setBlank();
-                } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 24 * 3) {
-                    //Start blinking animation here
+                if !tile.blank {
+                    if tile.article.getLifetime() <= 0 {
+                        tile.setBlank()
+                    } else if tile.article.getLifetime() <= Double(Simulation.TICKS_PER_DAY / 3) {
+                        tile.playLowLifeAnimation()
+                    }
                 }
             }
         }
@@ -152,11 +176,12 @@ class GameViewController: UIViewController, StateObject {
         }
         
         //Adds in new articles
-        a: for article in 0 ..< sim.newArticles.count {
+        a: for articleIndex in 0 ..< sim.newArticles.count {
             b: for tileIndex in 0 ..< articleTiles.count {
                 if let tile = articleTiles.object(at: tileIndex) {
-                    if tile.article.getTitle() == ArticleLibrary.blank.getTitle() {
-                        tile.set(article: &sim.newArticles[article]);
+                    print("New Article(\(tileIndex)): " + tile.article.getTitle() + " is blank: \(tile.blank)")
+                    if tile.blank {//article.getTitle() == ArticleLibrary.blank.getTitle() {
+                        tile.set(article: &sim.newArticles[articleIndex])
                         
                         break b;
                     }
@@ -166,46 +191,56 @@ class GameViewController: UIViewController, StateObject {
         
         sim.syncNewArticles();
         
-        if sim.writtenArticles.count == 12 {
-            pendingSlotsFullWarning.isHidden = false;
-        } else {
-            pendingSlotsFullWarning.isHidden = true;
-        }
+        pendingSlotsFullWarning.isHidden = sim.writtenArticles.count < 12
         
         //Handles the behavior of the moving tile from pending
         for i in 0 ..< articleTiles.count {
-            if articleTiles.object(at: i)!.isTouched && movingTileIndex != i {
+            if articleTiles.object(at: i)!.touched && movingTileIndex != i {
                 movingTileIndex = i;
                 
                 movingTileTitle.text = articleTiles.object(at: i)!.article.getTitle();
                 movingTileAuthor.text = articleTiles.object(at: i)!.article.getAuthor().getName();
-                movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().getColor();
+                movingTileQuality.text = "\(articleTiles.object(at: i)!.article.getQuality())"
+                movingTileImage.image = articleTiles.object(at: i)!.article.getTopic().image
+                movingTileReferenceView.backgroundColor = articleTiles.object(at: i)!.article.getTopic().articleColor
             }
         }
         
         //Handles the behavior of the moving tile from NE
         for i in 0 ..< NE_articleTiles.count {
-            if NE_articleTiles.object(at: i)!.isTouched && NE_movingTileIndex != i {
+            if NE_articleTiles.object(at: i)!.touched && NE_movingTileIndex != i {
                 NE_movingTileIndex = i;
                 
                 movingTileTitle.text = NE_articleTiles.object(at: i)!.article.getTitle();
                 movingTileAuthor.text = NE_articleTiles.object(at: i)!.article.getAuthor().getName();
-                movingTileReferenceView.backgroundColor = NE_articleTiles.object(at: i)!.article.getTopic().getColor();
+                movingTileQuality.text = "\(NE_articleTiles.object(at: i)!.article.getQuality())"
+                movingTileImage.image = NE_articleTiles.object(at: i)!.article.getTopic().image
+                movingTileReferenceView.backgroundColor = NE_articleTiles.object(at: i)!.article.getTopic().articleColor
             }
         }
-        
-        //Handles the Applicants counter visibility
-        if applicantBadgeCooldown == 0 {
-            if sim.applicantAuthors.count > 0 && applicantsButton.isEnabled == true {
-                applicantsCountBadge.text = "\(sim.applicantAuthors.count)";
-                applicantsCountBadge.isHidden = false;
-            } else {
-                applicantsCountBadge.isHidden = true;
-                applicantBadgeCooldown = 10;
+    }
+    
+    func showApplicantAlert() {
+        if applicantAuthorViewConstraint.constant == -45 {
+            applicantAuthorViewConstraint.constant = 10
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 1
+                self.view.layoutIfNeeded()
+            }) { (completed) in
+                
             }
-        } else {
-            applicantBadgeCooldown -= 1;
-            applicantAuthorsTable.reloadData();
+        }
+    }
+    
+    func hideApplicantAlert() {
+        if applicantAuthorViewConstraint.constant == 10 {
+            applicantAuthorViewConstraint.constant = -45
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (completed) in
+                
+            }
         }
     }
     
@@ -223,20 +258,6 @@ class GameViewController: UIViewController, StateObject {
         }
         
         pausesLeft.text = "\(sim.getPausesLeft())";
-    }
-    
-    @IBAction func statsTab(_ sender: Any) {
-        officeTab.isHidden = true
-        statsTab.isHidden = false
-        officeTabButton.isInUse = false
-        statsTabButton.isInUse = true
-    }
-    
-    @IBAction func officeTab(_ sender: Any) {
-        officeTab.isHidden = false
-        statsTab.isHidden = true
-        officeTabButton.isInUse = true
-        statsTabButton.isInUse = false
     }
     
     @IBAction func purchaseOffice(_ sender: Any) {
@@ -268,6 +289,20 @@ class GameViewController: UIViewController, StateObject {
         } else if segue.identifier == "officePurchaseSegue" {
             guard let offices = segue.destination as? OfficePurchaseMenu else { return }
             offices.gameVC = self
+            offices.currentOfficeSize = sim.office.size
+        } else if segue.identifier == "eventSegue" {
+            guard let eventPopup = segue.destination as? EventController else { return }
+            guard let event = sim.eventList.first(where: { (event) -> Bool in return !event.hasBeenShown }) else {
+                eventPopup.event = Event(title: "Oh My",
+                                         message: "It seems something has gone wrong! How embarrassing..",
+                                         color: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                                         image: #imageLiteral(resourceName: "Violence"),
+                                         lifetime: 1)
+                return
+            }
+            
+            event.hasBeenShown = true
+            eventPopup.event = event
         }
     }
     
@@ -326,37 +361,35 @@ class GameViewController: UIViewController, StateObject {
     
     func setupAesthetics() {
         movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199))
-        applicantsCountBadge.roundCorners(withIntensity: .full)
-        applicantsButton.layer.opacity = 0.3
-        journalistsButton.isEnabled = false
-        officeTabButton.isInUse = false
         
-        for node in NE_viewPositions {
-            node.addBorders(width: 3.0, color: UIColor.black.cgColor);
-        }
+        applicantAuthorView.roundCorners(withIntensity: .full)
+        applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.137254902, green: 0.137254902, blue: 0.3137254902, alpha: 1).cgColor)
+        applicantAuthorView.addShadow(radius: 10, height: 3)
+        applicantAuthorView.alpha = 0
+        applicantAuthorViewConstraint.constant = -45
+        applicantAuthorHireButton.roundCorners(withIntensity: .full)
+        applicantAuthorPortrait.roundCorners(withIntensity: .full)
         
         setRegionTopics()
         updateDataPanelsDaily()
         updateOfficeTab()
+        
+        view.layoutIfNeeded()
     }
     
     func updateOfficeTab() {
-        officeNameLabel.text = sim.office.name
         officePortraitButton.setImage(sim.office.image, for: .normal)
-        officeCapacityLabel.text = "\(sim.office.capacity)"
-        dailyCostLabel.text = sim.office.dailyCosts.dollarFormat()
-        moraleModifierLabel.text = sim.office.moraleModifierSymbol
     }
     
     func setRegionTopicsUI() {
         //Makes sure there is a News Topic to show
         if sim.getCurrentNewsEventTopic() != nil {
             newsBonusTopicOverlay.isHidden = false;
-            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.getColor();
-            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
-            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.getName();
-            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.getColor();
-            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.getColor();
+            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.color
+            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.name
+            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.name
+            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.color
+            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.color
         } else {
             //Makes sure its not processing the same UI info repeatedly
             if !newsBonusTopicOverlay.isHidden {
@@ -375,7 +408,7 @@ class GameViewController: UIViewController, StateObject {
             var topicText = "";
             if let region = sim.population.regions[i] {
                 for j in 0 ..< region.getTopics().count {
-                    topicText += region.getTopics()[j].getApprovalSymbol() + " " + region.getTopics()[j].getName()
+                    topicText += region.getTopics()[j].name
                     if j < 3 { topicText += "\n" }
                 }
             }
@@ -631,28 +664,6 @@ class GameViewController: UIViewController, StateObject {
         setRegionTopics()
     }
     
-    @IBAction func journalistsButton(_ sender: Any) {
-        journalistsButton.isEnabled = false;
-        journalistsButton.layer.opacity = 1;
-        applicantsButton.isEnabled = true;
-        applicantsButton.layer.opacity = 0.3;
-        
-        applicantAuthorsTable.isHidden = true;
-    }
-    
-    @IBAction func applicantsButton(_ sender: Any) {
-        applicantsCountBadge.isHidden = true;
-        applicantBadgeCooldown = 10
-        
-        applicantsButton.isEnabled = false;
-        applicantsButton.layer.opacity = 1;
-        journalistsButton.isEnabled = true;
-        journalistsButton.layer.opacity = 0.3;
-        
-        applicantAuthorsTable.isHidden = false;
-        applicantAuthorsTable.reloadData();
-    }
-    
     @IBAction func publishButton(_ sender: Any) {
         stateMachine.handle(input: .publish)
         
@@ -673,6 +684,42 @@ class GameViewController: UIViewController, StateObject {
             }
         }
     }
+    
+    @IBAction func hireApplicant(_ sender: Any) {
+        if state is PlayState {
+            stateMachine.handle(input: .pause)
+            applicantAuthorViewConstraint.constant = 50
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (finished) in
+                if let applicant = self.sim.applicantAuthors.first {
+                    self.sim.hire(applicant)
+                }
+                self.applicantAuthorViewConstraint.constant = -45
+                self.view.layoutIfNeeded()
+                
+                self.stateMachine.handle(input: .play)
+            }
+        }
+    }
+    
+    @IBAction func rejectApplicant(_ sender: Any) {
+        if state is PlayState {
+            stateMachine.handle(input: .pause)
+            applicantAuthorViewConstraint.constant = -45
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.applicantAuthorView.alpha = 0
+                self.view.layoutIfNeeded()
+            }) { (finished) in
+                if self.sim.applicantAuthors.count > 0 {
+                    self.sim.withdraw(applicantAt: 0)
+                }
+                self.stateMachine.handle(input: .play)
+            }
+        }
+    }
 }
 
 
@@ -689,34 +736,18 @@ class GameViewController: UIViewController, StateObject {
 extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == employedAuthorsTable {
-            return sim.employedAuthors.count;
-        } else if tableView == applicantAuthorsTable {
-            return sim.applicantAuthors.count;
-        } else if tableView == eventsTable {
-            return sim.eventList.count;
+            return sim.employedAuthors.count
         }
         
-        return 0;
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == employedAuthorsTable {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-                fatalError("Employed Author cell downcasting didn't work");
+                fatalError("Employed Author cell downcasting didn't work")
             }
-            return cell;
-            
-        } else if tableView == applicantAuthorsTable {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "applicantAuthorCell", for: indexPath) as? ApplicantAuthorCell else {
-                fatalError("Applicant Author cell downcasting didn't work");
-            }
-            return cell;
-            
-        } else if tableView == eventsTable {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
-                fatalError("Event cell downcasting didn't work");
-            }
-            return cell;
+            return cell
         }
         
         return UITableViewCell();
@@ -724,24 +755,24 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
-            let employedCell = cell as! EmployedAuthorCell;
+            guard let employedCell = cell as? EmployedAuthorCell else { return }
             
-            employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait();
-            employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName();
-            employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())";
-            employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol();
-            employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor();
-            employedCell.publications.text = "\(sim.employedAuthors[indexPath.row].getQuality())";
-            employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol();
-            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary() * 365).dollarFormat();
-            employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress());
-            employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat();
-            employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())";
-            employedCell.showSkillButtons();
+            employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait()
+            employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName()
+            employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())"
+            employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol()
+            employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor()
+            employedCell.publications.text = sim.employedAuthors[indexPath.row].getQualitySymbol()
+            employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol()
+            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary()/* * 365*/).dollarFormat()
+            employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress())
+            employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat()
+            employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+            employedCell.showSkillButtons()
             
-            employedCell.topicList.text = "";
+            employedCell.clearTopicImages()
             for topic in sim.employedAuthors[indexPath.row].getTopics() {
-                employedCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
+                employedCell.setTopicImage(topic.image)
             }
             
             if employedCell.overlayView.isHidden {
@@ -765,8 +796,8 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 if self.lastSelectedIndexPath.row != indexPath.row
                 && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
                     //Returns nil when referenced while scrolled out of sight
-                    guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return };
-                    pCell.hideOverlay();
+                    guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return }
+                    pCell.hideOverlay()
                 }
                 
                 self.lastSelectedIndexPath = indexPath;
@@ -774,7 +805,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         
             employedCell.fire = {
                 if self.state is PlayState {
-                    self.sim.fire(authorAt: indexPath.row)
+                    self.sim.fireEvent(forAuthorAt: indexPath.row)
                     employedCell.hideOverlay()
                     self.lastSelectedIndexPath.row = 0
                     tableView.reloadData()
@@ -796,34 +827,33 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                     employedCell.showSkillButtons()
                 }
             }
-            
-        } else if tableView == applicantAuthorsTable {
-            let applicantCell = cell as! ApplicantAuthorCell;
-            
-            applicantCell.authorPortrait.image = sim.applicantAuthors[indexPath.row].getPortrait();
-            applicantCell.authorName.text = sim.applicantAuthors[indexPath.row].getName();
-            applicantCell.quality.text = "\(sim.applicantAuthors[indexPath.row].getQuality())";
-            applicantCell.speed.text = sim.applicantAuthors[indexPath.row].getRateSymbol();
-            applicantCell.salary.text = (sim.applicantAuthors[indexPath.row].getSalary() * 365).dollarFormat();
-            
-            applicantCell.topicList.text = "";
-            for topic in sim.applicantAuthors[indexPath.row].getTopics() {
-                applicantCell.topicList.text?.append(contentsOf: "\(topic.getApprovalSymbol()) \(topic.getName())\n");
-            }
-            
-            applicantCell.onButtonTapped = {
-                self.sim.hire(self.sim.applicantAuthors[indexPath.row]);
-                tableView.reloadData();
-                self.hiredAuthors.text = "\(self.sim.employedAuthors.count) / \(self.sim.office.capacity)"
-            }
-            
-        } else if tableView == eventsTable {
-            let eventCell = cell as! EventCell;
-            
-            eventCell.view.backgroundColor = sim.eventList[indexPath.row].color;
-            eventCell.message.text = sim.eventList[indexPath.row].message;
-            eventCell.symbol.text = sim.eventList[indexPath.row].symbol;
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == employedAuthorsTable {
+            return 100
+        }
+        
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if tableView == employedAuthorsTable {
+            let footer = UIView()
+            footer.backgroundColor = .clear
+            return footer
+        }
+        
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if tableView == employedAuthorsTable {
+            return 55
+        }
+        
+        return 0
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

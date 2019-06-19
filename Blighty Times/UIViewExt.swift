@@ -22,7 +22,9 @@ extension UIView {
     }
     
     func roundCorners(withIntensity level: Roundness) {
-        self.clipsToBounds = true;
+        if self is UIImageView {
+            self.clipsToBounds = true;
+        }
         
         switch level {
         case .slight:
@@ -34,13 +36,13 @@ extension UIView {
         }
     }
     
-    func show() {
+    func animateShow() {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 1
         })
     }
     
-    func hide() {
+    func animateHide() {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
         })
@@ -50,5 +52,12 @@ extension UIView {
         case slight
         case heavy
         case full
+    }
+    
+    func pulseBackground() {
+        backgroundColor! -= 0.1
+        UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseInOut, .repeat, .allowUserInteraction], animations: {
+            self.backgroundColor! += 0.1
+        }, completion: nil)
     }
 }

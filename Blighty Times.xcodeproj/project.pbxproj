@@ -28,6 +28,8 @@
 		C31531132159485C0054684F /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31531122159485C0054684F /* Utilities.swift */; };
 		C317831821ADC78700347CB9 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C317831721ADC78700347CB9 /* StateMachine.swift */; };
 		C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31530F1215846D50054684F /* Assets.xcassets */; };
+		C334A65522AF1D2F00988837 /* DoubleExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334A65422AF1D2F00988837 /* DoubleExt.swift */; };
+		C334A65722B709FA00988837 /* EventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334A65622B709FA00988837 /* EventController.swift */; };
 		C3647846228CE50000E8C50A /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3647845228CE50000E8C50A /* MainMenu.swift */; };
 		C36478492290435200E8C50A /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478482290435200E8C50A /* UIColorExt.swift */; };
 		C364784B22908EB400E8C50A /* BaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C364784A22908EB400E8C50A /* BaseButton.swift */; };
@@ -42,8 +44,8 @@
 		C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478662291F5F400E8C50A /* OfficeButton.swift */; };
 		C364786A2293842A00E8C50A /* IntExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478692293842A00E8C50A /* IntExt.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
-		C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */; };
 		C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D3FF229B6D7E00BA86A6 /* Region.swift */; };
+		C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
 		C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D7218F7A6100A91E6E /* Event.swift */; };
 		C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D9218FDA9500A91E6E /* EventCell.swift */; };
@@ -73,6 +75,8 @@
 		C3153110215916040054684F /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		C31531122159485C0054684F /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C317831721ADC78700347CB9 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
+		C334A65422AF1D2F00988837 /* DoubleExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExt.swift; sourceTree = "<group>"; };
+		C334A65622B709FA00988837 /* EventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventController.swift; sourceTree = "<group>"; };
 		C3647845228CE50000E8C50A /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		C36478482290435200E8C50A /* UIColorExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
 		C364784A22908EB400E8C50A /* BaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseButton.swift; sourceTree = "<group>"; };
@@ -87,8 +91,8 @@
 		C36478662291F5F400E8C50A /* OfficeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeButton.swift; sourceTree = "<group>"; };
 		C36478692293842A00E8C50A /* IntExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExt.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
-		C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicantAuthorCell.swift; sourceTree = "<group>"; };
 		C3C3D3FF229B6D7E00BA86A6 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
+		C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExt.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
 		C3E3B5D7218F7A6100A91E6E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C3E3B5D9218FDA9500A91E6E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -147,8 +151,10 @@
 			children = (
 				C31531122159485C0054684F /* Utilities.swift */,
 				C36478692293842A00E8C50A /* IntExt.swift */,
+				C334A65422AF1D2F00988837 /* DoubleExt.swift */,
 				C36478482290435200E8C50A /* UIColorExt.swift */,
 				C364785022908F9000E8C50A /* UIViewExt.swift */,
+				C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -188,9 +194,9 @@
 				C36478642291F1D400E8C50A /* OfficePurchaseMenu.swift */,
 				C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */,
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
-				C395FC61216C0B870007605D /* ApplicantAuthorCell.swift */,
 				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
 				C31530FC215848790054684F /* ArticleTile.swift */,
+				C334A65622B709FA00988837 /* EventController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -327,7 +333,6 @@
 				C3647846228CE50000E8C50A /* MainMenu.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
 				C36478632291D09B00E8C50A /* Office.swift in Sources */,
-				C395FC62216C0B870007605D /* ApplicantAuthorCell.swift in Sources */,
 				C31531132159485C0054684F /* Utilities.swift in Sources */,
 				C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */,
 				C3133E30227DFD8300905F00 /* PausedState.swift in Sources */,
@@ -335,11 +340,14 @@
 				C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */,
 				C364785C22910C6700E8C50A /* MenuButton.swift in Sources */,
 				C3133E36227F658200905F00 /* PublishingState.swift in Sources */,
+				C334A65522AF1D2F00988837 /* DoubleExt.swift in Sources */,
+				C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */,
 				C311786A228A536100083BE1 /* InGameMenu.swift in Sources */,
 				C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */,
 				C364784B22908EB400E8C50A /* BaseButton.swift in Sources */,
 				C315310B215848790054684F /* Author.swift in Sources */,
 				C3133E32227DFDB600905F00 /* TutorialState.swift in Sources */,
+				C334A65722B709FA00988837 /* EventController.swift in Sources */,
 				C36478582290AD3800E8C50A /* SkillButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

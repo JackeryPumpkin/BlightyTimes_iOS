@@ -124,7 +124,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnApplicant()
-        spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
             newArticles.append(Article(topic: _employedAuthors[i].newArticleTopic(), author: &_employedAuthors[i]))
@@ -140,8 +139,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnStartingAuthor()
-        spawnApplicant()
-        spawnApplicant()
         spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
@@ -160,9 +157,6 @@ class Simulation {
         spawnStartingAuthor()
         spawnStartingAuthor()
         spawnStartingAuthor()
-        spawnApplicant()
-        spawnApplicant()
-        spawnApplicant()
         spawnApplicant()
         
         for i in 0 ..< _employedAuthors.count {
@@ -232,10 +226,12 @@ class Simulation {
     private func nextEditionArticleTick() {
         var i = _nextEditionArticles.count - 1;
         for _ in 0 ..< _nextEditionArticles.count {
-            _nextEditionArticles[i].tick();
-            
-            if _nextEditionArticles[i].getLifetime() <= 0 {
-                _nextEditionArticles[i] = ArticleLibrary.blank;
+            if _nextEditionArticles[i] === ArticleLibrary.blank {
+                if _nextEditionArticles[i].getLifetime() <= 0 {
+                    _nextEditionArticles[i] = ArticleLibrary.blank;
+                } else {
+                    _nextEditionArticles[i].tick()
+                }
             }
             
             i -= 1;
@@ -249,25 +245,45 @@ class Simulation {
         //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed, moraleModifier: _office.moraleModifier);
+            var event: Event?
             
-            //This chunk checks for various author
-            if _employedAuthors[i].hasInfrequentPublished {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is annoyed that their articles aren't published."));
-                _employedAuthors[i].hasInfrequentPublished = false;
-            }
-            if _employedAuthors[i].hasPromotionAnxiety {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is upset that they haven't been promoted."));
-                _employedAuthors[i].hasPromotionAnxiety = false;
-            }
-            if _employedAuthors[i].hasPendingPromotion {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + " is up for a promotion."));
-                _employedAuthors[i].hasPendingPromotion = false;
-            }
+            //This chunk checks for various author events
             if _employedAuthors[i].hasCriticalMorale {
-                add(EmployeeEvent(message: _employedAuthors[i].getName() + "'s morale is getting very low."));
+                event = EmployeeEvent(title: "Low Morale",
+                                      message: _employedAuthors[i].getName() + "'s morale is getting critically low.",
+                                      color: Event.veryBadColor,
+                                      image: _employedAuthors[i].getPortrait())
+                
                 _employedAuthors[i].hasCriticalMorale = false;
             }
+            else if _employedAuthors[i].hasInfrequentPublished {
+                event = EmployeeEvent(title: "Feeling Aimless",
+                                      message: _employedAuthors[i].getName() + " is annoyed that their articles haven't been published recently.",
+                                      color: Event.badColor,
+                                      image: _employedAuthors[i].getPortrait())
+                
+                _employedAuthors[i].hasInfrequentPublished = false;
+            }
+            else if _employedAuthors[i].hasPromotionAnxiety {
+                event = EmployeeEvent(title: "Feeling Underappreciated",
+                                      message: _employedAuthors[i].getName() + " is upset that they haven't gotten a promotion for their hard work.",
+                                      color: Event.badColor,
+                                      image: _employedAuthors[i].getPortrait())
+                
+                _employedAuthors[i].hasPromotionAnxiety = false;
+            }
+            else if _employedAuthors[i].hasPendingPromotion {
+                event = EmployeeEvent(title: "Level Up!",
+                                      message: _employedAuthors[i].getName() + " has been grinding long hours and is now up for a promotion.",
+                                      color: Event.goodColor,
+                                      image: _employedAuthors[i].getPortrait())
+                
+                _employedAuthors[i].hasPendingPromotion = false;
+            }
             
+            if let event = event {
+                add(event)
+            }
             
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
@@ -326,11 +342,13 @@ class Simulation {
         //Checks to see if there is already news in the eventList
         //Right now, I only want one NewsEvent at a time
         if let event = eventList.first {
-            if !(event is NewsEvent) {
-                if Random(int: 0 ... 5) == 3 {
-                    add(NewsEvent());
-                }
+            if event is NewsEvent {
+                return
             }
+        }
+        
+        if Random(int: 0 ... 5) == 3 {
+            add(NewsEvent())
         }
     }
     
@@ -362,7 +380,7 @@ class Simulation {
             }
             
             _employeesHiredThisWeek += 1;
-            add(CompanyEvent(message: "You hired " + author.getName() + "."));
+//            add(CompanyEvent(message: "You hired " + author.getName() + "."));
         } else {
             for event in eventList {
                 if event is OfficeEvent {
@@ -370,19 +388,43 @@ class Simulation {
                 }
             }
                 
-            add(OfficeEvent(message: "Cannot hire anyone right now. Your office is too full!"))
+            add(OfficeEvent(title: "Not Enough Room", message: "You cannot hire anyone right now. Your office is too full!", color: Event.badColor, image: _office.image))
         }
     }
     
+    func fireEvent(forAuthorAt index: Int) {
+        let name = _employedAuthors[index].getName()
+        add(FiringEvent(title: "Fire " + name + "?",
+                        message: "Firing " + name + " will lower the morale of the rest of the office",
+                        color: Event.veryBadColor,
+                        image: _employedAuthors[index].getPortrait()) {
+            self.fire(authorAt: index)
+        })
+    }
+    
     func fire(authorAt index: Int) {
-        add(CompanyEvent(message: "You fired " + _employedAuthors[index].getName() + "."));
         employeeLeaves(index);
         _employeesFiredThisWeek += 1;
+        
+        for author in employedAuthors {
+            author.companyFiringMoraleReduction()
+        }
     }
     
     func quit(authorAt index: Int) {
-        add(EmployeeEvent(message: _employedAuthors[index].getName() + " has left the company in disgust."));
-        employeeLeaves(index);
+        let name = _employedAuthors[index].getName()
+        
+        //This ensures that when an authors quits you don't get any other event alert from them
+        eventList.removeAll { (event) -> Bool in
+            return event.message.contains(name)
+        }
+        
+        add(EmployeeEvent(title: name + " Quit!",
+                          message: name + " has left the company in disgust.",
+                          color: Event.veryBadColor,
+                          image: _employedAuthors[index].getPortrait()))
+        
+        employeeLeaves(index)
     }
     
     func employeeLeaves(_ index: Int) {
@@ -399,7 +441,7 @@ class Simulation {
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
         _applicantAuthors.append(Author(exluding: &auths));
-        add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
+        //add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     
     func spawnStartingAuthor() {
@@ -411,10 +453,13 @@ class Simulation {
         _employedAuthors.append(Author(portrait: UIImage(), name: "Test", topics: [TopicLibrary.list[0]], quality: 5, articleRate: ((Double(Simulation.TICKS_PER_DAY) / 60) / 30) * 3))
     }
     
+    ///Checks 10 times per day if there should be a new applicant
     func chanceToSpawnApplicant() {
-        if _ticksElapsed % 200 == 0 {
-            if Random(int: 1 ... 5) == 5 {
-                spawnApplicant();
+        if applicantAuthors.count == 0 {
+            if _ticksElapsed % (Simulation.TICKS_PER_DAY / 10) == 0 {
+                if Random(int: 1 ... 5) == 5 {
+                    spawnApplicant()
+                }
             }
         }
     }
@@ -503,8 +548,8 @@ class Simulation {
     }
     
     func getCurrentNewsEventTopic() -> Topic? {
-        if eventList.first.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
-            return (eventList[0] as! NewsEvent).getTopic();
+        if eventList.first is NewsEvent {
+            return (eventList[0] as! NewsEvent).topic
         } else {
             return nil;
         }
@@ -678,7 +723,11 @@ class Simulation {
     //Office methods
     func purchaseOffice(_ size: OfficeSize, starting: Bool = false) -> Bool {
         if !starting && _company.getFunds() < _officeList[size.rawValue].downPayment {
-            add(OfficeEvent(message: "Cannot buy that shiny new office. You're too poor!"))
+            add(OfficeEvent(title: "Insufficient Funds",
+                            message: "Cannot buy that shiny new office. You're too poor!",
+                            color: Event.neutralColor,
+                            image: _officeList[size.rawValue].image))
+            
             return false
         }
         
@@ -687,7 +736,9 @@ class Simulation {
         
         if !starting {
             _company.payOfficeDownPayment(size: size)
-            add(CompanyEvent(message: "You moved into a new office with a wider audience!"))
+            add(CompanyEvent(title: "New Digs!",
+                             message: "You moved into a new, larger office! This will give you access to more regions, increasing your potential subscriber base. You will also now be able to hire up to \(_office.capacity) journalists at a time.",
+                             color: Event.goodColor))
         }
         
         for i in 0 ..< _office.size.rawValue {

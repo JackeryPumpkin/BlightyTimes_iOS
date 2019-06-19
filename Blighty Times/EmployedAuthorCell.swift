@@ -12,7 +12,7 @@ class EmployedAuthorCell: UITableViewCell {
     @IBOutlet weak var authorPortrait: UIImageView!
     @IBOutlet weak var authorName: UILabel!
     @IBOutlet weak var level: UILabel!
-    @IBOutlet weak var topicList: UILabel!
+    @IBOutlet var topicImages: [UIImageView]!
     @IBOutlet weak var publications: UILabel!
     @IBOutlet weak var salary: UILabel!
     @IBOutlet weak var speed: UILabel!
@@ -86,6 +86,19 @@ class EmployedAuthorCell: UITableViewCell {
             qualityButton.isEnabled = false;
             speedButton.isEnabled = false;
         }
+    }
+    
+    func setTopicImage(_ image: UIImage) {
+        for topicImageView in topicImages {
+            if topicImageView.image == nil {
+                topicImageView.image = image
+                break
+            }
+        }
+    }
+    
+    func clearTopicImages() {
+        topicImages.forEach {( $0.image = nil )}
     }
     
     @IBAction func fire(_ sender: Any) {

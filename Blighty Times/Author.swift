@@ -21,10 +21,10 @@ class Author {
     private var _articlesPublishedThisWeek: Int = 0;
     private var _articlesWrittenThisWeek: Int = 0;
     private var _daysSinceLastPublication: Int = 0;
-    private var _daysEmployed: Int = 0; //Their salary raises every 15 days.
-    private var _morale: Int; //Lowers when no articles published for # of ticks, raises when published, lowers slowly every day
+    private var _daysEmployed: Int = 0
+    private var _morale: Int;
     private var _lastKnownGameDaysElapsed: Int = 0;
-    private var _salary: Int;
+    private var _salary: Int { return Int(pow(Double(_quality + 5), 3)) }
     
     //EmployeeEvent flags
     var hasPendingPromotion: Bool = false; //1 skill point available
@@ -61,7 +61,6 @@ class Author {
         _quality = newAuthor.getQuality();
         _morale = newAuthor.getMorale();
         _articleRate = newAuthor.getRate();
-        _salary = newAuthor.getSalary();
     }
     
     ///Handles the inits for the pre-made Authors with random stats
@@ -74,7 +73,6 @@ class Author {
         _quality = AuthorLibrary.getRandomQuality();
         _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = AuthorLibrary.getRandomRate();
-        _salary = Int(_articleRate * 100) + (_quality * 10);
     }
     
     ///Public interface for custom author creation
@@ -86,7 +84,6 @@ class Author {
         _quality = quality;
         _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = articleRate;
-        _salary = Int(_articleRate * 200);
     }
     
     func employedTick(elapsed days: Int, moraleModifier: Double) {
@@ -145,15 +142,39 @@ class Author {
     }
     
     func getQuality() -> Int {
-        return _quality;
+        if hasCriticalMorale {
+            return _quality - 1
+        } else {
+            return _quality
+        }
     }
     
     func setIncreasedQuality() {
         _quality += 1;
     }
     
+    func getQualitySymbol() -> String {
+        return statString(from: 1, with: _quality, to: 10)
+    }
+    
     func getRate() -> Double {
         return _articleRate;
+    }
+    
+    func getRateOutOfTen() -> Int {
+        var rate = 1
+        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN
+        let increment = difference / 10
+        
+        for i in 1 ..< 10 {
+            if _articleRate > Author.ARTICLE_RATE_MIN + increment * Double(i) {
+                rate += 1
+            } else {
+                break
+            }
+        }
+        
+        return rate
     }
     
     func hasMaxRate() -> Bool {
@@ -167,19 +188,7 @@ class Author {
     }
     
     func getRateSymbol() -> String {
-        let difference = Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN;
-        
-        if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.25) {
-            return "Very Slow";
-        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.50) {
-            return "Slow";
-        } else if _articleRate < Author.ARTICLE_RATE_MIN + (difference * 0.75) {
-            return "Fast";
-        } else if _articleRate < Author.ARTICLE_RATE_MAX {
-            return "Very Fast";
-        } else {
-            return "Maximum"
-        }
+        return statString(from: Author.ARTICLE_RATE_MIN, with: _articleRate, to: Author.ARTICLE_RATE_MAX)
     }
     
     func getTopics() -> [Topic] {
@@ -209,53 +218,75 @@ class Author {
     }
     
     func getMoraleSymbol() -> String {
-        if _paycheckCooldown > 0 {
-            return "$";
-        } else if _promotionCooldown > 0 {
-            return "♔";
-        } else {
-            if _morale < 80 {
-                return "☠︎";
-            } else if _morale <= 200 {
-                return "☹︎-";
-            } else if _morale <= 300 {
-                return "☹︎";
-            } else if _morale <= 500 {
-                return "☺︎";
-            } else if _morale <= 600 {
-                return "☺︎+";
-            } else if _morale <= 800 {
-                return "☺︎++";
-            } else {
-                return "✪";
-            }
-        }
+        return statString(from: 0, with: _morale, to: 1000)
     }
     
     func getMoraleColor() -> UIColor {
-        return _morale <= 300 ? #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1) : #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1);
+        if _promotionCooldown > 0 || _paycheckCooldown > 0 {
+            return statColor(from: 0, with: 1, to: 1)
+        } else {
+            return statColor(from: 200, with: _morale, to: 1000)
+        }
+    }
+    
+    private func statString(from min: Int, with actual:Int, to max: Int) -> String {
+        return statString(from: Double(min), with: Double(actual), to: Double(max))
+    }
+    
+    private func statString(from min: Double, with actual: Double, to max: Double) -> String {
+        if max == 0  ||
+           min > max ||
+           actual < min { return "" }
+        
+        var statString = "|"
+        let difference = max - min
+        let increment = difference / 10
+        
+        for i in 1 ..< 10 {
+            if actual > min + increment * Double(i) {
+                statString += "|"
+            } else {
+                break
+            }
+        }
+        
+        return statString
+    }
+    
+    private func statColor(from low: Int, with actual:Int, to high: Int) -> UIColor {
+        if actual >= high {
+            return #colorLiteral(red: 0.3169804215, green: 0.9253683686, blue: 0, alpha: 1)
+        } else if actual <= low {
+            return #colorLiteral(red: 0.8795482516, green: 0.1792428792, blue: 0.3018780947, alpha: 1)
+        } else {
+            return  #colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1)
+        }
     }
     
     private func reduceMorale(_ moraleModifier: Double) {
         var moraleDecay = -1
         
-        if _paycheckCooldown == 0 {
-            if _daysEmployed > 7 {
-                moraleDecay -= 50;
-                
-                if _articlesPublishedThisWeek < 1 {
-                    moraleDecay -= 50;
-                }
-            } else if _daysEmployed > 30 {
-                moraleDecay -= 200;
+        if _daysEmployed > 7 && _promotionCooldown == 0 {
+            moraleDecay -= 50
+            
+            if _daysEmployed > 30 {
+                moraleDecay -= 200
             }
         }
         
-        _morale -= moraleDecay / moraleModifier
+        if _articlesPublishedThisWeek < 1 {
+            moraleDecay -= 50 * _daysSinceLastPublication
+        }
+        
+        _morale += moraleDecay / moraleModifier
         
         if _morale <= 200 && _criticalMoraleCooldown == 0 {
             hasCriticalMorale = true;
         }
+    }
+    
+    func companyFiringMoraleReduction() {
+        _morale -= 100
     }
     
     private func adjustApplicantMorale() {
@@ -266,12 +297,8 @@ class Author {
         return _salary;
     }
     
-    func setNewSalary() {
-        _salary += Int(_articleRate * 10) + (_quality * 10);
-    }
-    
     func getCommission() -> Int {
-        return getSalary() * 2;
+        return getSalary() / 2;
     }
     
     func getPublishedThisWeek() -> Int {
@@ -281,7 +308,7 @@ class Author {
     func publishArticle() {
         _articlesPublishedThisWeek += 1;
         _daysSinceLastPublication = 0;
-        increaseExperience(Double(_quality + 5) * 5);
+        increaseExperience((_quality + 5) * 2);
         _paycheckCooldown = Simulation.TICKS_PER_DAY / 12;
     }
     
@@ -292,16 +319,22 @@ class Author {
     func submitArticle() {
         _articlesWrittenThisWeek += 1;
         _articleProgress = 0;
-        increaseExperience(Double(_quality));
+        increaseExperience(_quality)
     }
     
     func getExperience() -> Double {
         return _experience;
     }
     
-    func increaseExperience(_ exp: Double) {
-        _morale += Int(exp * 0.25);
-        _experience += exp;
+    func increaseExperience(_ exp: Int) {
+        print(_name + " increase morale by \(exp * 4) from \(_morale)")
+        _morale += exp * 2
+        
+        if _morale > 1000 {
+            _morale = 1000
+        }
+        
+        _experience += Double(exp)
     }
     
     func getSkillPoints() -> Int {
@@ -313,7 +346,7 @@ class Author {
             _skillPoints += 1;
             _currentLevel = getSeniorityLevel();
             
-            if _skillPoints > 2 && _promotionAnxiety == 0 {
+            if _skillPoints > 1 && _promotionAnxiety == 0 {
                 hasPromotionAnxiety = true;
             } else if _skillPoints == 1 && _pendingPromotionCooldown == 0 {
                 hasPendingPromotion = true;
@@ -336,7 +369,6 @@ class Author {
     }
     
     private func promote() {
-        setNewSalary();
         _skillPoints -= 1;
         _promotionsThisWeek += 1;
         _promotionCooldown = Simulation.TICKS_PER_DAY / 2;

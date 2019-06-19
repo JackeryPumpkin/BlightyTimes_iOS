@@ -11,9 +11,13 @@ import UIKit
 class ArticleTile: UIView {
     @IBOutlet weak var articleTitle: UILabel!
     @IBOutlet weak var authorName: UILabel!
+    @IBOutlet weak var quality: UILabel!
+    @IBOutlet weak var image: UIImageView!
     
     var article: Article = ArticleLibrary.blank;
-    var isTouched: Bool = false;
+    var touched: Bool = false
+    var blinking: Bool = false
+    var blank: Bool = true
     
     override init(frame: CGRect) {
         super.init(frame: frame);
@@ -29,25 +33,46 @@ class ArticleTile: UIView {
         self.article = article;
         articleTitle.text = article.getTitle();
         authorName.text = article.getAuthor().getName();
-        self.backgroundColor = article.getTopic().getColor();
-        self.isUserInteractionEnabled = true;
+        quality.text = "\(article.getQuality())"
+        image.image = article.getTopic().image
+        backgroundColor = article.getTopic().articleColor
+        isUserInteractionEnabled = true
+        blank = article === ArticleLibrary.blank
     }
     
     func setBlank() {
         self.article = ArticleLibrary.blank;
         articleTitle.text = "";
         authorName.text = "";
+        quality.text = ""
+        image.image = UIImage()
         self.backgroundColor = .clear;
         self.isUserInteractionEnabled = false;
+        
+        blinking = false
+        blank = true
+        layer.removeAllAnimations()
+    }
+    
+    func playLowLifeAnimation() {
+        if touched {
+            blinking = false
+            layer.removeAllAnimations()
+        } else {
+            if !blinking && !blank {
+                pulseBackground()
+                blinking = true
+            }
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true;
+        touched = true
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = false;
+        touched = false;
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = false;
+        touched = false;
     }
 }
