@@ -245,7 +245,7 @@ class Simulation {
         //can quit and not put the index out of bounds
         for _ in 0 ..< _employedAuthors.count {
             _employedAuthors[i].employedTick(elapsed: _gameDaysElapsed, moraleModifier: _office.moraleModifier);
-            let event: Event
+            var event: Event?
             
             //This chunk checks for various author events
             if _employedAuthors[i].hasCriticalMorale {
@@ -253,7 +253,7 @@ class Simulation {
                                       message: _employedAuthors[i].getName() + "'s morale is getting critically low.",
                                       color: Event.veryBadColor,
                                       image: _employedAuthors[i].getPortrait())
-                add(event)
+                
                 _employedAuthors[i].hasCriticalMorale = false;
             }
             else if _employedAuthors[i].hasInfrequentPublished {
@@ -261,7 +261,7 @@ class Simulation {
                                       message: _employedAuthors[i].getName() + " is annoyed that their articles haven't been published recently.",
                                       color: Event.badColor,
                                       image: _employedAuthors[i].getPortrait())
-                add(event)
+                
                 _employedAuthors[i].hasInfrequentPublished = false;
             }
             else if _employedAuthors[i].hasPromotionAnxiety {
@@ -269,7 +269,7 @@ class Simulation {
                                       message: _employedAuthors[i].getName() + " is upset that they haven't gotten a promotion for their hard work.",
                                       color: Event.badColor,
                                       image: _employedAuthors[i].getPortrait())
-                add(event)
+                
                 _employedAuthors[i].hasPromotionAnxiety = false;
             }
             else if _employedAuthors[i].hasPendingPromotion {
@@ -277,16 +277,13 @@ class Simulation {
                                       message: _employedAuthors[i].getName() + " has been grinding long hours and is now up for a promotion.",
                                       color: Event.goodColor,
                                       image: _employedAuthors[i].getPortrait())
-                add(event)
+                
                 _employedAuthors[i].hasPendingPromotion = false;
             }
             
-//            if !(eventList.contains { (event) -> Bool in return event.message.contains(_employedAuthors[i].getName()) }) {
-//                if event.message != "" {
-//                    print("Adding event ID: \(event.id)")
-//                    add(event)
-//                }
-//            }
+            if let event = event {
+                add(event)
+            }
             
             if _employedAuthors[i].hasFinishedArticle() && _writtenArticles.count + newArticles.count < 12 {
                 _employedAuthors[i].submitArticle();
@@ -345,11 +342,13 @@ class Simulation {
         //Checks to see if there is already news in the eventList
         //Right now, I only want one NewsEvent at a time
         if let event = eventList.first {
-            if !(event is NewsEvent) {
-                if Random(int: 0 ... 5) == 3 {
-                    add(NewsEvent());
-                }
+            if event is NewsEvent {
+                return
             }
+        }
+        
+        if Random(int: 0 ... 5) == 3 {
+            add(NewsEvent())
         }
     }
     
@@ -414,6 +413,12 @@ class Simulation {
     
     func quit(authorAt index: Int) {
         let name = _employedAuthors[index].getName()
+        
+        //This ensures that when an authors quits you don't get any other event alert from them
+        eventList.removeAll { (event) -> Bool in
+            return event.message.contains(name)
+        }
+        
         add(EmployeeEvent(title: name + " Quit!",
                           message: name + " has left the company in disgust.",
                           color: Event.veryBadColor,

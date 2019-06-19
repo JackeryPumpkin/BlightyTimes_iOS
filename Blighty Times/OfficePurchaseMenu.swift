@@ -35,7 +35,7 @@ class OfficePurchaseMenu: UIViewController {
         large.purchased = game.sim.officeList[2].purchased
         huge.purchased = game.sim.officeList[3].purchased
         
-        updateView(with: .small)
+        updateView(with: currentOfficeSize)
     }
     
     @IBAction func smallOffice(_ sender: Any) {

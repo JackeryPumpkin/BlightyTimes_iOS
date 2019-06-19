@@ -33,6 +33,10 @@ class Event {
         //id = Int.random(in: 1 ... 10000)
     }
     
+    convenience init() {
+        self.init(title: "", message: "", color: UIColor(), image: UIImage(), lifetime: 0)
+    }
+    
     final func tick() {
         lifetime -= lifetime > 0 ? 1 : 0;
     }
@@ -113,7 +117,7 @@ class NewsEvent: Event {
                 "Longest cricket match in Blighty history continues into its fifth day."
             ]
             
-        case "Film":
+        case "Cinema":
             options = [
                 "Stephen Fry is premiering a documentary on ravens and writing desks.",
                 "New film by Quentin Tarantino is sparking an intense dialogue among viewers.",

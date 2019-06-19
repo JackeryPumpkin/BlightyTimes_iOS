@@ -52,22 +52,12 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
     @IBOutlet var regionBarProgressSymbols: [UILabel]!
-    @IBOutlet weak var eventsTable: UITableView!
-    @IBOutlet weak var noEventsSymbol: UILabel!
     @IBOutlet weak var newsBonusTopicOverlay: UIView!
     @IBOutlet weak var newsBonusTopic: UILabel!
-    @IBOutlet weak var statsTabButton: DataTabButton!
     @IBOutlet weak var statsTab: UIView!
     
     //Office Tab
-    @IBOutlet weak var officeTabButton: DataTabButton!
-    @IBOutlet weak var officeTab: UIView!
     @IBOutlet weak var officePortraitButton: BaseButton!
-    @IBOutlet weak var officeNameLabel: UILabel!
-    @IBOutlet weak var dailyCostLabel: UILabel!
-    @IBOutlet weak var regionsReachedLabel: UILabel!
-    @IBOutlet weak var officeCapacityLabel: UILabel!
-    @IBOutlet weak var moraleModifierLabel: UILabel!
     
     //Moving Tile Outlets and Properties
     @IBOutlet weak var movingTileReferenceView: UIView!
@@ -115,7 +105,6 @@ class GameViewController: UIViewController, StateObject {
         
         if sim.eventList.count > 0 && presentedViewController == nil {
             for event in sim.eventList {
-                print("Event: \(event.id) has been shown: \(event.hasBeenShown)")
                 if !event.hasBeenShown {
                     performSegue(withIdentifier: "eventSegue", sender: nil)
                     break
@@ -271,20 +260,6 @@ class GameViewController: UIViewController, StateObject {
         pausesLeft.text = "\(sim.getPausesLeft())";
     }
     
-    @IBAction func statsTab(_ sender: Any) {
-        officeTab.isHidden = true
-        statsTab.isHidden = false
-        officeTabButton.isInUse = false
-        statsTabButton.isInUse = true
-    }
-    
-    @IBAction func officeTab(_ sender: Any) {
-        officeTab.isHidden = false
-        statsTab.isHidden = true
-        officeTabButton.isInUse = true
-        statsTabButton.isInUse = false
-    }
-    
     @IBAction func purchaseOffice(_ sender: Any) {
         stateMachine.handle(input: .offices)
     }
@@ -314,6 +289,7 @@ class GameViewController: UIViewController, StateObject {
         } else if segue.identifier == "officePurchaseSegue" {
             guard let offices = segue.destination as? OfficePurchaseMenu else { return }
             offices.gameVC = self
+            offices.currentOfficeSize = sim.office.size
         } else if segue.identifier == "eventSegue" {
             guard let eventPopup = segue.destination as? EventController else { return }
             guard let event = sim.eventList.first(where: { (event) -> Bool in return !event.hasBeenShown }) else {
@@ -385,7 +361,6 @@ class GameViewController: UIViewController, StateObject {
     
     func setupAesthetics() {
         movingTileReferenceView.addShadow(radius: 7, height: 8, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.2011451199))
-        officeTabButton.isInUse = false
         
         applicantAuthorView.roundCorners(withIntensity: .full)
         applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.137254902, green: 0.137254902, blue: 0.3137254902, alpha: 1).cgColor)
@@ -403,11 +378,7 @@ class GameViewController: UIViewController, StateObject {
     }
     
     func updateOfficeTab() {
-        officeNameLabel.text = sim.office.name
         officePortraitButton.setImage(sim.office.image, for: .normal)
-        officeCapacityLabel.text = "\(sim.office.capacity)"
-        dailyCostLabel.text = sim.office.dailyCosts.dollarFormat()
-        moraleModifierLabel.text = sim.office.moraleModifierSymbol
     }
     
     func setRegionTopicsUI() {
@@ -767,9 +738,6 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView == employedAuthorsTable {
             return sim.employedAuthors.count
         }
-//        else if tableView == eventsTable {
-//            return sim.eventList.count
-//        }
         
         return 0
     }
@@ -781,12 +749,6 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         }
-//        else if tableView == eventsTable {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath) as? EventCell else {
-//                fatalError("Event cell downcasting didn't work");
-//            }
-//            return cell;
-//        }
         
         return UITableViewCell();
     }
@@ -866,22 +828,12 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-//        else if tableView == eventsTable {
-//            let eventCell = cell as! EventCell;
-//
-//            eventCell.view.backgroundColor = sim.eventList[indexPath.row].color;
-//            eventCell.message.text = sim.eventList[indexPath.row].message;
-//            eventCell.symbol.text = sim.eventList[indexPath.row].symbol;
-//        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == employedAuthorsTable {
             return 100
         }
-//        else if tableView == eventsTable {
-//            return 31
-//        }
         
         return 0
     }

@@ -9,9 +9,9 @@
 import UIKit
 
 class OfficeButton: BaseButton {
-    let purchasedColor = #colorLiteral(red: 0.2039215686, green: 0.7450980392, blue: 0.9647058824, alpha: 1)
+    let purchasedColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     let standardColor = #colorLiteral(red: 0.7511208653, green: 0.7511208653, blue: 0.7511208653, alpha: 1)
-    let selectedColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+    let selectedColor = #colorLiteral(red: 0.2039215686, green: 0.7450980392, blue: 0.9647058824, alpha: 1)
     
     var purchased: Bool = false
     var isInUse: Bool = false {
