@@ -34,13 +34,13 @@ class EventController: UIViewController {
         okayButton.color = event.color - 0.1
         cancelButton.color = event.color - 0.1
         
-        if event is EmployeeEvent || event is FiringEvent {
+        if !(event is NewsEvent) {
             //Rounds image when it's an author's portrait
             eventImage.roundCorners(withIntensity: .full)
-            
-            if event is FiringEvent {
-                okayButton.setTitle("FIRE", for: .normal)
-            }
+        }
+        
+        if event is FiringEvent {
+            okayButton.setTitle("FIRE", for: .normal)
         }
         
         containerCenterY.constant = (view.frame.height / 2) + (container.frame.height / 2)

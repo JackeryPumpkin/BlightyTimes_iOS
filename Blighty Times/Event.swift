@@ -18,7 +18,7 @@ class Event {
     var okayAction: (()->Void)?
     //let id: Int
     
-    static let badColor: UIColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
+    static let badColor: UIColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
     static let veryBadColor: UIColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
     static let goodColor: UIColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
     static let neutralColor: UIColor = #colorLiteral(red: 0.8451363548, green: 0.8862745166, blue: 0.8128135135, alpha: 1)
@@ -61,13 +61,15 @@ class NewsEvent: Event {
         case "Conservatism":
             options = [
                 "Conservative politition embroiled in intense scandal.",
-                "Conservative politition being celebrated for recent accomplishment."
+                "Conservative politition being celebrated for recent accomplishment.",
+                "Results just in from conservative referendum, \"Let’s keep everything how we’ve had it.\""
             ]
             
         case "Liberalism":
             options = [
                 "Liberal politition embroiled in intense scandal.",
-                "Liberal politition being celebrated for recent accomplishment."
+                "Liberal politition being celebrated for recent accomplishment.",
+                "Results just in from liberal referendum, \"Let’s change everything.\""
             ]
             
         case "Children":
@@ -91,12 +93,13 @@ class NewsEvent: Event {
         case "Education":
             options = [
                 "Standardized test scores are at an all-time low.",
-                "Graduation rate is an all-time high at local schools."
+                "Graduation rate is an all-time high at local schools.",
+                "Elementary school school play given scathing reviews on Rotten Tomatoes",
             ]
             
         case "Theatre":
             options = [
-                "Local theatre shutters its door front lack of attendance.",
+                "Local theatre shutters its doors from lack of attendance.",
                 "New satirical musical is a masterpiece, breaking sales records."
             ]
             
@@ -105,7 +108,8 @@ class NewsEvent: Event {
                 "The mayor of Blighty has put a travel ban on all flights to Babylon.",
                 "A wild fire has sprung up preventing commuters traveling to the west.",
                 "An upscale resort in the Caribbean is 50% off to all Blighty residents.",
-                "Blighty's Got Talent is filming its finale in Springfield next week."
+                "Blighty's Got Talent is filming its finale in Springfield next week.",
+                "\"One fish? Two fish. Red fish, blue fish.\" Oil spill causes thousands of fish wash up on Blighty's west coast."
             ]
             
         case "Sports":
@@ -137,7 +141,8 @@ class NewsEvent: Event {
                 "Local church raises money for medical aid.",
                 "Tis the season. Christmas decorations are going up all over town.",
                 "Menorah lighting at local synagogue.",
-                "People going door singing Festivus songs."
+                "People going door singing Festivus songs.",
+                "Authorities search for a man who attained super powers from excessive thoughts and prayers."
             ]
             
         case "Video Games":
@@ -149,7 +154,11 @@ class NewsEvent: Event {
             
         case "Technology":
             options = [
-                "Fancy gizmos are being invented around the world."
+                "Fancy gizmos are being invented around the world.",
+                "New Kindle reading device releasing soon with a display made from wood paste and ink, needing no batteries.",
+                "Next iPhone announced to come with six cameras, taking up too much room. Phone sold separately.",
+                "How many people does it take to screw in a lightbulb? None, says local robot.",
+                "Has the robot uprising already begun? \"Beep\" says enigmatic representative from Blighty Robotics."
             ]
             
         case "Music":
@@ -207,8 +216,8 @@ class EmployeeEvent: Event {
 }
 
 class CompanyEvent: Event {
-    init(title: String, message: String, color: UIColor) {
-        super.init(title: title, message: message, color: color, image: UIImage(), lifetime: Simulation.TICKS_PER_DAY)
+    init(title: String, message: String, color: UIColor, image: UIImage) {
+        super.init(title: title, message: message, color: color, image: image, lifetime: Simulation.TICKS_PER_DAY)
     }
 }
 
@@ -226,7 +235,7 @@ class RegionEvent: Event {
 
 class FiringEvent: Event {
     init(title: String, message: String, color: UIColor, image: UIImage, action: @escaping (()->Void)) {
-        super.init(title: title, message: message, color: color, image: UIImage(), lifetime: Simulation.TICKS_PER_DAY / 4)
+        super.init(title: title, message: message, color: color, image: image, lifetime: Simulation.TICKS_PER_DAY / 4)
         okayAction = action
     }
 }

@@ -206,6 +206,27 @@ class Simulation {
         if early { forceNextDay(); }
     }
     
+    func companyTick() {
+        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors, officeDailyCosts: _office.dailyCosts)
+        
+        var committedCash: Int = 0
+        
+        for author in _employedAuthors {
+            committedCash += author.getSalary()
+        }
+        
+        committedCash += company.getOperationsCosts()
+        committedCash += _office.dailyCosts
+        
+        if committedCash > company.getFunds() {
+            add(CompanyEvent(title: "Low Funds", message: "Your company's funds are getting critically low. You'll need to capture new subscribers or make cuts to your workforce.", color: Event.veryBadColor, image: _office.image))
+        }
+        
+        //Check for win-case
+        
+        //Check for lose-case
+    }
+    
     private func writtenArticleTick() {
         var i = _writtenArticles.count - 1;
         for _ in 0 ..< _writtenArticles.count{
@@ -380,7 +401,6 @@ class Simulation {
             }
             
             _employeesHiredThisWeek += 1;
-//            add(CompanyEvent(message: "You hired " + author.getName() + "."));
         } else {
             for event in eventList {
                 if event is OfficeEvent {
@@ -388,7 +408,7 @@ class Simulation {
                 }
             }
                 
-            add(OfficeEvent(title: "Not Enough Room", message: "You cannot hire anyone right now. Your office is too full!", color: Event.badColor, image: _office.image))
+            add(OfficeEvent(title: "Not Enough Room", message: "You cannot hire anyone right now. Your office is too full!", color: Event.neutralColor, image: _office.image))
         }
     }
     
@@ -623,7 +643,7 @@ class Simulation {
             _gameDayOfTheWeek += 1;
         }
         
-        company.tick(subscribers: population.getTotalSubscriberCount(), employedAuthors: _employedAuthors, officeDailyCosts: _office.dailyCosts);
+        companyTick()
     }
     
     func getDayOfTheWeek() -> String {
@@ -738,7 +758,8 @@ class Simulation {
             _company.payOfficeDownPayment(size: size)
             add(CompanyEvent(title: "New Digs!",
                              message: "You moved into a new, larger office! This will give you access to more regions, increasing your potential subscriber base. You will also now be able to hire up to \(_office.capacity) journalists at a time.",
-                             color: Event.goodColor))
+                             color: Event.goodColor,
+                             image: _officeList[size.rawValue].image))
         }
         
         for i in 0 ..< _office.size.rawValue {
