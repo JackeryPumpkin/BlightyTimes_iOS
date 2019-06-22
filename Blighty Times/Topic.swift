@@ -43,6 +43,27 @@ class TopicLibrary {
     
     static let blank: Topic = Topic(name: "", color:  #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0), image: UIImage())
     
+    static func getRandomTopics(count: Int, excludedTopics: [Topic]?) -> [Topic] {
+        var newTopics: [Topic] = []
+        var validTopics: [Topic] = []
+        
+        if let excludedTopics = excludedTopics {
+            validTopics = TopicLibrary.list.filter { topic -> Bool in
+                return excludedTopics.contains(where: { excludedTopic -> Bool in return excludedTopic.name != topic.name })
+            }
+        } else {
+            validTopics = TopicLibrary.list
+        }
+        
+        validTopics.shuffle()
+        
+        for i in 0 ..< count {
+            newTopics.append(validTopics[i])
+        }
+        
+        return newTopics
+    }
+    
     static func getRandomTopics() -> [Topic] {
         return getRandomTopics(from: TopicLibrary.list);
     }

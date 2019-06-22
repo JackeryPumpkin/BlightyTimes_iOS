@@ -24,6 +24,14 @@ class Region {
     private var _daysSinceLastApproval: Int = 0
     private var _missedDeadline: Bool = false
     
+    init(with officeSize: OfficeSize, excludedTopics: [Topic]?) {
+        let topicCount = officeSize == .huge ? 3 : officeSize.rawValue + 1
+        
+        _SIZE = 1000000 / topicCount
+        _TOPICS = Region.randomTopics(count: topicCount, excludedTopics: excludedTopics)
+        _subscribers = 0
+    }
+    
     init(withSubs: Bool) {
         _SIZE = Region.randomSize()
         _TOPICS = Region.randomTopics()
@@ -206,6 +214,10 @@ class Region {
     
     private static func randomSize() -> Int {
         return Random(int: 100000 ... 1000000)
+    }
+    
+    private static func randomTopics(count: Int, excludedTopics: [Topic]?) -> [Topic] {
+        return TopicLibrary.getRandomTopics(count: count, excludedTopics: excludedTopics)
     }
     
     private static func randomTopics() -> [Topic] {

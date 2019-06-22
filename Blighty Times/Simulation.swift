@@ -104,7 +104,7 @@ class Simulation {
     }
     
     private func smallStart() {
-        _company = Company(startingFunds: 5000)
+        _company = Company(startingFunds: 500000)
         _ = purchaseOffice(.small, starting: true)
         _population = Population(from: _office.size)
         
@@ -766,11 +766,14 @@ class Simulation {
             _officeList[i].purchased = true
         }
         
+        var currentTopics: [Topic] = []
         for i in 0 ..< _population.regions.count {
             if _population.regions[i] == nil {
-                _population.overwriteRegion(at: i, with: Region(withSubs: false))
+                _population.overwriteRegion(at: i, with: Region(with: size, excludedTopics: currentTopics))
                 return true
             }
+            
+            currentTopics.append(contentsOf: _population.regions[i]!.getTopics())
         }
         
         return true
