@@ -63,6 +63,7 @@ class Simulation {
     //Game Constants
     static let TICK_RATE: TimeInterval = 0.03;
     static let TICKS_PER_DAY: Int = 1800;
+    let supressPopups = false
     
     var gameMode: GameMode!
     
@@ -104,7 +105,7 @@ class Simulation {
     }
     
     private func smallStart() {
-        _company = Company(startingFunds: 500000)
+        _company = Company(startingFunds: 5000)
         _ = purchaseOffice(.small, starting: true)
         _population = Population(from: _office.size)
         
@@ -350,9 +351,11 @@ class Simulation {
     }
     
     func add(_ event: Event) {
+        if supressPopups && (event is EmployeeEvent || event is CompanyEvent)  { return }
+        
         //If there is a NewsEvent currently in the queue, put the next event
         //underneath it so that the News is always at the top
-        if eventList.first is NewsEvent {//.debugDescription == "Optional(Blighty_Times.NewsEvent)" {
+        if eventList.first is NewsEvent {
             eventList.insert(event, at: 1);
         } else {
             eventList.insert(event, at: 0);

@@ -47,7 +47,8 @@ class GameViewController: UIViewController, StateObject {
     @IBOutlet weak var hiredAuthors: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
-    @IBOutlet var regionTopicsLabels: [UILabel]!
+    @IBOutlet weak var subscriberPanelTitle: UILabel!
+    @IBOutlet var regionTopicIcons: [UIStackView]!
     @IBOutlet var regionBars: [UIView]!
     @IBOutlet var regionBarConstraints: [NSLayoutConstraint]!
     @IBOutlet weak var regionBarsMaxConstraint: NSLayoutConstraint!
@@ -383,13 +384,14 @@ class GameViewController: UIViewController, StateObject {
     
     func setRegionTopicsUI() {
         //Makes sure there is a News Topic to show
-        if sim.getCurrentNewsEventTopic() != nil {
+        if let topic = sim.getCurrentNewsEventTopic() {
             newsBonusTopicOverlay.isHidden = false;
-            newsBonusTopicOverlay.backgroundColor = sim.getCurrentNewsEventTopic()?.color
-            newsBonusTopic.text = sim.getCurrentNewsEventTopic()!.name
-            NE_bonusTopic.text = sim.getCurrentNewsEventTopic()!.name
-            NE_bonusTopic.textColor = sim.getCurrentNewsEventTopic()!.color
-            NE_bonusLabel.textColor = sim.getCurrentNewsEventTopic()!.color
+            newsBonusTopicOverlay.backgroundColor = topic.color
+            newsBonusTopic.text = topic.name
+            NE_bonusTopic.text = topic.name
+            NE_bonusTopic.textColor = topic.color
+            NE_bonusLabel.textColor = topic.color
+            subscriberPanelTitle.textColor = .white
         } else {
             //Makes sure its not processing the same UI info repeatedly
             if !newsBonusTopicOverlay.isHidden {
@@ -399,20 +401,26 @@ class GameViewController: UIViewController, StateObject {
                 NE_bonusTopic.text = "Topic";
                 NE_bonusTopic.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
                 NE_bonusLabel.textColor = #colorLiteral(red: 0.6442400406, green: 0.6506186548, blue: 0.6506186548, alpha: 1);
+                subscriberPanelTitle.textColor = #colorLiteral(red: 0.3921568627, green: 0.3921568627, blue: 0.3921568627, alpha: 1)
             }
         }
     }
     
     func setRegionTopics() {
-        for i in 0 ..< sim.population.regions.count {
-            var topicText = "";
-            if let region = sim.population.regions[i] {
-                for j in 0 ..< region.getTopics().count {
-                    topicText += region.getTopics()[j].name
-                    if j < 3 { topicText += "\n" }
-                }
+        var i = 0
+        for region in sim.population.regions {
+            regionTopicIcons[i].removeAllArrangedSubviews()
+            guard let region = region else { continue }
+            
+            for topic in region.getTopics() {
+                let topicImageView = UIImageView(image: topic.image)
+                topicImageView.contentMode = .scaleAspectFit
+                topicImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+                topicImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+                regionTopicIcons[i].addArrangedSubview(topicImageView)
             }
-            regionTopicsLabels[i].text = topicText
+            
+            i += 1
         }
     }
     
