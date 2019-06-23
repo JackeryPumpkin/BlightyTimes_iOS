@@ -757,7 +757,7 @@ class Simulation {
         if !starting {
             _company.payOfficeDownPayment(size: size)
             add(CompanyEvent(title: "New Digs!",
-                             message: "You moved into a new, larger office! This will give you access to more regions, increasing your potential subscriber base. You will also now be able to hire up to \(_office.capacity) journalists at a time.",
+                             message: "You moved into a larger office! You will now be able to hire up to \(_office.capacity) journalists at a time. This also gives you a new region in which to capture subscribers, so get publishing!",
                              color: Event.goodColor,
                              image: _officeList[size.rawValue].image))
         }
@@ -769,7 +769,8 @@ class Simulation {
         var currentTopics: [Topic] = []
         for i in 0 ..< _population.regions.count {
             if _population.regions[i] == nil {
-                _population.overwriteRegion(at: i, with: Region(with: size, excludedTopics: currentTopics))
+                let region = Region(with: size, excludedTopics: currentTopics)
+                _population.overwriteRegion(at: i, with: region)
                 return true
             }
             

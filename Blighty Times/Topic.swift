@@ -49,7 +49,7 @@ class TopicLibrary {
         
         if let excludedTopics = excludedTopics {
             validTopics = TopicLibrary.list.filter { topic -> Bool in
-                return excludedTopics.contains(where: { excludedTopic -> Bool in return excludedTopic.name != topic.name })
+                return !(excludedTopics.contains(where: { excludedTopic -> Bool in return excludedTopic.name == topic.name }))
             }
         } else {
             validTopics = TopicLibrary.list

@@ -27,7 +27,7 @@ class Region {
     init(with officeSize: OfficeSize, excludedTopics: [Topic]?) {
         let topicCount = officeSize == .huge ? 3 : officeSize.rawValue + 1
         
-        _SIZE = 1000000 / topicCount
+        _SIZE = 100000 * ((officeSize.rawValue + 1) * 3)
         _TOPICS = Region.randomTopics(count: topicCount, excludedTopics: excludedTopics)
         _subscribers = 0
     }

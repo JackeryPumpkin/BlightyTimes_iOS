@@ -274,10 +274,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The body of the event view controller will look like this and be formatted thusly. The " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="SFa-LF-eYU">
-                                        <rect key="frame" x="30" y="336" width="340" height="97"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="97" id="eLu-1R-XeH"/>
-                                        </constraints>
+                                        <rect key="frame" x="30" y="330" width="340" height="72"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                         <color key="textColor" white="0.0" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -330,12 +327,13 @@
                                     <constraint firstItem="CHS-SS-aBp" firstAttribute="top" secondItem="Z5e-Nc-qD6" secondAttribute="bottom" constant="30" id="70B-7u-xpV"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="DxI-da-doc"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="K48-E9-NN4"/>
+                                    <constraint firstItem="rZk-ad-F7g" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SFa-LF-eYU" secondAttribute="bottom" constant="20" id="MMB-NV-j9c"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="leading" secondItem="CHS-SS-aBp" secondAttribute="leading" id="Ndd-jk-u6U"/>
                                     <constraint firstAttribute="width" constant="400" id="Qly-kt-fyz"/>
                                     <constraint firstItem="CHS-SS-aBp" firstAttribute="leading" secondItem="a91-Eg-McK" secondAttribute="leading" constant="30" id="S5V-Wf-ulV"/>
                                     <constraint firstAttribute="height" constant="550" id="Wol-Gv-J42"/>
                                     <constraint firstItem="SFa-LF-eYU" firstAttribute="leading" secondItem="CHS-SS-aBp" secondAttribute="leading" id="Xep-1R-ldF"/>
-                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="top" secondItem="CHS-SS-aBp" secondAttribute="bottom" constant="20" id="c7J-Hw-kAU"/>
+                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="top" secondItem="a91-Eg-McK" secondAttribute="top" constant="330" id="c7J-Hw-kAU"/>
                                     <constraint firstItem="Z5e-Nc-qD6" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="iTg-JR-oud"/>
                                     <constraint firstItem="SFa-LF-eYU" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="nbX-pd-sNw"/>
                                     <constraint firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" constant="30" id="oPg-VH-6fV"/>
