@@ -325,6 +325,7 @@
                                     <constraint firstAttribute="bottom" secondItem="rZk-ad-F7g" secondAttribute="bottom" constant="30" id="3GZ-yN-2sa"/>
                                     <constraint firstItem="Z5e-Nc-qD6" firstAttribute="top" secondItem="a91-Eg-McK" secondAttribute="top" constant="50" id="5yF-nS-tba"/>
                                     <constraint firstItem="CHS-SS-aBp" firstAttribute="top" secondItem="Z5e-Nc-qD6" secondAttribute="bottom" constant="30" id="70B-7u-xpV"/>
+                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="top" secondItem="CHS-SS-aBp" secondAttribute="bottom" constant="14" id="8hJ-Xu-QFG"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="DxI-da-doc"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="K48-E9-NN4"/>
                                     <constraint firstItem="rZk-ad-F7g" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SFa-LF-eYU" secondAttribute="bottom" constant="20" id="MMB-NV-j9c"/>
@@ -333,7 +334,6 @@
                                     <constraint firstItem="CHS-SS-aBp" firstAttribute="leading" secondItem="a91-Eg-McK" secondAttribute="leading" constant="30" id="S5V-Wf-ulV"/>
                                     <constraint firstAttribute="height" constant="550" id="Wol-Gv-J42"/>
                                     <constraint firstItem="SFa-LF-eYU" firstAttribute="leading" secondItem="CHS-SS-aBp" secondAttribute="leading" id="Xep-1R-ldF"/>
-                                    <constraint firstItem="SFa-LF-eYU" firstAttribute="top" secondItem="a91-Eg-McK" secondAttribute="top" constant="330" id="c7J-Hw-kAU"/>
                                     <constraint firstItem="Z5e-Nc-qD6" firstAttribute="centerX" secondItem="a91-Eg-McK" secondAttribute="centerX" id="iTg-JR-oud"/>
                                     <constraint firstItem="SFa-LF-eYU" firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" id="nbX-pd-sNw"/>
                                     <constraint firstAttribute="trailing" secondItem="CHS-SS-aBp" secondAttribute="trailing" constant="30" id="oPg-VH-6fV"/>

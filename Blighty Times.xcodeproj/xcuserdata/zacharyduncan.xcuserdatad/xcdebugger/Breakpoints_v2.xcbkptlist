@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/GameViewController.swift"
-            timestampString = "583009639.341538"
+            timestampString = "583123551.876346"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "503"
+            endingLineNumber = "503"
             landmarkName = "handlePan(recognizer:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/GameViewController.swift"
-            timestampString = "583009639.342134"
+            timestampString = "583123551.876598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
+            startingLineNumber = "489"
+            endingLineNumber = "489"
             landmarkName = "handlePan(recognizer:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.3425291"
+            timestampString = "583123551.876693"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
+            startingLineNumber = "520"
+            endingLineNumber = "520"
             landmarkName = "Simulation"
             landmarkType = "3">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.34304"
+            timestampString = "583123551.876773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
+            startingLineNumber = "558"
+            endingLineNumber = "558"
             landmarkName = "backToPending(ne_index:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.3435481"
+            timestampString = "583123551.876896"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "735"
-            endingLineNumber = "735"
+            startingLineNumber = "740"
+            endingLineNumber = "740"
             landmarkName = "getRegionGraphLengths(with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,7 +266,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Author.swift"
-            timestampString = "582604161.713418"
+            timestampString = "583123551.877001"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
@@ -282,11 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Author.swift"
-            timestampString = "582604161.713654"
+            timestampString = "583123551.8770781"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "reduceMorale(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Author.swift"
-            timestampString = "582604161.713726"
+            timestampString = "583123551.877149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
+            startingLineNumber = "354"
+            endingLineNumber = "354"
             landmarkName = "increaseExperience(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.344103"
+            timestampString = "583123551.877221"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "356"
@@ -330,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.344521"
+            timestampString = "583123551.877295"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "414"
-            endingLineNumber = "414"
+            startingLineNumber = "419"
+            endingLineNumber = "419"
             landmarkName = "hire(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.344944"
+            timestampString = "583123551.877352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "420"
-            endingLineNumber = "420"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
             landmarkName = "fireEvent(forAuthorAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -362,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.345342"
+            timestampString = "583123551.877416"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
+            startingLineNumber = "450"
+            endingLineNumber = "450"
             landmarkName = "quit(authorAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -378,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.345741"
+            timestampString = "583123551.877473"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "749"
-            endingLineNumber = "749"
+            startingLineNumber = "754"
+            endingLineNumber = "754"
             landmarkName = "purchaseOffice(_:starting:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.346156"
+            timestampString = "583123551.877532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "762"
-            endingLineNumber = "762"
+            startingLineNumber = "767"
+            endingLineNumber = "767"
             landmarkName = "purchaseOffice(_:starting:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,7 +410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.346568"
+            timestampString = "583123551.877605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "286"
@@ -426,7 +426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.3469861"
+            timestampString = "583123551.877661"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "294"
@@ -442,7 +442,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.347388"
+            timestampString = "583123551.877722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "302"
@@ -454,27 +454,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Blighty Times/GameViewController.swift"
-            timestampString = "583009639.3478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "tick()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/GameViewController.swift"
-            timestampString = "583009639.348206"
+            timestampString = "583123551.877785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "295"
@@ -506,7 +490,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.348659"
+            timestampString = "583123551.877882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "305"
@@ -522,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.349071"
+            timestampString = "583123551.877956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "426"
-            endingLineNumber = "426"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "fireEvent(forAuthorAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -538,7 +522,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/GameViewController.swift"
-            timestampString = "583009639.349467"
+            timestampString = "583123551.8780251"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "315"
@@ -554,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.3498369"
+            timestampString = "583123551.878089"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "775"
-            endingLineNumber = "775"
+            startingLineNumber = "780"
+            endingLineNumber = "780"
             landmarkName = "purchaseOffice(_:starting:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.350211"
+            timestampString = "583123551.878148"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "779"
-            endingLineNumber = "779"
+            startingLineNumber = "784"
+            endingLineNumber = "784"
             landmarkName = "purchaseOffice(_:starting:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,7 +570,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.3506269"
+            timestampString = "583123551.878212"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "787"
+            endingLineNumber = "787"
+            landmarkName = "purchaseOffice(_:starting:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Blighty Times/Simulation.swift"
+            timestampString = "583123551.8782721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "782"
@@ -598,16 +598,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Blighty Times/Simulation.swift"
-            timestampString = "583009639.351042"
+            filePath = "Blighty Times/Author.swift"
+            timestampString = "583123551.87834"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "777"
-            endingLineNumber = "777"
-            landmarkName = "purchaseOffice(_:starting:)"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "getQualityColor()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Blighty Times/Author.swift"
+            timestampString = "583123551.8784029"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "statColor(from:with:to:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

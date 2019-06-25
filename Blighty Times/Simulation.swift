@@ -272,7 +272,7 @@ class Simulation {
             //This chunk checks for various author events
             if _employedAuthors[i].hasCriticalMorale {
                 event = EmployeeEvent(title: "Low Morale",
-                                      message: _employedAuthors[i].getName() + "'s morale is getting critically low.",
+                                      message: _employedAuthors[i].getName() + "'s morale is getting critically low. Their article quality will be lower until you show them some attention.",
                                       color: Event.veryBadColor,
                                       image: _employedAuthors[i].getPortrait())
                 
@@ -280,7 +280,7 @@ class Simulation {
             }
             else if _employedAuthors[i].hasInfrequentPublished {
                 event = EmployeeEvent(title: "Feeling Aimless",
-                                      message: _employedAuthors[i].getName() + " is annoyed that their articles haven't been published recently.",
+                                      message: _employedAuthors[i].getName() + " is annoyed that their articles haven't been published recently. Their article quality will be lower until you prove that you like their work.",
                                       color: Event.badColor,
                                       image: _employedAuthors[i].getPortrait())
                 
@@ -288,7 +288,7 @@ class Simulation {
             }
             else if _employedAuthors[i].hasPromotionAnxiety {
                 event = EmployeeEvent(title: "Feeling Underappreciated",
-                                      message: _employedAuthors[i].getName() + " is upset that they haven't gotten a promotion for their hard work.",
+                                      message: _employedAuthors[i].getName() + " is upset that they haven't gotten a promotion for their hard work. Their article quality will be lower until you properly acknowledge their value.",
                                       color: Event.badColor,
                                       image: _employedAuthors[i].getPortrait())
                 
@@ -392,6 +392,11 @@ class Simulation {
     
     //Author Methods
     func hire(_ author: Author) {
+        if _company.getFunds() < author.getSalary() {
+            add(CompanyEvent(title: "Can't Hire", message: "You don't have enough money to hire \(author.getName())", color: Event.neutralColor, image: author.getPortrait()))
+            return
+        }
+        
         if _employedAuthors.count < _office.capacity {
             author.becomeHired();
             _employedAuthors.append(author);
@@ -463,7 +468,7 @@ class Simulation {
     
     func spawnApplicant() {
         var auths = _employedAuthors + _applicantAuthors
-        _applicantAuthors.append(Author(exluding: &auths));
+        _applicantAuthors.append(Author(exluding: &auths, in: _office.size));
         //add(ApplicantEvent(message: _applicantAuthors.last!.getName() + " sent you their application."));
     }
     

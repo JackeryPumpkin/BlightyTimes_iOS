@@ -46,7 +46,7 @@ func Random(double range: ClosedRange<Double>) -> Double {
     return Double.random(in: range);
 }
 
-func Random(index arrayCount: Int) -> Int {
+func RandomIndex(fromCount arrayCount: Int) -> Int {
     return Int.random(in: 0 ..< arrayCount);
 }
 

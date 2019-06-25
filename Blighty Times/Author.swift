@@ -42,7 +42,7 @@ class Author {
     //EmployeeEvent cooldown properties
     private var _pendingPromotionCooldown: Int = 0
     private var _criticalMoraleCooldown: Int = 0;
-    private var _infrequentPublishedColldown: Int = 0;
+    private var _infrequentPublishedCooldown: Int = 0;
     private var _promotionAnxiety: Int = 0;
     
     //Constants
@@ -52,14 +52,14 @@ class Author {
     
     ///Is the public interface for adding new pre-made Authors
     ///in context of the currently employed authors
-    init(exluding employedAuthors: inout [Author]) {
+    init(exluding employedAuthors: inout [Author], in officeSize: OfficeSize) {
         let newAuthor = AuthorLibrary.getRandom(employedAuthors: &employedAuthors);
         _portrait = newAuthor.getPortrait();
         _name = newAuthor.getName();
         _experience = 0;
         _topics = newAuthor.getTopics();
-        _quality = newAuthor.getQuality();
-        _morale = newAuthor.getMorale();
+        _quality = newAuthor.getQuality()
+        _morale = newAuthor.getMorale()
         _articleRate = newAuthor.getRate();
     }
     
@@ -70,7 +70,7 @@ class Author {
         _name = name;
         _experience = 0;
         _topics = TopicLibrary.getRandomTopics();
-        _quality = AuthorLibrary.getRandomQuality();
+        _quality = AuthorLibrary.getRandomQuality(with: nil)
         _morale = Simulation.TICKS_PER_DAY / _quality;
         _articleRate = AuthorLibrary.getRandomRate();
     }
@@ -96,7 +96,7 @@ class Author {
             reduceMorale(moraleModifier);
             
             if _daysSinceLastPublication > 5
-            && _infrequentPublishedColldown == 0 {
+            && _infrequentPublishedCooldown == 0 {
                 hasInfrequentPublished = true;
             }
         }
@@ -120,7 +120,7 @@ class Author {
         
         _pendingPromotionCooldown -= _pendingPromotionCooldown > 0 ? 1 : 0;
         _criticalMoraleCooldown -= _criticalMoraleCooldown > 0 ? 1 : 0;
-        _infrequentPublishedColldown -= _infrequentPublishedColldown > 0 ? 1 : 0;
+        _infrequentPublishedCooldown -= _infrequentPublishedCooldown > 0 ? 1 : 0;
         _promotionAnxiety -= _promotionAnxiety > 0 ? 1 : 0;
     }
     
@@ -142,8 +142,8 @@ class Author {
     }
     
     func getQuality() -> Int {
-        if hasCriticalMorale {
-            return _quality - 1
+        if areStatsReduced() {
+            return _quality > 1 ? _quality - 1 : 1
         } else {
             return _quality
         }
@@ -157,8 +157,24 @@ class Author {
         return statString(from: 1, with: _quality, to: 10)
     }
     
+    func getQualityColor() -> UIColor {
+        if areStatsReduced() {
+            return statColor(from: 0, with: 0, to: 1)
+        } else {
+            return statColor(from: 0, with: getQuality(), to: 10)
+        }
+    }
+    
+    func areStatsReduced() -> Bool {
+        return _criticalMoraleCooldown != 0 || _promotionAnxiety != 0 || _infrequentPublishedCooldown != 0 || _morale <= 200
+    }
+    
     func getRate() -> Double {
-        return _articleRate;
+        if areStatsReduced() {
+            return _articleRate > 1 ? _articleRate - 1 : 1
+        } else {
+            return _articleRate
+        }
     }
     
     func getRateOutOfTen() -> Int {
@@ -181,14 +197,22 @@ class Author {
         return _articleRate == Author.ARTICLE_RATE_MAX
     }
     
+    ///Increases rate by 1/10 of the difference between the min and max rates
     func setIncreasedRate() {
-        //Increases rate by a 10th of the difference between the min and max rates
         let rateIncrease: Double = (Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN) / 10.0;
         _articleRate = _articleRate + rateIncrease > Author.ARTICLE_RATE_MAX ? Author.ARTICLE_RATE_MAX : _articleRate + rateIncrease;
     }
     
     func getRateSymbol() -> String {
-        return statString(from: Author.ARTICLE_RATE_MIN, with: _articleRate, to: Author.ARTICLE_RATE_MAX)
+        return statString(from: Author.ARTICLE_RATE_MIN, with: getRate(), to: Author.ARTICLE_RATE_MAX)
+    }
+    
+    func getRateColor() -> UIColor {
+        if areStatsReduced() {
+            return statColor(from: 0, with: 0, to: 1)
+        } else {
+            return statColor(from: Author.ARTICLE_RATE_MIN, with: getRate(), to: Author.ARTICLE_RATE_MAX)
+        }
     }
     
     func getTopics() -> [Topic] {
@@ -253,7 +277,11 @@ class Author {
         return statString
     }
     
-    private func statColor(from low: Int, with actual:Int, to high: Int) -> UIColor {
+    private func statColor(from low: Int, with actual: Int, to high: Int) -> UIColor {
+        return statColor(from: Double(low), with: Double(actual), to: Double(high))
+    }
+    
+    private func statColor(from low: Double, with actual: Double, to high: Double) -> UIColor {
         if actual >= high {
             return #colorLiteral(red: 0.3169804215, green: 0.9253683686, blue: 0, alpha: 1)
         } else if actual <= low {
@@ -383,7 +411,7 @@ class Author {
     }
     
     func newArticleTopic() -> Topic {
-        return _topics[Random(index: _topics.count)];
+        return _topics[RandomIndex(fromCount: _topics.count)];
     }
     
     func becomeHired() {
@@ -449,7 +477,7 @@ class AuthorLibrary {
     var blank: Author = Author(portrait: UIImage(), name: "blank", topics: [], quality: 1, articleRate: 0);
     
     fileprivate static func getRandom(employedAuthors: inout [Author]) -> Author {
-        var rAuthor = AuthorLibrary._AUTHORS[Random(index: AuthorLibrary._AUTHORS.count)];
+        var rAuthor = AuthorLibrary._AUTHORS[RandomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
         
         var valid = false;
         while (!valid) {
@@ -457,7 +485,7 @@ class AuthorLibrary {
             
             for author in employedAuthors {
                 if (author.getName() == rAuthor.getName()) {
-                    rAuthor = AuthorLibrary._AUTHORS[Random(index: AuthorLibrary._AUTHORS.count)];
+                    rAuthor = AuthorLibrary._AUTHORS[RandomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
                     valid = false;
                 }
             }
@@ -466,8 +494,10 @@ class AuthorLibrary {
         return rAuthor;
     }
     
-    static func getRandomQuality() -> Int {
-        return Random(int: 1 ... 5);
+    static func getRandomQuality(with officeSize: OfficeSize?) -> Int {
+        let max = officeSize == nil ? 5 : officeSize!.rawValue + 5
+        let min = officeSize == nil ? 1 : officeSize!.rawValue + 1
+        return Random(int: min ... max);
     }
     
     static func getRandomRate() -> Double {

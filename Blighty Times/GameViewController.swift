@@ -407,20 +407,24 @@ class GameViewController: UIViewController, StateObject {
     }
     
     func setRegionTopics() {
-        var i = 0
-        for region in sim.population.regions {
-            regionTopicIcons[i].removeAllArrangedSubviews()
-            guard let region = region else { continue }
-            
-            for topic in region.getTopics() {
-                let topicImageView = UIImageView(image: topic.image)
-                topicImageView.contentMode = .scaleAspectFit
-                topicImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
-                topicImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
-                regionTopicIcons[i].addArrangedSubview(topicImageView)
+        UIView.performWithoutAnimation {
+            var i = 0
+            for region in sim.population.regions {
+                regionTopicIcons[i].removeAllArrangedSubviews()
+                guard let region = region else { continue }
+                
+                for topic in region.getTopics() {
+                    let topicImageView = UIImageView(image: topic.image)
+                    topicImageView.contentMode = .scaleAspectFit
+                    topicImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+                    topicImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+                    regionTopicIcons[i].addArrangedSubview(topicImageView)
+                }
+                
+                i += 1
             }
             
-            i += 1
+            view.layoutIfNeeded()
         }
     }
     
@@ -695,15 +699,15 @@ class GameViewController: UIViewController, StateObject {
     
     @IBAction func hireApplicant(_ sender: Any) {
         if state is PlayState {
+            guard let applicant = sim.applicantAuthors.first else { return }
+            
             stateMachine.handle(input: .pause)
             applicantAuthorViewConstraint.constant = 50
             UIView.animate(withDuration: 0.2, animations: {
                 self.applicantAuthorView.alpha = 0
                 self.view.layoutIfNeeded()
             }) { (finished) in
-                if let applicant = self.sim.applicantAuthors.first {
-                    self.sim.hire(applicant)
-                }
+                self.sim.hire(applicant)
                 self.applicantAuthorViewConstraint.constant = -45
                 self.view.layoutIfNeeded()
                 
@@ -764,27 +768,30 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
             guard let employedCell = cell as? EmployedAuthorCell else { return }
+            let employedAuthor = sim.employedAuthors[indexPath.row]
             
-            employedCell.authorPortrait.image = sim.employedAuthors[indexPath.row].getPortrait()
-            employedCell.authorName.text = sim.employedAuthors[indexPath.row].getName()
-            employedCell.level.text = "\(sim.employedAuthors[indexPath.row].getSeniorityLevel())"
-            employedCell.morale.text = sim.employedAuthors[indexPath.row].getMoraleSymbol()
-            employedCell.morale.textColor = sim.employedAuthors[indexPath.row].getMoraleColor()
-            employedCell.publications.text = sim.employedAuthors[indexPath.row].getQualitySymbol()
-            employedCell.speed.text = sim.employedAuthors[indexPath.row].getRateSymbol()
-            employedCell.salary.text = (sim.employedAuthors[indexPath.row].getSalary()/* * 365*/).dollarFormat()
-            employedCell.progressConstraint.constant = employedCell.getProgressLength(sim.employedAuthors[indexPath.row].getArticalProgress())
-            employedCell.experience.text = Int(sim.employedAuthors[indexPath.row].getExperience()).commaFormat()
-            employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+            employedCell.authorPortrait.image = employedAuthor.getPortrait()
+            employedCell.authorName.text = employedAuthor.getName()
+            employedCell.level.text = "\(employedAuthor.getSeniorityLevel())"
+            employedCell.morale.text = employedAuthor.getMoraleSymbol()
+            employedCell.morale.textColor = employedAuthor.getMoraleColor()
+            employedCell.publications.text = employedAuthor.getQualitySymbol()
+            employedCell.publications.textColor = employedAuthor.getQualityColor()
+            employedCell.speed.text = employedAuthor.getRateSymbol()
+            employedCell.speed.textColor = employedAuthor.getRateColor()
+            employedCell.salary.text = (employedAuthor.getSalary()/* * 365*/).dollarFormat()
+            employedCell.progressConstraint.constant = employedCell.getProgressLength(employedAuthor.getArticalProgress())
+            employedCell.experience.text = Int(employedAuthor.getExperience()).commaFormat()
+            employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
             employedCell.showSkillButtons()
             
             employedCell.clearTopicImages()
-            for topic in sim.employedAuthors[indexPath.row].getTopics() {
+            for topic in employedAuthor.getTopics() {
                 employedCell.setTopicImage(topic.image)
             }
             
             if employedCell.overlayView.isHidden {
-                if self.sim.employedAuthors[indexPath.row].getSkillPoints() > 0 {
+                if employedAuthor.getSkillPoints() > 0 {
                     employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
                     employedCell.overlayButton.setTitle("↑", for: .normal)
                     employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
@@ -793,8 +800,9 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
                     employedCell.overlayButton.setTitle("⚙︎", for: .normal)
                     employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
                 }
+                
             } else {
-                if sim.employedAuthors[indexPath.row].hasMaxRate() {
+                if employedAuthor.hasMaxRate() {
                     employedCell.speedButton.isEnabled = false
                 }
             }
@@ -822,16 +830,16 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
             
             employedCell.promoteQuality = {
                 if self.state is PlayState {
-                    self.sim.employedAuthors[indexPath.row].promoteQuality()
-                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedAuthor.promoteQuality()
+                    employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
                     employedCell.showSkillButtons()
                 }
             }
             
             employedCell.promoteSpeed = {
                 if self.state is PlayState {
-                    self.sim.employedAuthors[indexPath.row].promoteSpeed()
-                    employedCell.skillPoints.text = "\(self.sim.employedAuthors[indexPath.row].getSkillPoints())"
+                    employedAuthor.promoteSpeed()
+                    employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
                     employedCell.showSkillButtons()
                 }
             }

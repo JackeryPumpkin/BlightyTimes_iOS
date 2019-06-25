@@ -170,7 +170,7 @@ class NewsEvent: Event {
             return "Ain't nothing going on out there.";
         }
         
-        return options[Random(index: options.count)]
+        return options[RandomIndex(fromCount: options.count)]
     }
     
     final private func lifetime() -> Int {

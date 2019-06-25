@@ -69,12 +69,12 @@ class TopicLibrary {
     }
     
     static func getRandomTopics(from subset: [Topic], quantity MAX: Int = 3) -> [Topic] {
-        let numTopics = Random(index: subset.count > MAX ? MAX : subset.count);
+        let numTopics = RandomIndex(fromCount: subset.count > MAX ? MAX : subset.count);
         var topics: [Topic] = [];
         var usedTopics: [Int] = [];
         
         for _ in 0 ... numTopics {
-            var topicIndex = Random(index: subset.count);
+            var topicIndex = RandomIndex(fromCount: subset.count);
             var valid: Bool = false;
             
             while (!valid) {
@@ -82,7 +82,7 @@ class TopicLibrary {
                 
                 for i in 0 ..< usedTopics.count {
                     if (topicIndex == usedTopics[i]) {
-                        topicIndex = Random(index: subset.count);
+                        topicIndex = RandomIndex(fromCount: subset.count);
                         valid = false
                     }
                 }
