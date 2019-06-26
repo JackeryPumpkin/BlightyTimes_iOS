@@ -154,7 +154,7 @@ class Author {
     }
     
     func getQualitySymbol() -> String {
-        return statString(from: 1, with: _quality, to: 10)
+        return statString(from: 1, with: getQuality(), to: 10)
     }
     
     func getQualityColor() -> UIColor {
@@ -170,8 +170,9 @@ class Author {
     }
     
     func getRate() -> Double {
+        let increment = (Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN) / 10
         if areStatsReduced() {
-            return _articleRate > 1 ? _articleRate - 1 : 1
+            return _articleRate >= Author.ARTICLE_RATE_MIN + increment ? _articleRate - increment : Author.ARTICLE_RATE_MIN
         } else {
             return _articleRate
         }
@@ -260,7 +261,9 @@ class Author {
     private func statString(from min: Double, with actual: Double, to max: Double) -> String {
         if max == 0  ||
            min > max ||
-           actual < min { return "" }
+           actual < min {
+            return ""
+        }
         
         var statString = "|"
         let difference = max - min

@@ -97,6 +97,14 @@ class NewsEvent: Event {
                 "Elementary school school play given scathing reviews on Rotten Tomatoes",
             ]
             
+        case "Literature":
+            options = [
+                "George RR Martin to release next book in A Song of Ice and Fire series! The entire world holds its breath",
+                "Small-town Blighty citizen writes a brilliant new poem that bring poetry back into the public eye",
+                "Parents worried about startling new fad that has children sitting for hours reading novels for leisure",
+                "Book shop burgled again by knowledge thirsty thieves. Shop owner appreciates their well worded apology letters"
+            ]
+            
         case "Theatre":
             options = [
                 "Local theatre shutters its doors from lack of attendance.",

@@ -365,7 +365,7 @@ class GameViewController: UIViewController, StateObject {
         
         applicantAuthorView.roundCorners(withIntensity: .full)
         applicantAuthorView.addBorders(width: 3, color: #colorLiteral(red: 0.137254902, green: 0.137254902, blue: 0.3137254902, alpha: 1).cgColor)
-        applicantAuthorView.addShadow(radius: 10, height: 3)
+        applicantAuthorView.addShadow(radius: 10, height: 3, color: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.4))
         applicantAuthorView.alpha = 0
         applicantAuthorViewConstraint.constant = -45
         applicantAuthorHireButton.roundCorners(withIntensity: .full)
@@ -475,7 +475,6 @@ class GameViewController: UIViewController, StateObject {
 
                 if recognizer.state == .ended || recognizer.state == .cancelled {
                     let dropLocation = recognizer.location(in: articlePane);
-//                    var NE_newLocation: CGPoint? = nil;
                     var NE_newIndex: Int? = nil;
 
                     hitLoop: for ne_view in NE_viewPositions {
