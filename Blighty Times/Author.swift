@@ -58,9 +58,9 @@ class Author {
         _name = newAuthor.getName();
         _experience = 0;
         _topics = newAuthor.getTopics();
-        _quality = newAuthor.getQuality()
+        _quality = AuthorLibrary.getRandomQuality(with: officeSize)
         _morale = newAuthor.getMorale()
-        _articleRate = newAuthor.getRate();
+        _articleRate = AuthorLibrary.getRandomRate(with: officeSize)
     }
     
     ///Handles the inits for the pre-made Authors with random stats
@@ -72,7 +72,7 @@ class Author {
         _topics = TopicLibrary.getRandomTopics();
         _quality = AuthorLibrary.getRandomQuality(with: nil)
         _morale = Simulation.TICKS_PER_DAY / _quality;
-        _articleRate = AuthorLibrary.getRandomRate();
+        _articleRate = AuthorLibrary.getRandomRate(with: nil)
     }
     
     ///Public interface for custom author creation
@@ -495,9 +495,48 @@ class AuthorLibrary {
     }
     
     static func getRandomQuality(with officeSize: OfficeSize?) -> Int {
-        let max = officeSize == nil ? 5 : officeSize!.rawValue + 5
-        let min = officeSize == nil ? 1 : officeSize!.rawValue + 1
+        var max = 4
+        var min = 1
+        
+        if let size = officeSize {
+            switch size {
+            case .small:
+                max = 2
+            case .medium:
+                max = 3
+            case .large:
+                max = 5
+                min = 3
+            case .huge:
+                max = 6
+                min = 3
+            }
+        }
+        
         return Random(int: min ... max);
+    }
+    
+    static func getRandomRate(with officeSize: OfficeSize?) -> Double {
+        let increment = (Author.ARTICLE_RATE_MAX - Author.ARTICLE_RATE_MIN) / 10
+        var max = Author.ARTICLE_RATE_MIN + (increment * 3)
+        var min = Author.ARTICLE_RATE_MIN
+        
+        if let size = officeSize {
+            switch size {
+            case .small:
+                max = Author.ARTICLE_RATE_MIN + (increment * 2)
+            case .medium:
+                max = Author.ARTICLE_RATE_MIN + (increment * 4)
+            case .large:
+                max = Author.ARTICLE_RATE_MIN + (increment * 6)
+                min = Author.ARTICLE_RATE_MIN + (increment * 2)
+            case .huge:
+                max = Author.ARTICLE_RATE_MIN + (increment * 7)
+                min = Author.ARTICLE_RATE_MIN + (increment * 3)
+            }
+        }
+        
+        return Random(double: min ... max)
     }
     
     static func getRandomRate() -> Double {
