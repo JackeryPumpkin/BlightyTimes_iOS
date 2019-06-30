@@ -44,7 +44,6 @@ class GameViewController: UIViewController, StateObject {
     //Data Tracking Outlets
     @IBOutlet weak var companyFunds: UILabel!
     @IBOutlet weak var yesterdaysProfit: UILabel!
-    @IBOutlet weak var hiredAuthors: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
     @IBOutlet weak var subscriberPanelTitle: UILabel!
@@ -375,6 +374,9 @@ class GameViewController: UIViewController, StateObject {
         updateDataPanelsDaily()
         updateOfficeTab()
         
+        let footerView = EmployeeFooter()
+        employedAuthorsTable.tableFooterView = footerView
+        
         view.layoutIfNeeded()
     }
     
@@ -623,7 +625,6 @@ class GameViewController: UIViewController, StateObject {
         yesterdaysProfit.textColor = sim.company.getYesterdaysProfit() < 0 ? .red : .black;
         totalSubscribers.text = sim.population.getTotalSubscriberCount().commaFormat();
         newSubscribers.text = sim.population.getNewSubscriberCount().commaFormat();
-        hiredAuthors.text = "\(sim.employedAuthors.count) / \(sim.office.capacity)"
         
         //Update Region Bars and Topics
         updateRegions()
@@ -855,11 +856,26 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if tableView == employedAuthorsTable {
-            let footer = UIView()
-            footer.backgroundColor = .clear
-            return footer
+            let footerTitle = UILabel()
+
+            if sim.employedAuthors.count == 0 {
+                footerTitle.text = "Office is empty :("
+                footerTitle.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            } else if sim.employedAuthors.count < sim.office.capacity {
+                footerTitle.text = "\(sim.employedAuthors.count) / \(sim.office.capacity)"
+                footerTitle.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            }
+
+            footerTitle.textAlignment = .center
+            footerTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
+            return footerTitle
+            
+//            let footer = EmployeeFooter()
+//
+//            return footer
         }
-        
+
         return nil
     }
     

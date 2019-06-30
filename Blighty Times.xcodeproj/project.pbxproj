@@ -44,6 +44,8 @@
 		C36478672291F5F400E8C50A /* OfficeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478662291F5F400E8C50A /* OfficeButton.swift */; };
 		C364786A2293842A00E8C50A /* IntExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36478692293842A00E8C50A /* IntExt.swift */; };
 		C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D81CB216FAE0800CD2E85 /* Population.swift */; };
+		C3AB5D4E22C711B500981A37 /* EmployeeFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */; };
+		C3AB5D5022C7191C00981A37 /* EmployeeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */; };
 		C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D3FF229B6D7E00BA86A6 /* Region.swift */; };
 		C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
@@ -91,6 +93,8 @@
 		C36478662291F5F400E8C50A /* OfficeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeButton.swift; sourceTree = "<group>"; };
 		C36478692293842A00E8C50A /* IntExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExt.swift; sourceTree = "<group>"; };
 		C37D81CB216FAE0800CD2E85 /* Population.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Population.swift; sourceTree = "<group>"; };
+		C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmployeeFooter.xib; sourceTree = "<group>"; };
+		C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeFooter.swift; sourceTree = "<group>"; };
 		C3C3D3FF229B6D7E00BA86A6 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExt.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
 				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
 				C31530FC215848790054684F /* ArticleTile.swift */,
+				C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */,
 				C334A65622B709FA00988837 /* EventController.swift */,
 			);
 			name = Controllers;
@@ -234,6 +239,7 @@
 				C31530FF215848790054684F /* Main.storyboard */,
 				C31530F3215846D50054684F /* LaunchScreen.storyboard */,
 				C31530FD215848790054684F /* ArticleTile.xib */,
+				C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */,
 				C31530F1215846D50054684F /* Assets.xcassets */,
 			);
 			name = Views;
@@ -297,6 +303,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3AB5D4E22C711B500981A37 /* EmployeeFooter.xib in Resources */,
 				C31530F5215846D50054684F /* LaunchScreen.storyboard in Resources */,
 				C3153107215848790054684F /* ArticleTile.xib in Resources */,
 				C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */,
@@ -330,6 +337,7 @@
 				C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
 				C36478562290A1A600E8C50A /* RedButton.swift in Sources */,
+				C3AB5D5022C7191C00981A37 /* EmployeeFooter.swift in Sources */,
 				C3647846228CE50000E8C50A /* MainMenu.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
 				C36478632291D09B00E8C50A /* Office.swift in Sources */,
