@@ -178,7 +178,7 @@ class NewsEvent: Event {
             return "Ain't nothing going on out there.";
         }
         
-        return options[RandomIndex(fromCount: options.count)]
+        return options[Int.randomIndex(fromCount: options.count)]
     }
     
     final private func lifetime() -> Int {
@@ -244,6 +244,20 @@ class RegionEvent: Event {
 class FiringEvent: Event {
     init(title: String, message: String, color: UIColor, image: UIImage, action: @escaping (()->Void)) {
         super.init(title: title, message: message, color: color, image: image, lifetime: Simulation.TICKS_PER_DAY / 4)
+        okayAction = action
+    }
+}
+
+class LoseEvent: Event {
+    init(message: String, action: @escaping (()->Void)) {
+        super.init(title: "You Lose.", message: message, color: Event.veryBadColor, image: #imageLiteral(resourceName: "Violence"), lifetime: 0)
+        okayAction = action
+    }
+}
+
+class WinEvent: Event {
+    init(message: String, action: @escaping (()->Void)) {
+        super.init(title: "You Win!", message: message, color: Event.goodColor, image: #imageLiteral(resourceName: "Liberalism"), lifetime: 0)
         okayAction = action
     }
 }

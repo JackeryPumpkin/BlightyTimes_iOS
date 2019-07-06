@@ -768,6 +768,7 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
             guard let employedCell = cell as? EmployedAuthorCell else { return }
+            guard sim.employedAuthors.count != indexPath.row else { return }
             let employedAuthor = sim.employedAuthors[indexPath.row]
             
             employedCell.authorPortrait.image = employedAuthor.getPortrait()
