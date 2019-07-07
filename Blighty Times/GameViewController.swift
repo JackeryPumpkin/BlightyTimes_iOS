@@ -98,7 +98,19 @@ class GameViewController: UIViewController, StateObject {
     
     @objc func tick() {
         //Game Simulation
-        sim.tick();
+        sim.tick()
+        //Check for Win Case
+        if sim.population.getTotalSubscriberCount() > 1000000 {
+            stateMachine.handle(input: .pause)
+            sim.add(WinEvent(message: "WIN win WIN win WIN win WIN win WIN win ", action: {self.dismiss(animated: true, completion: nil)}))
+            return
+        }
+        //Check for Lose Case
+        if sim.company.getFunds() <= 0 && sim.employedAuthors.count == 0 {
+            stateMachine.handle(input: .pause)
+            sim.add(LoseEvent(message: "You have no journalists and no funds left to hire anyone. Your assets will be handed over to the bank and you will be escorted to Blighty Prison.", action: {self.dismiss(animated: true, completion: nil)}))
+            return 
+        }
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
