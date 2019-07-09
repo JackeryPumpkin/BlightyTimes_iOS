@@ -11,9 +11,9 @@ import UIKit
 class MainMenu: UIViewController {
     var gameMode: GameMode?
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        present(Popup(), animated: true, completion: nil)
-//    }
+    override func viewDidAppear(_ animated: Bool) {
+        present(Popup(), animated: true, completion: nil)
+    }
     
     func newGame() {
         performSegue(withIdentifier: "newGameSegue", sender: nil)
