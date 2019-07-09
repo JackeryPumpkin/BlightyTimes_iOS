@@ -350,7 +350,8 @@ class Simulation {
         }
     }
     
-    func add(_ event: Event) {
+    /// Adds a new Event to the eventList to be displayed later
+    private func add(_ event: Event) {
         if supressPopups && (event is EmployeeEvent || event is CompanyEvent)  { return }
         
         //If there is a NewsEvent currently in the queue, put the next event
@@ -359,6 +360,46 @@ class Simulation {
             eventList.insert(event, at: 1);
         } else {
             eventList.insert(event, at: 0);
+        }
+    }
+    
+    /// This will force the current popup to be a specific WinEvent, ending the game.
+    ///
+    /// - Parameters:
+    ///   - message: Will be displayed under the default Win title
+    ///   - controller: The ViewController that presents EventControllers
+    func addWinEvent(_ message: String, in controller: UIViewController) {
+        let winEvent = WinEvent(message: message, action: {controller.dismiss(animated: true, completion: nil)})
+        addGameEnd(event: winEvent, in: controller)
+    }
+    
+    /// This will force the current popup to be a specific WinEvent, ending the game.
+    ///
+    /// - Parameters:
+    ///   - message: Will be displayed under the default Win title
+    ///   - controller: The ViewController that presents EventControllers
+    func addLoseEvent(_ message: String, in controller: UIViewController) {
+        let loseEvent = LoseEvent(message: message, action: {controller.dismiss(animated: true, completion: nil)})
+        addGameEnd(event: loseEvent, in: controller)
+    }
+    
+    /// This checks to see if there are any popups currently being presented by the
+    /// supplied ViewController. It will dismiss it if there is one and present an EventController
+    /// with the supplied Event.
+    ///
+    /// - Parameters:
+    ///   - event: Should only be WinEvent or LoseEvent
+    ///   - controller: The ViewController that presents EventControllers
+    private func addGameEnd(event: Event, in controller: UIViewController) {
+        eventList.removeAll()
+        add(event)
+        
+        if let popup = controller.presentedViewController {
+            popup.dismiss(animated: true) {
+                controller.performSegue(withIdentifier: "eventSegue", sender: nil)
+            }
+        } else {
+            controller.performSegue(withIdentifier: "eventSegue", sender: nil)
         }
     }
     
@@ -377,6 +418,9 @@ class Simulation {
     }
     
     func weeklyReset() {
+        company.weeklyReset()
+        population.weeklyReset()
+        
         //Player property reset
         _playerPausesLeft = Simulation._MAX_PAUSES;
         

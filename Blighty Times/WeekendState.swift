@@ -30,6 +30,6 @@ class WeekendState: State {
     }
     
     func exit(_ stateObject: StateObject) {
-        //
+        stateObject.sim.weeklyReset()
     }
 }

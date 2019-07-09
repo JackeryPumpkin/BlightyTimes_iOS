@@ -102,14 +102,12 @@ class GameViewController: UIViewController, StateObject {
         //Check for Win Case
         if sim.population.getTotalSubscriberCount() > 1000000 {
             stateMachine.handle(input: .pause)
-            sim.add(WinEvent(message: "WIN win WIN win WIN win WIN win WIN win ", action: {self.dismiss(animated: true, completion: nil)}))
-            return
+            sim.addWinEvent("You've certainly captured the admiration of the public. Your company has become such a big hit that Amazon has aquired you. Enjoy your retirement.", in: self)
         }
         //Check for Lose Case
         if sim.company.getFunds() <= 0 && sim.employedAuthors.count == 0 {
             stateMachine.handle(input: .pause)
-            sim.add(LoseEvent(message: "You have no journalists and no funds left to hire anyone. Your assets will be handed over to the bank and you will be escorted to Blighty Prison.", action: {self.dismiss(animated: true, completion: nil)}))
-            return 
+            sim.addLoseEvent("You have no journalists and no funds left to hire anyone. Your assets will be handed over to the bank and you will be escorted to Blighty Prison.", in: self)
         }
         
         //Animate UI changes
@@ -320,13 +318,7 @@ class GameViewController: UIViewController, StateObject {
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
         stateMachine.handle(input: .play)
-        pausesLeft.text = "\(sim.getPausesLeft())";
-        
-        if segue.identifier == "unwindScore" {
-            sim.company.weeklyReset()
-            sim.population.weeklyReset()
-            sim.weeklyReset()
-        }
+        pausesLeft.text = "\(sim.getPausesLeft())"
     }
     
     func createTiles() {
@@ -645,7 +637,13 @@ class GameViewController: UIViewController, StateObject {
             self.view.layoutIfNeeded()
         }) { (finished) in
             if self.sim.isEndOfWeek() {
-                self.stateMachine.handle(input: .weekend)
+                //Check for Win conditions
+                if self.sim.getAverageQualityThisWeek() >= 10 {
+                    self.stateMachine.handle(input: .pause)
+                    self.sim.addWinEvent("Blighty Times' publications are so powerful and incisive that you have been granted the Pulitzer Prize. Congratulations!", in: self)
+                } else {
+                    self.stateMachine.handle(input: .weekend)
+                }
             } else {
                 self.stateMachine.handle(input: .publishComplete)
             }
