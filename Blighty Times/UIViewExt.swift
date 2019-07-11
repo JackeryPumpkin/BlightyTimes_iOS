@@ -23,16 +23,16 @@ extension UIView {
     
     func roundCorners(withIntensity level: Roundness) {
         if self is UIImageView {
-            self.clipsToBounds = true;
+            self.clipsToBounds = true
         }
         
         switch level {
         case .slight:
-            self.layer.cornerRadius = 5.0
+            layer.cornerRadius = 5.0
         case .heavy:
-            self.layer.cornerRadius = 15.0
+            layer.cornerRadius = 15.0
         case .full:
-            self.layer.cornerRadius = self.frame.width > self.frame.height ? self.frame.height / 2 : self.frame.width / 2
+            layer.cornerRadius = frame.width > frame.height ? frame.height / 2 : frame.width / 2
         }
     }
     

@@ -12,7 +12,8 @@ class MainMenu: UIViewController {
     var gameMode: GameMode?
     
     override func viewDidAppear(_ animated: Bool) {
-        present(Popup(), animated: true, completion: nil)
+        let event = Event(title: "Test", message: "Fancy message to display", color: #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), image: #imageLiteral(resourceName: "RichardFeak"), lifetime: 0)
+        present(EventPopup(with: event), animated: true, completion: nil)
     }
     
     func newGame() {
