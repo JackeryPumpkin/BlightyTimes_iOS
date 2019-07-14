@@ -36,4 +36,16 @@ extension Int {
     static func /(left: Int, right: Double) -> Int {
         return Int(Double(left) / right)
     }
+    
+    static func randomIndex(fromCount arrayCount: Int) -> Int {
+        return Int.random(in: 0 ..< arrayCount);
+    }
+    
+    static func random(between left: Int, and right: Int) -> Int {
+        if left < right {
+            return Int.random(in: left ... right);
+        } else {
+            return Int.random(in: right ... left);
+        }
+    }
 }

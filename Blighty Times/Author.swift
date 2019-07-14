@@ -414,7 +414,7 @@ class Author {
     }
     
     func newArticleTopic() -> Topic {
-        return _topics[RandomIndex(fromCount: _topics.count)];
+        return _topics[Int.randomIndex(fromCount: _topics.count)];
     }
     
     func becomeHired() {
@@ -480,7 +480,7 @@ class AuthorLibrary {
     var blank: Author = Author(portrait: UIImage(), name: "blank", topics: [], quality: 1, articleRate: 0);
     
     fileprivate static func getRandom(employedAuthors: inout [Author]) -> Author {
-        var rAuthor = AuthorLibrary._AUTHORS[RandomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
+        var rAuthor = AuthorLibrary._AUTHORS[Int.randomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
         
         var valid = false;
         while (!valid) {
@@ -488,7 +488,7 @@ class AuthorLibrary {
             
             for author in employedAuthors {
                 if (author.getName() == rAuthor.getName()) {
-                    rAuthor = AuthorLibrary._AUTHORS[RandomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
+                    rAuthor = AuthorLibrary._AUTHORS[Int.randomIndex(fromCount: AuthorLibrary._AUTHORS.count)];
                     valid = false;
                 }
             }
@@ -516,7 +516,7 @@ class AuthorLibrary {
             }
         }
         
-        return Random(int: min ... max);
+        return Int.random(in: min ... max);
     }
     
     static func getRandomRate(with officeSize: OfficeSize?) -> Double {

@@ -44,7 +44,6 @@ class GameViewController: UIViewController, StateObject {
     //Data Tracking Outlets
     @IBOutlet weak var companyFunds: UILabel!
     @IBOutlet weak var yesterdaysProfit: UILabel!
-    @IBOutlet weak var hiredAuthors: UILabel!
     @IBOutlet weak var totalSubscribers: UILabel!
     @IBOutlet weak var newSubscribers: UILabel!
     @IBOutlet weak var subscriberPanelTitle: UILabel!
@@ -99,7 +98,17 @@ class GameViewController: UIViewController, StateObject {
     
     @objc func tick() {
         //Game Simulation
-        sim.tick();
+        sim.tick()
+        //Check for Win Case
+        if sim.population.getTotalSubscriberCount() > 1000000 {
+            stateMachine.handle(input: .pause)
+            sim.addWinEvent("You've certainly captured the admiration of the public. Your company has become such a big hit that Amazon has aquired you. Enjoy your retirement.", in: self)
+        }
+        //Check for Lose Case
+        if sim.company.getFunds() <= 0 && sim.employedAuthors.count == 0 {
+            stateMachine.handle(input: .pause)
+            sim.addLoseEvent("You have no journalists and no funds left to hire anyone. Your assets will be handed over to the bank and you will be escorted to Blighty Prison.", in: self)
+        }
         
         //Animate UI changes
         employedAuthorsTable.reloadData();
@@ -309,13 +318,7 @@ class GameViewController: UIViewController, StateObject {
     
     @IBAction func unwindToGame(segue:UIStoryboardSegue) {
         stateMachine.handle(input: .play)
-        pausesLeft.text = "\(sim.getPausesLeft())";
-        
-        if segue.identifier == "unwindScore" {
-            sim.company.weeklyReset()
-            sim.population.weeklyReset()
-            sim.weeklyReset()
-        }
+        pausesLeft.text = "\(sim.getPausesLeft())"
     }
     
     func createTiles() {
@@ -374,6 +377,9 @@ class GameViewController: UIViewController, StateObject {
         setRegionTopics()
         updateDataPanelsDaily()
         updateOfficeTab()
+        
+        let footerView = EmployeeFooterCell()
+        employedAuthorsTable.tableFooterView = footerView
         
         view.layoutIfNeeded()
     }
@@ -623,7 +629,6 @@ class GameViewController: UIViewController, StateObject {
         yesterdaysProfit.textColor = sim.company.getYesterdaysProfit() < 0 ? .red : .black;
         totalSubscribers.text = sim.population.getTotalSubscriberCount().commaFormat();
         newSubscribers.text = sim.population.getNewSubscriberCount().commaFormat();
-        hiredAuthors.text = "\(sim.employedAuthors.count) / \(sim.office.capacity)"
         
         //Update Region Bars and Topics
         updateRegions()
@@ -632,7 +637,13 @@ class GameViewController: UIViewController, StateObject {
             self.view.layoutIfNeeded()
         }) { (finished) in
             if self.sim.isEndOfWeek() {
-                self.stateMachine.handle(input: .weekend)
+                //Check for Win conditions
+                if self.sim.getAverageQualityThisWeek() >= 10 {
+                    self.stateMachine.handle(input: .pause)
+                    self.sim.addWinEvent("Blighty Times' publications are so powerful and incisive that you have been granted the Pulitzer Prize. Congratulations!", in: self)
+                } else {
+                    self.stateMachine.handle(input: .weekend)
+                }
             } else {
                 self.stateMachine.handle(input: .publishComplete)
             }
@@ -741,13 +752,11 @@ class GameViewController: UIViewController, StateObject {
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////        Table Methods        ///////////////////////
-///////////////////////////////////////////////////////////////////////
+//MARK: - Table Methods
 extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == employedAuthorsTable {
-            return sim.employedAuthors.count
+            return sim.employedAuthors.count + 1
         }
         
         return 0
@@ -755,10 +764,17 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == employedAuthorsTable {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
-                fatalError("Employed Author cell downcasting didn't work")
+            if indexPath.row < sim.employedAuthors.count {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "employedAuthorCell", for: indexPath) as? EmployedAuthorCell else {
+                    fatalError("Employed Author cell downcasting didn't work")
+                }
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "footerCell", for: indexPath) as? EmployeeFooterCell else {
+                    fatalError("Employed Author cell downcasting didn't work")
+                }
+                return cell
             }
-            return cell
         }
         
         return UITableViewCell();
@@ -766,106 +782,103 @@ extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if tableView == employedAuthorsTable {
-            guard let employedCell = cell as? EmployedAuthorCell else { return }
-            let employedAuthor = sim.employedAuthors[indexPath.row]
-            
-            employedCell.authorPortrait.image = employedAuthor.getPortrait()
-            employedCell.authorName.text = employedAuthor.getName()
-            employedCell.level.text = "\(employedAuthor.getSeniorityLevel())"
-            employedCell.morale.text = employedAuthor.getMoraleSymbol()
-            employedCell.morale.textColor = employedAuthor.getMoraleColor()
-            employedCell.publications.text = employedAuthor.getQualitySymbol()
-            employedCell.publications.textColor = employedAuthor.getQualityColor()
-            employedCell.speed.text = employedAuthor.getRateSymbol()
-            employedCell.speed.textColor = employedAuthor.getRateColor()
-            employedCell.salary.text = (employedAuthor.getSalary()/* * 365*/).dollarFormat()
-            employedCell.progressConstraint.constant = employedCell.getProgressLength(employedAuthor.getArticalProgress())
-            employedCell.experience.text = Int(employedAuthor.getExperience()).commaFormat()
-            employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
-            employedCell.showSkillButtons()
-            
-            employedCell.clearTopicImages()
-            for topic in employedAuthor.getTopics() {
-                employedCell.setTopicImage(topic.image)
-            }
-            
-            if employedCell.overlayView.isHidden {
-                if employedAuthor.getSkillPoints() > 0 {
-                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
-                    employedCell.overlayButton.setTitle("↑", for: .normal)
-                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
+            // Defines all employee cells
+            if indexPath.row < sim.employedAuthors.count {
+                guard let employedCell = cell as? EmployedAuthorCell else { return }
+                guard sim.employedAuthors.count != indexPath.row else { return }
+                let employedAuthor = sim.employedAuthors[indexPath.row]
+                
+                employedCell.authorPortrait.image = employedAuthor.getPortrait()
+                employedCell.authorName.text = employedAuthor.getName()
+                employedCell.level.text = "\(employedAuthor.getSeniorityLevel())"
+                employedCell.morale.text = employedAuthor.getMoraleSymbol()
+                employedCell.morale.textColor = employedAuthor.getMoraleColor()
+                employedCell.publications.text = employedAuthor.getQualitySymbol()
+                employedCell.publications.textColor = employedAuthor.getQualityColor()
+                employedCell.speed.text = employedAuthor.getRateSymbol()
+                employedCell.speed.textColor = employedAuthor.getRateColor()
+                employedCell.salary.text = (employedAuthor.getSalary()/* * 365*/).dollarFormat()
+                employedCell.progressConstraint.constant = employedCell.getProgressLength(employedAuthor.getArticalProgress())
+                employedCell.experience.text = Int(employedAuthor.getExperience()).commaFormat()
+                employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
+                employedCell.showSkillButtons()
+                
+                employedCell.clearTopicImages()
+                for topic in employedAuthor.getTopics() {
+                    employedCell.setTopicImage(topic.image)
+                }
+                
+                if employedCell.overlayView.isHidden {
+                    if employedAuthor.getSkillPoints() > 0 {
+                        employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0, green: 0.4802635312, blue: 0.9984222054, alpha: 1), for: .normal);
+                        employedCell.overlayButton.setTitle("↑", for: .normal)
+                        employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .heavy)
+                    } else {
+                        employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
+                        employedCell.overlayButton.setTitle("⚙︎", for: .normal)
+                        employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
+                    }
+                    
                 } else {
-                    employedCell.overlayButton.setTitleColor(#colorLiteral(red: 0.3601692021, green: 0.3580333591, blue: 0.3618144095, alpha: 1), for: .normal);
-                    employedCell.overlayButton.setTitle("⚙︎", for: .normal)
-                    employedCell.overlayButton.titleLabel?.font = UIFont.systemFont(ofSize: 23, weight: .regular)
+                    if employedAuthor.hasMaxRate() {
+                        employedCell.speedButton.isEnabled = false
+                    }
                 }
                 
-            } else {
-                if employedAuthor.hasMaxRate() {
-                    employedCell.speedButton.isEnabled = false
-                }
-            }
-            
-            employedCell.toggleOverlay = {
-                //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
-                if self.lastSelectedIndexPath.row != indexPath.row
-                && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
-                    //Returns nil when referenced while scrolled out of sight
-                    guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return }
-                    pCell.hideOverlay()
+                employedCell.toggleOverlay = {
+                    //Checks for a cell at lastSelectedIndexPath.row which has already shown its overlay
+                    if self.lastSelectedIndexPath.row != indexPath.row
+                        && self.lastSelectedIndexPath.row < self.sim.employedAuthors.count {
+                        //Returns nil when referenced while scrolled out of sight
+                        guard let pCell = tableView.cellForRow(at: self.lastSelectedIndexPath) as? EmployedAuthorCell else { return }
+                        pCell.hideOverlay()
+                    }
+                    
+                    self.lastSelectedIndexPath = indexPath;
                 }
                 
-                self.lastSelectedIndexPath = indexPath;
-            }
-        
-            employedCell.fire = {
-                if self.state is PlayState {
-                    self.sim.fireEvent(forAuthorAt: indexPath.row)
-                    employedCell.hideOverlay()
-                    self.lastSelectedIndexPath.row = 0
-                    tableView.reloadData()
+                employedCell.fire = {
+                    if self.state is PlayState {
+                        self.sim.fireEvent(forAuthorAt: indexPath.row)
+                        employedCell.hideOverlay()
+                        self.lastSelectedIndexPath.row = 0
+                        tableView.reloadData()
+                    }
+                }
+                
+                employedCell.promoteQuality = {
+                    if self.state is PlayState {
+                        employedAuthor.promoteQuality()
+                        employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
+                        employedCell.showSkillButtons()
+                    }
+                }
+                
+                employedCell.promoteSpeed = {
+                    if self.state is PlayState {
+                        employedAuthor.promoteSpeed()
+                        employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
+                        employedCell.showSkillButtons()
+                    }
                 }
             }
             
-            employedCell.promoteQuality = {
-                if self.state is PlayState {
-                    employedAuthor.promoteQuality()
-                    employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
-                    employedCell.showSkillButtons()
-                }
-            }
-            
-            employedCell.promoteSpeed = {
-                if self.state is PlayState {
-                    employedAuthor.promoteSpeed()
-                    employedCell.skillPoints.text = "\(employedAuthor.getSkillPoints())"
-                    employedCell.showSkillButtons()
-                }
+            // This defines the "footer" cell
+            else {
+                guard let footerCell = cell as? EmployeeFooterCell else { return }
+                footerCell.author(count: sim.employedAuthors.count, capacity: sim.office.capacity)
             }
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == employedAuthorsTable {
-            return 100
-        }
-        
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if tableView == employedAuthorsTable {
-            let footer = UIView()
-            footer.backgroundColor = .clear
-            return footer
-        }
-        
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if tableView == employedAuthorsTable {
-            return 55
+            if indexPath.row < sim.employedAuthors.count {
+                return 100
+            } else {
+                // For the footer cell
+                return 57
+            }
         }
         
         return 0

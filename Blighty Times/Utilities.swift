@@ -29,27 +29,10 @@ import UIKit
 //}
 
 
-func Random(between left: Int, and right: Int) -> Int {
-    if left < right {
-        return Int.random(in: left ... right);
-    } else {
-        return Int.random(in: right ... left);
-    }
-    
-}
-
-func Random(int range: ClosedRange<Int>) -> Int {
-    return Int.random(in: range);
-}
 
 func Random(double range: ClosedRange<Double>) -> Double {
     return Double.random(in: range);
 }
-
-func RandomIndex(fromCount arrayCount: Int) -> Int {
-    return Int.random(in: 0 ..< arrayCount);
-}
-
 
 
 

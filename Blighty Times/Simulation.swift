@@ -105,7 +105,7 @@ class Simulation {
     }
     
     private func smallStart() {
-        _company = Company(startingFunds: 5000)
+        _company = Company(startingFunds: 15000)
         _ = purchaseOffice(.small, starting: true)
         _population = Population(from: _office.size)
         
@@ -118,7 +118,7 @@ class Simulation {
     }
     
     private func mediumStart() {
-        _company = Company(startingFunds: 10000)
+        _company = Company(startingFunds: 25000)
         _ = purchaseOffice(.medium, starting: true)
         _population = Population(from: _office.size)
         
@@ -133,7 +133,7 @@ class Simulation {
     }
     
     private func largeStart() {
-        _company = Company(startingFunds: 20000)
+        _company = Company(startingFunds: 40000)
         _ = purchaseOffice(.large, starting: true)
         _population = Population(from: _office.size)
         
@@ -150,7 +150,7 @@ class Simulation {
     }
     
     private func hugeStart() {
-        _company = Company(startingFunds: 50000)
+        _company = Company(startingFunds: 70000)
         _ = purchaseOffice(.huge, starting: true)
         _population = Population(from: _office.size)
         
@@ -350,7 +350,8 @@ class Simulation {
         }
     }
     
-    func add(_ event: Event) {
+    /// Adds a new Event to the eventList to be displayed later
+    private func add(_ event: Event) {
         if supressPopups && (event is EmployeeEvent || event is CompanyEvent)  { return }
         
         //If there is a NewsEvent currently in the queue, put the next event
@@ -359,6 +360,46 @@ class Simulation {
             eventList.insert(event, at: 1);
         } else {
             eventList.insert(event, at: 0);
+        }
+    }
+    
+    /// This will force the current popup to be a specific WinEvent, ending the game.
+    ///
+    /// - Parameters:
+    ///   - message: Will be displayed under the default Win title
+    ///   - controller: The ViewController that presents EventControllers
+    func addWinEvent(_ message: String, in controller: UIViewController) {
+        let winEvent = WinEvent(message: message, action: {controller.dismiss(animated: true, completion: nil)})
+        addGameEnd(event: winEvent, in: controller)
+    }
+    
+    /// This will force the current popup to be a specific WinEvent, ending the game.
+    ///
+    /// - Parameters:
+    ///   - message: Will be displayed under the default Win title
+    ///   - controller: The ViewController that presents EventControllers
+    func addLoseEvent(_ message: String, in controller: UIViewController) {
+        let loseEvent = LoseEvent(message: message, action: {controller.dismiss(animated: true, completion: nil)})
+        addGameEnd(event: loseEvent, in: controller)
+    }
+    
+    /// This checks to see if there are any popups currently being presented by the
+    /// supplied ViewController. It will dismiss it if there is one and present an EventController
+    /// with the supplied Event.
+    ///
+    /// - Parameters:
+    ///   - event: Should only be WinEvent or LoseEvent
+    ///   - controller: The ViewController that presents EventControllers
+    private func addGameEnd(event: Event, in controller: UIViewController) {
+        eventList.removeAll()
+        add(event)
+        
+        if let popup = controller.presentedViewController {
+            popup.dismiss(animated: true) {
+                controller.performSegue(withIdentifier: "eventSegue", sender: nil)
+            }
+        } else {
+            controller.performSegue(withIdentifier: "eventSegue", sender: nil)
         }
     }
     
@@ -371,12 +412,15 @@ class Simulation {
             }
         }
         
-        if Random(int: 0 ... 5) == 3 {
+        if Int.random(in: 0 ... 5) == 3 {
             add(NewsEvent())
         }
     }
     
     func weeklyReset() {
+        company.weeklyReset()
+        population.weeklyReset()
+        
         //Player property reset
         _playerPausesLeft = Simulation._MAX_PAUSES;
         
@@ -485,7 +529,7 @@ class Simulation {
     func chanceToSpawnApplicant() {
         if applicantAuthors.count == 0 {
             if _ticksElapsed % (Simulation.TICKS_PER_DAY / 10) == 0 {
-                if Random(int: 1 ... 5) == 5 {
+                if Int.random(in: 1 ... 5) == 5 {
                     spawnApplicant()
                 }
             }

@@ -213,7 +213,7 @@ class Region {
     }
     
     private static func randomSize() -> Int {
-        return Random(int: 100000 ... 1000000)
+        return Int.random(in: 100000 ... 1000000)
     }
     
     private static func randomTopics(count: Int, excludedTopics: [Topic]?) -> [Topic] {
@@ -225,6 +225,6 @@ class Region {
     }
     
     private static func randomStartingSubs(withRegion size: Int) -> Int {
-        return Random(int: 0 ... size)
+        return Int.random(in: 0 ... size)
     }
 }
