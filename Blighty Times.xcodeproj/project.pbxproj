@@ -47,8 +47,7 @@
 		C39388AD22CEBC9100AEF699 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39388AC22CEBC9100AEF699 /* Popup.swift */; };
 		C39388AF22CECB2D00AEF699 /* BoolExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39388AE22CECB2D00AEF699 /* BoolExt.swift */; };
 		C39388BC22D5518100AEF699 /* EventPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39388BB22D5518100AEF699 /* EventPopup.swift */; };
-		C3AB5D4E22C711B500981A37 /* EmployeeFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */; };
-		C3AB5D5022C7191C00981A37 /* EmployeeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */; };
+		C3AB5D5022C7191C00981A37 /* EmployeeFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AB5D4F22C7191C00981A37 /* EmployeeFooterCell.swift */; };
 		C3C3D400229B6D7E00BA86A6 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D3FF229B6D7E00BA86A6 /* Region.swift */; };
 		C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
@@ -98,8 +97,7 @@
 		C39388AC22CEBC9100AEF699 /* Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		C39388AE22CECB2D00AEF699 /* BoolExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolExt.swift; sourceTree = "<group>"; };
 		C39388BB22D5518100AEF699 /* EventPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPopup.swift; sourceTree = "<group>"; };
-		C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmployeeFooter.xib; sourceTree = "<group>"; };
-		C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeFooter.swift; sourceTree = "<group>"; };
+		C3AB5D4F22C7191C00981A37 /* EmployeeFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeFooterCell.swift; sourceTree = "<group>"; };
 		C3C3D3FF229B6D7E00BA86A6 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExt.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
@@ -205,8 +203,7 @@
 			children = (
 				C3153101215848790054684F /* Author.swift */,
 				C3153103215848790054684F /* EmployedAuthorCell.swift */,
-				C3AB5D4F22C7191C00981A37 /* EmployeeFooter.swift */,
-				C3AB5D4D22C711B500981A37 /* EmployeeFooter.xib */,
+				C3AB5D4F22C7191C00981A37 /* EmployeeFooterCell.swift */,
 			);
 			name = Author;
 			sourceTree = "<group>";
@@ -325,7 +322,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3AB5D4E22C711B500981A37 /* EmployeeFooter.xib in Resources */,
 				C31530F5215846D50054684F /* LaunchScreen.storyboard in Resources */,
 				C3153107215848790054684F /* ArticleTile.xib in Resources */,
 				C31DC5C0228A501700CEA46A /* Assets.xcassets in Resources */,
@@ -360,7 +356,7 @@
 				C3133E2E227DFD6D00905F00 /* PlayState.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
 				C36478562290A1A600E8C50A /* RedButton.swift in Sources */,
-				C3AB5D5022C7191C00981A37 /* EmployeeFooter.swift in Sources */,
+				C3AB5D5022C7191C00981A37 /* EmployeeFooterCell.swift in Sources */,
 				C3647846228CE50000E8C50A /* MainMenu.swift in Sources */,
 				C315310E215848790054684F /* GameViewController.swift in Sources */,
 				C36478632291D09B00E8C50A /* Office.swift in Sources */,

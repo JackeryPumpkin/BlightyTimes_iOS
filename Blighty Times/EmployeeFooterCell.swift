@@ -1,5 +1,5 @@
 //
-//  EmployeeFooter.swift
+//  EmployeeFooterCell.swift
 //  Blighty Times
 //
 //  Created by Zachary Duncan on 6/28/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EmployeeFooter: UIView {
+class EmployeeFooterCell: UITableViewCell {
     @IBOutlet weak var authors: UILabel!
     
     func author(count: Int, capacity: Int) {
