@@ -53,7 +53,6 @@
 		C3C3D40622AB5FFE00BA86A6 /* UIStackViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */; };
 		C3DFC7F3217E8D9C0074AAF0 /* ScoreCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */; };
 		C3E3B5D8218F7A6100A91E6E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D7218F7A6100A91E6E /* Event.swift */; };
-		C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E3B5D9218FDA9500A91E6E /* EventCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,7 +104,6 @@
 		C3C3D40522AB5FFE00BA86A6 /* UIStackViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExt.swift; sourceTree = "<group>"; };
 		C3DFC7F2217E8D9C0074AAF0 /* ScoreCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCardViewController.swift; sourceTree = "<group>"; };
 		C3E3B5D7218F7A6100A91E6E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		C3E3B5D9218FDA9500A91E6E /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,7 +225,6 @@
 			isa = PBXGroup;
 			children = (
 				C3E3B5D7218F7A6100A91E6E /* Event.swift */,
-				C3E3B5D9218FDA9500A91E6E /* EventCell.swift */,
 				C334A65622B709FA00988837 /* EventController.swift */,
 			);
 			name = Event;
@@ -361,7 +358,6 @@
 				C39388AF22CECB2D00AEF699 /* BoolExt.swift in Sources */,
 				C37D81CC216FAE0800CD2E85 /* Population.swift in Sources */,
 				C3133E2E227DFD6D00905F00 /* PlayState.swift in Sources */,
-				C3E3B5DA218FDA9500A91E6E /* EventCell.swift in Sources */,
 				C315310C215848790054684F /* Simulation.swift in Sources */,
 				C36478562290A1A600E8C50A /* RedButton.swift in Sources */,
 				C3AB5D5022C7191C00981A37 /* EmployeeFooter.swift in Sources */,
